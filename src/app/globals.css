@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+:root {
+  --background: #faf8f3;
+  --foreground: #1a2417;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-fraunces);
+
+  /* Forest greens */
+  --color-forest-950: #0f1a0d;
+  --color-forest-900: #16260f;
+  --color-forest-800: #1f3517;
+  --color-forest-700: #2b4a20;
+  --color-forest-600: #38612a;
+  --color-forest-500: #497b37;
+
+  /* Fresh leaf greens */
+  --color-leaf-500: #5c9a3d;
+  --color-leaf-400: #79b558;
+  --color-leaf-300: #9fcf80;
+  --color-leaf-200: #cbe6b8;
+
+  /* Sand / cream backgrounds */
+  --color-sand-50: #faf8f3;
+  --color-sand-100: #f3eee0;
+  --color-sand-200: #e9e0c9;
+
+  /* Earth browns */
+  --color-earth-700: #5a4227;
+  --color-earth-600: #7a5934;
+  --color-earth-500: #9a7248;
+
+  /* Terracotta accent (CTAs) */
+  --color-terracotta-500: #c9713f;
+  --color-terracotta-600: #b25f31;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+html {
+  scroll-behavior: smooth;
+}
