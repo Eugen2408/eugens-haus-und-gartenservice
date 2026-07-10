@@ -1,12 +1,12 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { Suspense, useMemo, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Float, Sparkles, ContactShadows } from "@react-three/drei";
+import { Float, Sparkles, ContactShadows, Environment } from "@react-three/drei";
 import * as THREE from "three";
 
 const GRASS_COUNT = 1600;
-const LEAF_COUNT = 26;
+const LEAF_COUNT = 11;
 
 function GrassField() {
   const meshRef = useRef<THREE.InstancedMesh>(null);
@@ -72,19 +72,19 @@ function LowPolyTree({
     <group position={position} scale={scale}>
       <mesh position={[0, 0.5, 0]} castShadow>
         <cylinderGeometry args={[0.09, 0.13, 1, 6]} />
-        <meshStandardMaterial color="#5a4227" roughness={0.9} />
+        <meshPhysicalMaterial color="#5a4227" roughness={0.75} clearcoat={0.4} clearcoatRoughness={0.4} />
       </mesh>
       <mesh position={[0, 1.25, 0]} castShadow>
         <coneGeometry args={[0.65, 1.1, 7]} />
-        <meshStandardMaterial color="#38612a" roughness={0.8} />
+        <meshPhysicalMaterial color="#38612a" roughness={0.35} clearcoat={0.7} clearcoatRoughness={0.25} />
       </mesh>
       <mesh position={[0, 1.75, 0]} castShadow>
         <coneGeometry args={[0.48, 0.9, 7]} />
-        <meshStandardMaterial color="#497b37" roughness={0.8} />
+        <meshPhysicalMaterial color="#497b37" roughness={0.35} clearcoat={0.7} clearcoatRoughness={0.25} />
       </mesh>
       <mesh position={[0, 2.15, 0]} castShadow>
         <coneGeometry args={[0.3, 0.65, 7]} />
-        <meshStandardMaterial color="#5c9a3d" roughness={0.8} />
+        <meshPhysicalMaterial color="#5c9a3d" roughness={0.3} clearcoat={0.8} clearcoatRoughness={0.2} />
       </mesh>
     </group>
   );
@@ -115,7 +115,7 @@ function Bush({
       {blobs.map((b, i) => (
         <mesh key={i} position={[b.x, b.y + b.r * 0.7, b.z]} castShadow>
           <icosahedronGeometry args={[b.r, 0]} />
-          <meshStandardMaterial color={color} roughness={0.85} flatShading />
+          <meshPhysicalMaterial color={color} roughness={0.4} clearcoat={0.6} clearcoatRoughness={0.3} flatShading />
         </mesh>
       ))}
     </group>
@@ -132,21 +132,24 @@ function FloatingLeaves() {
         -3 + Math.random() * 5.5,
       ] as [number, number, number],
       color: colors[Math.floor(Math.random() * colors.length)],
-      scale: 0.12 + Math.random() * 0.14,
-      speed: 0.5 + Math.random() * 1,
+      scale: 0.09 + Math.random() * 0.09,
+      speed: 0.3 + Math.random() * 0.5,
     }));
   }, []);
 
   return (
     <>
       {leaves.map((leaf, i) => (
-        <Float key={i} speed={leaf.speed} rotationIntensity={2.4} floatIntensity={2.6}>
+        <Float key={i} speed={leaf.speed} rotationIntensity={1.2} floatIntensity={1.4}>
           <mesh position={leaf.position}>
             <planeGeometry args={[leaf.scale, leaf.scale * 1.4]} />
-            <meshStandardMaterial
+            <meshPhysicalMaterial
               color={leaf.color}
               side={THREE.DoubleSide}
-              roughness={0.6}
+              roughness={0.3}
+              clearcoat={0.6}
+              transparent
+              opacity={0.85}
             />
           </mesh>
         </Float>
@@ -199,6 +202,9 @@ export default function GardenScene() {
         shadow-mapSize={[1024, 1024]}
       />
       <ambientLight intensity={0.25} />
+      <Suspense fallback={null}>
+        <Environment preset="park" environmentIntensity={0.6} />
+      </Suspense>
 
       <Ground />
       <GrassField />
@@ -221,7 +227,7 @@ export default function GardenScene() {
       />
 
       <FloatingLeaves />
-      <Sparkles count={60} scale={[9, 3.5, 7]} size={2.2} speed={0.3} opacity={0.45} color="#fff4da" />
+      <Sparkles count={40} scale={[9, 3.5, 7]} size={1.8} speed={0.2} opacity={0.35} color="#fff4da" />
 
       <CameraRig />
     </Canvas>
