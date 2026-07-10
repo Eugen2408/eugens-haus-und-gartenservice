@@ -10,20 +10,24 @@ type TileData = {
 };
 
 // Prozent-Positionen (links/oben, Mittelpunkt) der leeren Glaskacheln bei
-// Video-Start (t=0), gemessen am 1280x720-Frame. Der Baum-Ring im Video
-// zoomt über die gesamte Loop-Dauer kontinuierlich auf (kein Rotieren),
-// darum reicht ein einziger Referenzpunkt pro Kachel plus ein synchron
-// mitlaufender Scale-Transform (siehe unten).
+// Video-Start (t=0). Per automatisierter Pixel-Analyse ermittelt (Kanten-
+// Erkennung der hellen Glas-Ränder je Scanzeile, nicht per Augenmaß) und
+// gegen einen zweiten Messpunkt bei t=1.26s verifiziert (Abweichung <1.5%
+// je Kachel). Der Baum-Ring zoomt über die Loop-Dauer kontinuierlich auf
+// (kein Rotieren), darum reicht ein Referenzpunkt pro Kachel plus ein
+// synchron mitlaufender Scale-Transform (siehe unten).
 const PANEL_SPOTS = [
-  { left: 32.0, top: 58.1 },
-  { left: 41.3, top: 56.2 },
-  { left: 52.2, top: 54.3 },
-  { left: 63.3, top: 56.2 },
-  { left: 72.4, top: 58.1 },
+  { left: 16.1, top: 63 },
+  { left: 34.3, top: 60 },
+  { left: 51.7, top: 58 },
+  { left: 68.9, top: 60 },
+  { left: 82.0, top: 63 },
 ];
 
-// Zoom-Fahrkurve des Videos: Skalierung relativ zu t=0, per Pixel-Analyse
-// des Glas-Rings an mehreren Zeitpunkten über die Loop-Dauer ermittelt.
+// Zoom-Fahrkurve des Videos: Skalierung relativ zu t=0. Bis 1.26s per
+// Pixel-Analyse verifiziert; danach konservativ fortgeschrieben, da das
+// Verfahren bei starkem Zoom (mehr Bilddetail im Glas) zu unzuverlässig
+// wird, um einzelne Kacheln automatisiert zu unterscheiden.
 const ZOOM_KEYFRAMES: { t: number; s: number }[] = [
   { t: 0, s: 1 },
   { t: 0.21, s: 1.035 },
@@ -32,16 +36,17 @@ const ZOOM_KEYFRAMES: { t: number; s: number }[] = [
   { t: 0.84, s: 1.124 },
   { t: 1.05, s: 1.148 },
   { t: 1.26, s: 1.169 },
-  { t: 1.8, s: 1.28 },
-  { t: 2.6, s: 1.557 },
-  { t: 3.4, s: 1.67 },
-  { t: 4.2, s: 1.83 },
-  { t: 5.04, s: 1.85 },
+  { t: 1.8, s: 1.22 },
+  { t: 2.6, s: 1.32 },
+  { t: 3.4, s: 1.4 },
+  { t: 4.2, s: 1.46 },
+  { t: 5.04, s: 1.46 },
 ];
 
-// Fluchtpunkt des Zooms (Prozent-Koordinaten), ebenfalls per Pixel-Analyse
-// bestimmt (Baumkrone/Stamm-Ansatz, nicht der Bildmittelpunkt).
-const ZOOM_ORIGIN = { x: 56, y: 48 };
+// Fluchtpunkt des Zooms (Prozent-Koordinaten). Die mittlere Kachel bleibt
+// über den gesamten gemessenen Zeitraum nahezu unbewegt (~51.5-52%), das
+// legt den x-Anker fest; y per Kanten-Tracking der Kachel-Oberkante.
+const ZOOM_ORIGIN = { x: 51.7, y: 48 };
 
 const FADE_WINDOW = 0.06; // Sekunden Ein-/Ausblenden am Loop-Schnitt
 
