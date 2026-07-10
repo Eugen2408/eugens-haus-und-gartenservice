@@ -1,19 +1,25 @@
 export default function Footer() {
   return (
-    <footer className="bg-forest-950 px-5 py-10 text-sand-100/70">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 text-center sm:flex-row sm:text-left">
+    <footer className="bg-forest-950 px-5 py-12 text-sand-100/70">
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-8 text-center sm:flex-row sm:text-left">
         <div>
-          <p className="font-display text-lg font-semibold text-sand-50">
+          <p className="font-display text-xl font-semibold text-sand-50">
             Eugens Haus- &amp; Gartenservice
           </p>
           <p className="mt-1 text-sm">Reembroden 14, 22339 Hamburg</p>
         </div>
 
-        <div className="flex flex-col items-center gap-1 text-sm sm:items-end">
-          <a href="tel:+4915560691797" className="hover:text-leaf-300">
+        <div className="flex flex-col items-center gap-2 text-sm sm:items-end">
+          <a
+            href="tel:+4915560691797"
+            className="rounded px-1 py-1 transition-colors hover:text-leaf-300"
+          >
             0155 60691797
           </a>
-          <a href="tel:+494036935718" className="hover:text-leaf-300">
+          <a
+            href="tel:+494036935718"
+            className="rounded px-1 py-1 transition-colors hover:text-leaf-300"
+          >
             040 36935718
           </a>
         </div>

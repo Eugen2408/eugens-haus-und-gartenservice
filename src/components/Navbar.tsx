@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 const LINKS = [
   { href: "#leistungen", label: "Leistungen" },
@@ -8,6 +9,32 @@ const LINKS = [
   { href: "#ueber-uns", label: "Über uns" },
   { href: "#kontakt", label: "Kontakt" },
 ];
+
+function NavLink({
+  href,
+  label,
+  dark,
+}: {
+  href: string;
+  label: string;
+  dark: boolean;
+}) {
+  return (
+    <a
+      href={href}
+      className={`group relative py-1 text-sm font-medium transition-colors ${
+        dark ? "text-forest-800" : "text-sand-50"
+      }`}
+    >
+      {label}
+      <span
+        className={`absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 transition-transform duration-300 ease-out group-hover:scale-x-100 ${
+          dark ? "bg-forest-800" : "bg-sand-50"
+        }`}
+      />
+    </a>
+  );
+}
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -20,17 +47,24 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-        scrolled ? "bg-sand-50/90 shadow-sm backdrop-blur" : "bg-transparent"
+        scrolled && !open ? "bg-sand-50/90 shadow-sm backdrop-blur" : "bg-transparent"
       }`}
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
         <a
           href="#top"
           className={`font-display text-lg font-semibold tracking-tight transition-colors ${
-            scrolled ? "text-forest-900" : "text-sand-50"
+            (scrolled && !open) || open ? "text-forest-900" : "text-sand-50"
           }`}
         >
           Eugens <span className="text-leaf-500">Haus- &amp; Gartenservice</span>
@@ -38,19 +72,11 @@ export default function Navbar() {
 
         <div className="hidden items-center gap-8 md:flex">
           {LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className={`text-sm font-medium transition-colors hover:text-leaf-500 ${
-                scrolled ? "text-forest-800" : "text-sand-50"
-              }`}
-            >
-              {link.label}
-            </a>
+            <NavLink key={link.href} {...link} dark={scrolled} />
           ))}
           <a
             href="#kontakt"
-            className="rounded-full bg-terracotta-500 px-5 py-2.5 text-sm font-semibold text-sand-50 shadow-sm transition-colors hover:bg-terracotta-600"
+            className="rounded-full bg-terracotta-500 px-5 py-2.5 text-sm font-semibold text-sand-50 shadow-sm transition-transform duration-300 hover:scale-105 hover:bg-terracotta-600"
           >
             Kostenlos anfragen
           </a>
@@ -58,53 +84,60 @@ export default function Navbar() {
 
         <button
           type="button"
-          aria-label="Menü öffnen"
+          aria-label={open ? "Menü schließen" : "Menü öffnen"}
+          aria-expanded={open}
           onClick={() => setOpen((o) => !o)}
-          className={`flex h-9 w-9 items-center justify-center rounded-full md:hidden ${
-            scrolled ? "text-forest-900" : "text-sand-50"
+          className={`relative z-10 flex h-11 w-11 items-center justify-center rounded-full md:hidden ${
+            (scrolled && !open) || open ? "text-forest-900" : "text-sand-50"
           }`}
         >
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
             {open ? (
-              <path
-                d="M6 6L18 18M6 18L18 6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
+              <path d="M6 6L18 18M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             ) : (
-              <path
-                d="M4 7H20M4 12H20M4 17H20"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
+              <path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             )}
           </svg>
         </button>
       </nav>
 
-      {open && (
-        <div className="mx-5 mb-4 flex flex-col gap-1 rounded-2xl bg-sand-50 p-4 shadow-lg md:hidden">
-          {LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={() => setOpen(false)}
-              className="rounded-lg px-3 py-2.5 text-sm font-medium text-forest-800 hover:bg-sand-100"
-            >
-              {link.label}
-            </a>
-          ))}
-          <a
-            href="#kontakt"
-            onClick={() => setOpen(false)}
-            className="mt-1 rounded-full bg-terracotta-500 px-5 py-2.5 text-center text-sm font-semibold text-sand-50"
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-0 flex flex-col justify-center bg-sand-50 px-8 md:hidden"
           >
-            Kostenlos anfragen
-          </a>
-        </div>
-      )}
+            <nav className="flex flex-col gap-2">
+              {LINKS.map((link, i) => (
+                <motion.a
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.08 * i, ease: [0.22, 1, 0.36, 1] }}
+                  className="font-display text-4xl font-semibold text-forest-950"
+                >
+                  {link.label}
+                </motion.a>
+              ))}
+              <motion.a
+                href="#kontakt"
+                onClick={() => setOpen(false)}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.08 * LINKS.length, ease: [0.22, 1, 0.36, 1] }}
+                className="mt-6 inline-flex w-fit items-center rounded-full bg-terracotta-500 px-7 py-3.5 text-sm font-semibold text-sand-50"
+              >
+                Kostenlos anfragen
+              </motion.a>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

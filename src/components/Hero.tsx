@@ -20,20 +20,26 @@ export default function Hero() {
           Haus- &amp; Gartenservice in Hamburg
         </motion.p>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-          className="max-w-2xl font-display text-4xl font-semibold leading-[1.1] text-sand-50 sm:text-5xl md:text-6xl"
-        >
-          Ihr Garten. Gepflegt, wie Sie ihn sich wünschen.
-        </motion.h1>
+        <h1 className="max-w-3xl font-display text-5xl font-semibold leading-[1.02] tracking-tight text-sand-50 sm:text-6xl md:text-7xl lg:text-8xl">
+          {["Ihr Garten.", "Gepflegt, wie", "Sie ihn wünschen."].map((line, i) => (
+            <span key={line} className="block overflow-hidden">
+              <motion.span
+                initial={{ y: "110%" }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.9, delay: 0.15 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                className="block"
+              >
+                {line}
+              </motion.span>
+            </span>
+          ))}
+        </h1>
 
         <motion.p
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="mt-5 max-w-lg text-lg text-sand-100/90"
+          className="mt-6 max-w-lg text-lg text-sand-100/90"
         >
           Von der Rasenpflege bis zur kompletten Gartengestaltung – zuverlässig,
           termintreu und mit Blick fürs Detail.

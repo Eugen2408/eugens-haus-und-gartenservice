@@ -32,7 +32,7 @@ export default function ContactSection() {
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-leaf-500">
             Kontakt
           </p>
-          <h2 className="mt-3 font-display text-3xl font-semibold text-forest-950 sm:text-4xl">
+          <h2 className="mt-3 font-display text-4xl font-semibold leading-[1.05] tracking-tight text-forest-950 sm:text-5xl">
             Lassen Sie uns über Ihr Projekt sprechen
           </h2>
           <p className="mt-4 max-w-md text-forest-800/70">
@@ -47,9 +47,9 @@ export default function ContactSection() {
                 href={item.href}
                 target={item.label !== "Telefon" && item.label !== "Festnetz" ? "_blank" : undefined}
                 rel={item.label !== "Telefon" && item.label !== "Festnetz" ? "noreferrer" : undefined}
-                className="flex items-center gap-4 rounded-xl border border-forest-900/5 bg-white/60 p-4 transition-colors hover:bg-white"
+                className="flex min-h-[44px] items-center gap-4 rounded-xl border border-forest-900/5 bg-white/60 p-4 transition-colors hover:bg-white"
               >
-                <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-leaf-200 text-forest-700">
+                <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-leaf-200 text-forest-700">
                   {item.label === "Adresse" ? (
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                       <path
@@ -137,7 +137,7 @@ export default function ContactSection() {
             </div>
             <button
               type="submit"
-              className="mt-6 w-full rounded-full bg-terracotta-500 px-6 py-3.5 text-sm font-semibold text-sand-50 transition-colors hover:bg-terracotta-600"
+              className="mt-6 w-full rounded-full bg-terracotta-500 px-6 py-3.5 text-sm font-semibold text-sand-50 transition-transform duration-300 hover:scale-[1.02] hover:bg-terracotta-600"
             >
               Nachricht senden
             </button>

@@ -22,7 +22,7 @@ export default function AboutSection() {
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-leaf-500">
             Über uns
           </p>
-          <h2 className="mt-3 font-display text-3xl font-semibold text-forest-950 sm:text-4xl">
+          <h2 className="mt-3 font-display text-4xl font-semibold leading-[1.05] tracking-tight text-forest-950 sm:text-5xl">
             Der Profi aus der Nachbarschaft
           </h2>
           <p className="mt-5 text-forest-800/80 leading-relaxed">
