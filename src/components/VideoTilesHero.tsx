@@ -64,7 +64,12 @@ function scaleAt(t: number): number {
   return kf[kf.length - 1].s;
 }
 
-export default function VideoTilesHero() {
+type VideoTilesHeroProps = {
+  /** Index der aktuell hervorgehobenen Kachel (0-basiert). undefined = alle gleich hell. */
+  activeIndex?: number;
+};
+
+export default function VideoTilesHero({ activeIndex }: VideoTilesHeroProps = {}) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const tilesRef = useRef<HTMLDivElement[]>([]);
@@ -127,6 +132,20 @@ export default function VideoTilesHero() {
       { opacity: 1, scale: 1, duration: 0.8, stagger: 0.12, delay: 0.2, ease: "power3.out" }
     );
   }, [tiles]);
+
+  useEffect(() => {
+    if (!tiles || activeIndex === undefined) return;
+    tilesRef.current.forEach((el, i) => {
+      if (!el) return;
+      gsap.to(el, {
+        opacity: i === activeIndex ? 1 : 0.35,
+        scale: i === activeIndex ? 1.1 : 0.92,
+        duration: 0.5,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
+    });
+  }, [tiles, activeIndex]);
 
   return (
     <div className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-3xl bg-black" style={{ aspectRatio: "1280 / 720" }}>
