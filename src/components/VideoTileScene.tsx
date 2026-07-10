@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Float, Html } from "@react-three/drei";
 import * as THREE from "three";
+import gsap from "gsap";
 
 type TileData = {
   id: string;
@@ -17,10 +18,29 @@ const TILE_HEIGHT = 1.6;
 const GAP_X = 3.4;
 const GAP_Y = 2.2;
 
-function Tile({ data, position }: { data: TileData; position: [number, number, number] }) {
+function Tile({
+  data,
+  position,
+  index,
+}: {
+  data: TileData;
+  position: [number, number, number];
+  index: number;
+}) {
+  const groupRef = useRef<THREE.Group>(null);
+
+  useEffect(() => {
+    if (!groupRef.current) return;
+    gsap.fromTo(
+      groupRef.current.scale,
+      { x: 0, y: 0, z: 0 },
+      { x: 1, y: 1, z: 1, duration: 0.9, delay: 0.12 * index, ease: "back.out(1.6)" }
+    );
+  }, [index]);
+
   return (
     <Float speed={1.1} rotationIntensity={0.35} floatIntensity={0.9}>
-      <group position={position}>
+      <group ref={groupRef} position={position} scale={0}>
         <mesh>
           <planeGeometry args={[TILE_WIDTH, TILE_HEIGHT]} />
           <meshPhysicalMaterial
@@ -56,13 +76,22 @@ function Tile({ data, position }: { data: TileData; position: [number, number, n
   );
 }
 
-function CameraDrift() {
+function CameraRig({ scrollProgress }: { scrollProgress: RefObject<number> }) {
   const { camera, pointer } = useThree();
+
   useFrame(() => {
-    camera.position.x = THREE.MathUtils.lerp(camera.position.x, pointer.x * 0.6, 0.03);
-    camera.position.y = THREE.MathUtils.lerp(camera.position.y, pointer.y * 0.35, 0.03);
-    camera.lookAt(0, 0, 0);
+    const p = scrollProgress.current;
+    const targetX = pointer.x * 0.6;
+    const targetY = pointer.y * 0.35 + p * 1.1;
+    const targetZ = 7 - p * 2.4;
+
+    camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetX, 0.05);
+    camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY, 0.05);
+    camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 0.05);
+    camera.rotation.z = THREE.MathUtils.lerp(camera.rotation.z, p * 0.06, 0.05);
+    camera.lookAt(0, p * 0.6, 0);
   });
+
   return null;
 }
 
@@ -83,13 +112,17 @@ function TileGrid({ tiles }: { tiles: TileData[] }) {
   return (
     <>
       {tiles.map((tile, i) => (
-        <Tile key={tile.id} data={tile} position={positions[i]} />
+        <Tile key={tile.id} data={tile} position={positions[i]} index={i} />
       ))}
     </>
   );
 }
 
-export default function VideoTileScene() {
+export default function VideoTileScene({
+  scrollProgress,
+}: {
+  scrollProgress: RefObject<number>;
+}) {
   const [tiles, setTiles] = useState<TileData[] | null>(null);
 
   useEffect(() => {
@@ -119,7 +152,7 @@ export default function VideoTileScene() {
       <ambientLight intensity={0.9} />
       <directionalLight position={[3, 4, 5]} intensity={1.1} />
       <TileGrid tiles={tiles} />
-      <CameraDrift />
+      <CameraRig scrollProgress={scrollProgress} />
     </Canvas>
   );
 }
