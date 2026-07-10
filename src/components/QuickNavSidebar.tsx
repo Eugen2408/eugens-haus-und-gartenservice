@@ -14,10 +14,21 @@ export default function QuickNavSidebar() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > window.innerHeight * 0.6);
+    const target = document.getElementById("leistungen");
+
+    const onScroll = () => {
+      const threshold = target
+        ? target.offsetTop + target.offsetHeight
+        : window.innerHeight * 1.4;
+      setVisible(window.scrollY > threshold);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   return (
