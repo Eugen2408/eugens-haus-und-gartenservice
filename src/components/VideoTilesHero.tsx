@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -13,7 +13,7 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-export default function VideoTilesHero() {
+export default function VideoTilesHero({ children }: { children?: ReactNode }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const scrollProgress = useRef(0);
 
@@ -49,6 +49,7 @@ export default function VideoTilesHero() {
         <div className="absolute inset-0">
           <VideoTileScene scrollProgress={scrollProgress} />
         </div>
+        {children}
       </div>
     </div>
   );

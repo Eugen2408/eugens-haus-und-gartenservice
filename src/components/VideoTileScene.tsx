@@ -12,11 +12,12 @@ type TileData = {
   text: string;
 };
 
-const GRID_COLS = 3;
-const TILE_WIDTH = 2.6;
-const TILE_HEIGHT = 1.6;
-const GAP_X = 3.4;
-const GAP_Y = 2.2;
+const GRID_COLS = 2;
+const TILE_WIDTH = 2.0;
+const TILE_HEIGHT = 1.25;
+const GAP_X = 2.4;
+const GAP_Y = 1.7;
+const GRID_OFFSET_X = 3.1;
 
 function Tile({
   data,
@@ -62,11 +63,11 @@ function Tile({
           position={[0, 0, 0.02]}
           className="pointer-events-none select-none"
         >
-          <div className="flex h-[160px] w-[260px] flex-col justify-end p-4">
-            <h3 className="font-display text-lg font-semibold text-sand-50 drop-shadow-md">
+          <div className="flex h-[135px] w-[220px] flex-col justify-end p-3">
+            <h3 className="font-display text-base font-semibold text-sand-50 drop-shadow-md">
               {data.title}
             </h3>
-            <p className="mt-1 text-xs leading-snug text-sand-100/85 drop-shadow-md">
+            <p className="mt-1 text-[11px] leading-snug text-sand-100/85 drop-shadow-md">
               {data.text}
             </p>
           </div>
@@ -102,7 +103,7 @@ function TileGrid({ tiles }: { tiles: TileData[] }) {
       const row = Math.floor(i / GRID_COLS);
       const cols = Math.min(GRID_COLS, tiles.length);
       const rows = Math.ceil(tiles.length / GRID_COLS);
-      const x = (col - (cols - 1) / 2) * GAP_X;
+      const x = (col - (cols - 1) / 2) * GAP_X + GRID_OFFSET_X;
       const y = ((rows - 1) / 2 - row) * GAP_Y;
       const z = (i % 2 === 0 ? -0.3 : 0.3) + Math.sin(i) * 0.2;
       return [x, y, z] as [number, number, number];
