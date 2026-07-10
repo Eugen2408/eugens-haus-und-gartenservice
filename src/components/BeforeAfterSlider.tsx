@@ -18,7 +18,7 @@ export default function BeforeAfterSlider({
   afterLabel = "Nachher",
   alt,
 }: Props) {
-  const [position, setPosition] = useState(8);
+  const [position, setPosition] = useState(90);
   const [dragging, setDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -41,22 +41,6 @@ export default function BeforeAfterSlider({
     >
       <div className="absolute inset-0">
         <Image
-          src={beforeSrc}
-          alt={`${alt} – ${beforeLabel}`}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, 50vw"
-        />
-        <span className="absolute left-4 top-4 rounded-full bg-sand-50/90 px-3 py-1 text-xs font-medium tracking-wide text-forest-900">
-          {beforeLabel}
-        </span>
-      </div>
-
-      <div
-        className="absolute inset-0 overflow-hidden"
-        style={{ clipPath: `inset(0 0 0 ${100 - position}%)` }}
-      >
-        <Image
           src={afterSrc}
           alt={`${alt} – ${afterLabel}`}
           fill
@@ -69,8 +53,24 @@ export default function BeforeAfterSlider({
       </div>
 
       <div
+        className="absolute inset-0 overflow-hidden"
+        style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
+      >
+        <Image
+          src={beforeSrc}
+          alt={`${alt} – ${beforeLabel}`}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 50vw"
+        />
+        <span className="absolute left-4 top-4 rounded-full bg-sand-50/90 px-3 py-1 text-xs font-medium tracking-wide text-forest-900">
+          {beforeLabel}
+        </span>
+      </div>
+
+      <div
         className="absolute inset-y-0 z-10 w-1 -translate-x-1/2 bg-sand-50 shadow-md"
-        style={{ left: `${100 - position}%` }}
+        style={{ left: `${position}%` }}
       >
         <button
           type="button"

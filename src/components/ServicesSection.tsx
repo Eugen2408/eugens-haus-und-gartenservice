@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import Reveal from "./Reveal";
 import TiltCard from "./TiltCard";
+import ServicesTree3D from "./ServicesTree3D";
 
 const SERVICES = [
   {
@@ -87,7 +88,11 @@ export default function ServicesSection() {
         </Reveal>
       </div>
 
-      <Reveal delay={0.1} className="mt-14">
+      <Reveal delay={0.1} className="relative mx-auto mt-12 h-[380px] w-full max-w-6xl overflow-hidden rounded-3xl md:h-[480px]">
+        <ServicesTree3D />
+      </Reveal>
+
+      <Reveal delay={0.15} className="mt-14">
         <div
           ref={scrollerRef}
           className="flex snap-x snap-mandatory gap-6 overflow-x-auto pb-6 pl-5 pr-5 [scrollbar-width:none] [-ms-overflow-style:none] sm:pl-[max(1.25rem,calc((100vw-72rem)/2+1.25rem))] [&::-webkit-scrollbar]:hidden"
