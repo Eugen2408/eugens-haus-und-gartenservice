@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import ServicesSection from "@/components/ServicesSection";
 import BeforeAfterSection from "@/components/BeforeAfterSection";
+import Transformation3DSection from "@/components/Transformation3DSection";
 import AboutSection from "@/components/AboutSection";
 import ReviewsSection from "@/components/ReviewsSection";
 import ContactSection from "@/components/ContactSection";
@@ -16,6 +17,7 @@ export default function Home() {
         <Hero />
         <ServicesSection />
         <BeforeAfterSection />
+        <Transformation3DSection />
         <AboutSection />
         <ReviewsSection />
         <ContactSection />
