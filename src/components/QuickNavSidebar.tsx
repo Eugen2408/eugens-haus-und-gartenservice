@@ -1,0 +1,53 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+
+const ITEMS = [
+  { href: "#leistungen", label: "Leistungen" },
+  { href: "#vorher-nachher", label: "Vorher / Nachher" },
+  { href: "#ueber-uns", label: "Über uns" },
+  { href: "#kontakt", label: "Kontakt" },
+];
+
+export default function QuickNavSidebar() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > window.innerHeight * 0.6);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <motion.div
+      initial={false}
+      animate={{ opacity: visible ? 1 : 0, x: visible ? 0 : -16 }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      className="pointer-events-none fixed left-6 top-1/2 z-40 hidden -translate-y-1/2 lg:block"
+      style={{ pointerEvents: visible ? "auto" : "none" }}
+    >
+      <div className="rounded-2xl border border-forest-900/10 bg-white/70 p-4 shadow-lg shadow-forest-900/5 backdrop-blur-md">
+        <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-forest-800/50">
+          Wonach suchst du?
+        </p>
+        <ul className="space-y-2">
+          {ITEMS.map((item) => (
+            <li key={item.href}>
+              <a
+                href={item.href}
+                className="group flex items-center gap-2 text-sm font-medium text-forest-800 transition-colors hover:text-leaf-600"
+              >
+                <span className="text-leaf-500 transition-transform duration-200 group-hover:translate-x-0.5">
+                  →
+                </span>
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </motion.div>
+  );
+}

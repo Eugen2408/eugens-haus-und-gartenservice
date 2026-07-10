@@ -7,11 +7,15 @@ import ReviewsSection from "@/components/ReviewsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import QuickNavSidebar from "@/components/QuickNavSidebar";
+import SectionDots from "@/components/SectionDots";
 
 export default function Home() {
   return (
     <>
       <Navbar />
+      <QuickNavSidebar />
+      <SectionDots />
       <main>
         <Hero />
         <ServicesSection />
