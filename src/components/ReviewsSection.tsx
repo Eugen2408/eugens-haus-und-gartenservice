@@ -7,9 +7,7 @@ const GOOGLE_PROFILE_URL =
   "https://www.google.com/search?q=Eugens+Haus-+und+Gartenservice+Hamburg";
 
 // Google Place ID: ChIJ-zWuHHua_6sR6OOZXKBzgX0 ("Eugens Haus- und Gartenservice")
-// Widget-ID im Featurable-Dashboard (featurable.com) mit dieser Place ID
-// verbinden, anlegen und die ID hier eintragen.
-const FEATURABLE_WIDGET_ID = "F18C1786";
+const FEATURABLE_WIDGET_ID = "4232857a-9a67-4d53-89a8-89313d81dc99";
 
 export default function ReviewsSection() {
   return (
@@ -25,8 +23,12 @@ export default function ReviewsSection() {
         </Reveal>
 
         <Reveal delay={0.1} className="mt-10">
-          <div className="featurable-widget" data-widget-id={FEATURABLE_WIDGET_ID} />
-          <Script src="https://featurable.com/assets/bundle.js" strategy="afterInteractive" />
+          <div
+            id={`featurable-${FEATURABLE_WIDGET_ID}`}
+            data-featurable-async
+            data-location-code="de"
+          />
+          <Script src="https://cdn.featurable.com/widget/v2/embed.js" strategy="afterInteractive" />
         </Reveal>
 
         <Reveal delay={0.15} className="mt-8 flex justify-center">
