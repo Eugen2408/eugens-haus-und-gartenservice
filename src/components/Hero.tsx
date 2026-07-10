@@ -1,40 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import VideoTilesHero from "./VideoTilesHero";
 
-gsap.registerPlugin(ScrollTrigger);
-
-const TILE_COUNT = 5;
-const VH_PER_TILE = 60;
-
 export default function Hero() {
-  const scrollWrapperRef = useRef<HTMLDivElement>(null);
-  const pinRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  useEffect(() => {
-    const wrapper = scrollWrapperRef.current;
-    const pin = pinRef.current;
-    if (!wrapper || !pin) return;
-
-    const st = ScrollTrigger.create({
-      trigger: wrapper,
-      start: "top top",
-      end: "bottom bottom",
-      pin,
-      scrub: true,
-      onUpdate: (self) => {
-        setActiveIndex(Math.min(TILE_COUNT - 1, Math.floor(self.progress * TILE_COUNT)));
-      },
-    });
-
-    return () => st.kill();
-  }, []);
-
   return (
     <section id="top" className="relative w-full bg-forest-950 pt-28 pb-14 md:pt-36 md:pb-20">
       <div className="mx-auto w-full max-w-6xl px-5">
@@ -87,18 +56,14 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      <div ref={scrollWrapperRef} className="relative mt-14" style={{ height: `${TILE_COUNT * VH_PER_TILE}vh` }}>
-        <div ref={pinRef} className="flex h-screen w-full items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.35 }}
-            className="mx-auto w-full max-w-6xl px-5"
-          >
-            <VideoTilesHero activeIndex={activeIndex} />
-          </motion.div>
-        </div>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.35 }}
+        className="mx-auto mt-14 w-full max-w-6xl px-5"
+      >
+        <VideoTilesHero />
+      </motion.div>
     </section>
   );
 }

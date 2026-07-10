@@ -9,69 +9,69 @@ type TileData = {
   text: string;
 };
 
-// Prozent-Positionen (links/oben, Mittelpunkt) der leeren Glaskacheln bei
-// Video-Start (t=0). Per automatisierter Pixel-Analyse ermittelt (Kanten-
-// Erkennung der hellen Glas-Ränder je Scanzeile, nicht per Augenmaß) und
-// gegen einen zweiten Messpunkt bei t=1.26s verifiziert (Abweichung <1.5%
-// je Kachel). Der Baum-Ring zoomt über die Loop-Dauer kontinuierlich auf
-// (kein Rotieren), darum reicht ein Referenzpunkt pro Kachel plus ein
-// synchron mitlaufender Scale-Transform (siehe unten).
-const PANEL_SPOTS = [
-  { left: 16.1, top: 63 },
-  { left: 34.3, top: 60 },
-  { left: 51.7, top: 58 },
-  { left: 68.9, top: 60 },
-  { left: 82.0, top: 63 },
+type PanelKeyframe = { t: number; left: number; top: number };
+
+// Prozent-Positionen (links/oben, Mittelpunkt) der 5 verfolgten Glaskacheln,
+// per Raster-Overlay direkt aus dem Rohvideo abgelesen (nicht per einzelnem
+// Zoom-Skalar hochgerechnet). Jede Kachel hat ihre eigene Bahnkurve, weil
+// die Kacheln je nach Abstand zum Zoom-Fluchtpunkt unterschiedlich schnell
+// wandern. Nur bis t=0.63s vermessen — das ist das Fenster, in dem alle 5
+// Kacheln eindeutig identifizierbar sind, bevor sie im weiteren Zoomverlauf
+// zu weit auseinanderlaufen bzw. den Bildrand verlassen. Für die restliche
+// Loop-Dauer blendet der Text aus (siehe FADE_* unten), statt mit unsicheren
+// Positionen weiterzuraten.
+const PANEL_TRACKS: PanelKeyframe[][] = [
+  [
+    { t: 0, left: 15.9, top: 58.4 },
+    { t: 0.63, left: 19.5, top: 57.6 },
+  ],
+  [
+    { t: 0, left: 27.4, top: 56.3 },
+    { t: 0.63, left: 34.5, top: 57.85 },
+  ],
+  [
+    { t: 0, left: 41.75, top: 54.15 },
+    { t: 0.63, left: 52.5, top: 58.1 },
+  ],
+  [
+    { t: 0, left: 59.4, top: 56.3 },
+    { t: 0.63, left: 69.5, top: 59.5 },
+  ],
+  [
+    { t: 0, left: 74, top: 57.5 },
+    { t: 0.63, left: 84, top: 63 },
+  ],
 ];
 
-// Zoom-Fahrkurve des Videos: Skalierung relativ zu t=0. Bis 1.26s per
-// Pixel-Analyse verifiziert; danach konservativ fortgeschrieben, da das
-// Verfahren bei starkem Zoom (mehr Bilddetail im Glas) zu unzuverlässig
-// wird, um einzelne Kacheln automatisiert zu unterscheiden.
-const ZOOM_KEYFRAMES: { t: number; s: number }[] = [
-  { t: 0, s: 1 },
-  { t: 0.21, s: 1.035 },
-  { t: 0.42, s: 1.068 },
-  { t: 0.63, s: 1.098 },
-  { t: 0.84, s: 1.124 },
-  { t: 1.05, s: 1.148 },
-  { t: 1.26, s: 1.169 },
-  { t: 1.8, s: 1.22 },
-  { t: 2.6, s: 1.32 },
-  { t: 3.4, s: 1.4 },
-  { t: 4.2, s: 1.46 },
-  { t: 5.04, s: 1.46 },
-];
+const TRACK_END = 0.63; // letzter vermessener Zeitpunkt
+const FADE_IN_END = 0.15; // Sekunden ab Loop-Start, in denen der Text einblendet
+const FADE_OUT_START = 0.63; // ab hier verlässt die Position den vermessenen Bereich
+const FADE_OUT_END = 0.95; // ab hier komplett unsichtbar, bis der Loop neu startet
 
-// Fluchtpunkt des Zooms (Prozent-Koordinaten). Die mittlere Kachel bleibt
-// über den gesamten gemessenen Zeitraum nahezu unbewegt (~51.5-52%), das
-// legt den x-Anker fest; y per Kanten-Tracking der Kachel-Oberkante.
-const ZOOM_ORIGIN = { x: 51.7, y: 48 };
-
-const FADE_WINDOW = 0.06; // Sekunden Ein-/Ausblenden am Loop-Schnitt
-
-function scaleAt(t: number): number {
-  const kf = ZOOM_KEYFRAMES;
-  if (t <= kf[0].t) return kf[0].s;
-  for (let i = 1; i < kf.length; i++) {
-    if (t <= kf[i].t) {
-      const a = kf[i - 1];
-      const b = kf[i];
-      const f = (t - a.t) / (b.t - a.t);
-      return a.s + (b.s - a.s) * f;
+function panelPosAt(track: PanelKeyframe[], t: number): { left: number; top: number } {
+  const clamped = Math.min(t, TRACK_END);
+  if (clamped <= track[0].t) return { left: track[0].left, top: track[0].top };
+  for (let i = 1; i < track.length; i++) {
+    if (clamped <= track[i].t) {
+      const a = track[i - 1];
+      const b = track[i];
+      const f = (clamped - a.t) / (b.t - a.t);
+      return { left: a.left + (b.left - a.left) * f, top: a.top + (b.top - a.top) * f };
     }
   }
-  return kf[kf.length - 1].s;
+  const last = track[track.length - 1];
+  return { left: last.left, top: last.top };
 }
 
-type VideoTilesHeroProps = {
-  /** Index der aktuell hervorgehobenen Kachel (0-basiert). undefined = alle gleich hell. */
-  activeIndex?: number;
-};
+function opacityAt(t: number): number {
+  if (t < FADE_IN_END) return t / FADE_IN_END;
+  if (t < FADE_OUT_START) return 1;
+  if (t < FADE_OUT_END) return 1 - (t - FADE_OUT_START) / (FADE_OUT_END - FADE_OUT_START);
+  return 0;
+}
 
-export default function VideoTilesHero({ activeIndex }: VideoTilesHeroProps = {}) {
+export default function VideoTilesHero() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
   const tilesRef = useRef<HTMLDivElement[]>([]);
   const [tiles, setTiles] = useState<TileData[] | null>(null);
 
@@ -86,21 +86,18 @@ export default function VideoTilesHero({ activeIndex }: VideoTilesHeroProps = {}
 
     const tick = () => {
       const video = videoRef.current;
-      const overlay = overlayRef.current;
-      if (video && overlay && video.duration) {
+      if (video && video.duration) {
         const t = video.currentTime;
-        const duration = video.duration;
-        const scale = scaleAt(t);
+        const opacity = Math.max(0, Math.min(1, opacityAt(t)));
 
-        let opacity = 1;
-        if (t < FADE_WINDOW) {
-          opacity = t / FADE_WINDOW;
-        } else if (t > duration - FADE_WINDOW) {
-          opacity = (duration - t) / FADE_WINDOW;
-        }
-
-        overlay.style.transform = `scale(${scale})`;
-        overlay.style.opacity = String(Math.max(0, Math.min(1, opacity)));
+        tilesRef.current.forEach((el, i) => {
+          const track = PANEL_TRACKS[i];
+          if (!el || !track) return;
+          const pos = panelPosAt(track, t);
+          el.style.left = `${pos.left}%`;
+          el.style.top = `${pos.top}%`;
+          el.style.opacity = String(opacity);
+        });
       }
       rafId = requestAnimationFrame(tick);
     };
@@ -114,7 +111,7 @@ export default function VideoTilesHero({ activeIndex }: VideoTilesHeroProps = {}
     fetch("/data/hero-tiles.json")
       .then((res) => res.json())
       .then((data: TileData[]) => {
-        if (!cancelled) setTiles(data.slice(0, PANEL_SPOTS.length));
+        if (!cancelled) setTiles(data.slice(0, PANEL_TRACKS.length));
       })
       .catch(() => {
         if (!cancelled) setTiles([]);
@@ -128,24 +125,10 @@ export default function VideoTilesHero({ activeIndex }: VideoTilesHeroProps = {}
     if (!tiles) return;
     gsap.fromTo(
       tilesRef.current.filter(Boolean),
-      { opacity: 0, scale: 0.85 },
-      { opacity: 1, scale: 1, duration: 0.8, stagger: 0.12, delay: 0.2, ease: "power3.out" }
+      { scale: 0.85 },
+      { scale: 1, duration: 0.8, stagger: 0.12, delay: 0.2, ease: "power3.out" }
     );
   }, [tiles]);
-
-  useEffect(() => {
-    if (!tiles || activeIndex === undefined) return;
-    tilesRef.current.forEach((el, i) => {
-      if (!el) return;
-      gsap.to(el, {
-        opacity: i === activeIndex ? 1 : 0.35,
-        scale: i === activeIndex ? 1.1 : 0.92,
-        duration: 0.5,
-        ease: "power2.out",
-        overwrite: "auto",
-      });
-    });
-  }, [tiles, activeIndex]);
 
   return (
     <div className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-3xl bg-black" style={{ aspectRatio: "1280 / 720" }}>
@@ -160,22 +143,17 @@ export default function VideoTilesHero({ activeIndex }: VideoTilesHeroProps = {}
         preload="auto"
       />
 
-      <div
-        ref={overlayRef}
-        className="absolute inset-0 hidden sm:block"
-        style={{ transformOrigin: `${ZOOM_ORIGIN.x}% ${ZOOM_ORIGIN.y}%`, willChange: "transform" }}
-      >
+      <div className="absolute inset-0 hidden sm:block">
         {tiles?.map((tile, i) => {
-          const spot = PANEL_SPOTS[i];
-          if (!spot) return null;
+          if (!PANEL_TRACKS[i]) return null;
           return (
             <div
               key={tile.id}
               ref={(el) => {
                 if (el) tilesRef.current[i] = el;
               }}
-              className="absolute flex w-[8.5%] -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center"
-              style={{ left: `${spot.left}%`, top: `${spot.top}%` }}
+              className="absolute flex w-[7%] -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center"
+              style={{ opacity: 0 }}
             >
               <h3 className="break-words font-display text-[clamp(0.5rem,0.9vw,0.85rem)] font-semibold leading-[1.15] text-sand-50 drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)]">
                 {tile.title}
