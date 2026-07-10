@@ -55,12 +55,14 @@ export default function Navbar() {
   }, [open]);
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-        scrolled && !open ? "bg-sand-50/90 shadow-sm backdrop-blur" : "bg-transparent"
-      }`}
-    >
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
+    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4">
+      <nav
+        className={`mx-auto flex max-w-6xl items-center justify-between rounded-full px-5 py-3 transition-all duration-300 ${
+          scrolled && !open
+            ? "bg-sand-50/90 shadow-md shadow-forest-900/5 backdrop-blur"
+            : "bg-transparent"
+        }`}
+      >
         <a
           href="#top"
           className={`font-display text-lg font-semibold tracking-tight transition-colors ${
