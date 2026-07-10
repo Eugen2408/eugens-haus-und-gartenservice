@@ -20,20 +20,14 @@ export default function Hero() {
           Haus- &amp; Gartenservice in Hamburg
         </motion.p>
 
-        <h1 className="max-w-3xl font-display text-5xl font-semibold leading-[1.02] tracking-tight text-sand-50 sm:text-6xl md:text-7xl lg:text-8xl">
-          {["Ihr Garten.", "Gepflegt, wie", "Sie ihn wünschen."].map((line, i) => (
-            <span key={line} className="block overflow-hidden">
-              <motion.span
-                initial={{ y: "110%" }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.9, delay: 0.15 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                className="block"
-              >
-                {line}
-              </motion.span>
-            </span>
-          ))}
-        </h1>
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-3xl font-display text-5xl font-semibold leading-[1.05] tracking-tight text-sand-50 sm:text-6xl md:text-7xl"
+        >
+          Ihr Garten. Gepflegt, wie Sie ihn wünschen.
+        </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 24 }}

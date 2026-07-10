@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import Reveal from "./Reveal";
+import TiltCard from "./TiltCard";
 
 const SERVICES = [
   {
@@ -92,41 +93,46 @@ export default function ServicesSection() {
           className="flex snap-x snap-mandatory gap-6 overflow-x-auto pb-6 pl-5 pr-5 [scrollbar-width:none] [-ms-overflow-style:none] sm:pl-[max(1.25rem,calc((100vw-72rem)/2+1.25rem))] [&::-webkit-scrollbar]:hidden"
         >
           {SERVICES.map((service, i) => (
-            <a
+            <TiltCard
               key={service.title}
-              href="#kontakt"
-              className="group relative w-[280px] flex-none snap-start overflow-hidden rounded-2xl bg-forest-950 shadow-sm transition-shadow hover:shadow-2xl sm:w-[340px]"
+              className="group w-[280px] flex-none snap-start sm:w-[340px]"
             >
-              <div className="relative aspect-[3/4] w-full overflow-hidden">
-                <Image
-                  src={service.image}
-                  alt={service.title}
-                  fill
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                  sizes="(max-width: 640px) 80vw, 340px"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-forest-950/90 via-forest-950/30 to-forest-950/10" />
+              <a
+                href="#kontakt"
+                className="relative block overflow-hidden rounded-2xl border border-white/60 bg-white/70 shadow-lg shadow-forest-900/10 backdrop-blur-sm transition-shadow duration-300 hover:shadow-2xl"
+              >
+                <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl">
+                  <Image
+                    src={service.image}
+                    alt={service.title}
+                    fill
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    sizes="(max-width: 640px) 80vw, 340px"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-forest-950/85 via-forest-950/10 to-transparent" />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/25 via-transparent to-transparent" />
 
-                <span className="absolute left-5 top-5 font-display text-6xl font-semibold text-sand-50/20">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-
-                <div className="absolute inset-x-5 bottom-5">
-                  <h3 className="font-display text-2xl font-semibold text-sand-50">
-                    {service.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-sand-100/80">
-                    {service.desc}
-                  </p>
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-terracotta-400 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                    Anfragen
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                      <path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
+                  <span className="absolute left-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/85 font-display text-sm font-semibold text-forest-900 shadow-sm backdrop-blur-sm">
+                    {String(i + 1).padStart(2, "0")}
                   </span>
+
+                  <div className="absolute inset-x-5 bottom-5">
+                    <h3 className="font-display text-2xl font-semibold text-sand-50">
+                      {service.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-sand-100/80">
+                      {service.desc}
+                    </p>
+                    <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-terracotta-400 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                      Anfragen
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </a>
+              </a>
+            </TiltCard>
           ))}
         </div>
       </Reveal>

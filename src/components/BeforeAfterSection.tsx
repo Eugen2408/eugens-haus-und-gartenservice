@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import BeforeAfterSlider from "./BeforeAfterSlider";
 import Reveal from "./Reveal";
 
@@ -20,9 +19,6 @@ const PAIRS = [
 ];
 
 export default function BeforeAfterSection() {
-  const [active, setActive] = useState(0);
-  const pair = PAIRS[active];
-
   return (
     <section
       id="vorher-nachher"
@@ -37,36 +33,25 @@ export default function BeforeAfterSection() {
             Vorher &amp; Nachher
           </h2>
           <p className="mt-4 max-w-xl text-sand-100/70">
-            Ziehen Sie den Regler und sehen Sie selbst, was ein bisschen
-            Pflege bewirken kann.
+            Ziehen Sie den Regler nach rechts und sehen Sie selbst, was ein
+            bisschen Pflege bewirken kann.
           </p>
         </Reveal>
 
-        <Reveal delay={0.1} className="mt-8 flex flex-wrap gap-3">
-          {PAIRS.map((p, i) => (
-            <button
-              key={p.label}
-              type="button"
-              onClick={() => setActive(i)}
-              className={`rounded-full px-5 py-2.5 text-sm font-medium transition-colors ${
-                active === i
-                  ? "bg-terracotta-500 text-sand-50"
-                  : "bg-sand-50/10 text-sand-100/80 hover:bg-sand-50/20"
-              }`}
-            >
-              {p.label}
-            </button>
+        <div className="mt-12 space-y-16">
+          {PAIRS.map((pair, i) => (
+            <Reveal key={pair.label} delay={i * 0.1}>
+              <p className="mb-4 text-sm font-semibold uppercase tracking-[0.15em] text-sand-100/60">
+                {pair.label}
+              </p>
+              <BeforeAfterSlider
+                beforeSrc={pair.beforeSrc}
+                afterSrc={pair.afterSrc}
+                alt={pair.alt}
+              />
+            </Reveal>
           ))}
-        </Reveal>
-
-        <Reveal delay={0.15} className="mt-8">
-          <BeforeAfterSlider
-            key={pair.label}
-            beforeSrc={pair.beforeSrc}
-            afterSrc={pair.afterSrc}
-            alt={pair.alt}
-          />
-        </Reveal>
+        </div>
       </div>
     </section>
   );
