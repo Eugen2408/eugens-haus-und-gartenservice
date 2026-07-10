@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Reveal from "./Reveal";
+import TiltCard from "./TiltCard";
 
 export default function AboutSection() {
   return (
     <section id="ueber-uns" className="mx-auto max-w-6xl px-5 py-24 md:py-32">
       <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
         <Reveal>
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl shadow-xl">
+          <TiltCard className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl shadow-2xl">
             <Image
               src="/images/heckenschnitt.jpg"
               alt="Eugen bei der Heckenpflege"
@@ -14,7 +15,7 @@ export default function AboutSection() {
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 50vw"
             />
-          </div>
+          </TiltCard>
         </Reveal>
 
         <Reveal delay={0.15}>

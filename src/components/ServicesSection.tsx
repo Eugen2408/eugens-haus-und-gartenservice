@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Reveal from "./Reveal";
+import TiltCard from "./TiltCard";
 
 const SERVICES = [
   {
@@ -51,29 +52,29 @@ export default function ServicesSection() {
         </p>
       </Reveal>
 
-      <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2">
         {SERVICES.map((service, i) => (
-          <Reveal key={service.title} delay={i * 0.06}>
-            <div className="group h-full overflow-hidden rounded-2xl border border-forest-900/5 bg-white/70 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl">
-              <div className="relative aspect-[4/3] w-full overflow-hidden">
+          <Reveal key={service.title} delay={i * 0.07}>
+            <TiltCard className="group h-full overflow-hidden rounded-2xl border border-forest-900/5 bg-white/70 shadow-sm transition-shadow hover:shadow-2xl">
+              <div className="relative aspect-[16/10] w-full overflow-hidden">
                 <Image
                   src={service.image}
                   alt={service.title}
                   fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-forest-950/50 to-transparent" />
-              </div>
-              <div className="p-6">
-                <h3 className="font-display text-xl font-semibold text-forest-950">
+                <div className="absolute inset-0 bg-gradient-to-t from-forest-950/60 via-forest-950/0 to-transparent" />
+                <h3 className="absolute bottom-4 left-5 font-display text-2xl font-semibold text-sand-50">
                   {service.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-forest-800/70">
+              </div>
+              <div className="p-6">
+                <p className="text-sm leading-relaxed text-forest-800/70">
                   {service.desc}
                 </p>
               </div>
-            </div>
+            </TiltCard>
           </Reveal>
         ))}
       </div>
