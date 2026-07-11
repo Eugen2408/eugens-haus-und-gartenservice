@@ -8,21 +8,22 @@ gsap.registerPlugin(ScrollTrigger);
 
 // Scroll-gescrubbte Bildsequenz (Küchenmontage: echtes Baustellenfoto als
 // gehaltener Auftakt → Aufbau-Schwenk → Brand auf der Arbeitsplatte →
-// Explosion am Kochfeld → Kamerafahrt in die Spüle → fertige Küche →
-// echtes Ergebnisfoto als gehaltener Schluss). Zusammengeschnitten aus
-// küche.mp4, küche 2.mp4 (Brand) und Küche 3.mp4 (Explosion).
-// Desktop: 158 Steps (134 Dateien à 1280px), Mobile: 92 Steps (68 à 768px).
+// Kamerafahrt in die Spüle → fertige Küche → echtes Ergebnisfoto als
+// gehaltener Schluss). Zusammengeschnitten aus küche.mp4 und küche 2.mp4
+// (Brand); das Karton-Explosions-Segment aus Küche 3.mp4 wurde auf
+// User-Wunsch wieder entfernt.
+// Desktop: 134 Steps (110 Dateien à 1280px), Mobile: 80 Steps (56 à 768px).
 const DESKTOP = {
-  count: 158,
+  count: 134,
   src: (i: number) => {
-    const n = i < 14 ? 0 : i < 146 ? i - 13 : 133;
+    const n = i < 14 ? 0 : i < 122 ? i - 13 : 109;
     return `/frames/kueche/kueche-${String(n).padStart(3, "0")}.webp`;
   },
 };
 const MOBILE = {
-  count: 92,
+  count: 80,
   src: (i: number) => {
-    const n = i < 14 ? 0 : i < 80 ? i - 13 : 67;
+    const n = i < 14 ? 0 : i < 68 ? i - 13 : 55;
     return `/frames/kueche/m/kueche-${String(n).padStart(3, "0")}.webp`;
   },
 };
