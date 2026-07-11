@@ -144,7 +144,7 @@ export default function TilesScrollScene() {
           trigger: wrapper,
           start: "top top",
           end: "bottom bottom",
-          scrub: 0.35,
+          scrub: 0.6,
           invalidateOnRefresh: true,
         },
       });
@@ -217,7 +217,7 @@ export default function TilesScrollScene() {
     <section
       id="fliesen"
       ref={wrapperRef}
-      className={`relative bg-forest-950 ${reducedMotion ? "" : "h-[240svh]"}`}
+      className={`relative bg-forest-950 ${reducedMotion ? "" : "h-[180svh]"}`}
     >
       <div
         className={`${reducedMotion ? "relative py-24" : "sticky top-0 h-[100svh]"} flex items-center justify-center overflow-hidden px-5`}
