@@ -23,7 +23,7 @@ const CHAPTERS: Chapter[] = [
   {
     kicker: "So arbeite ich",
     title: "Vom Rohbau zur Form.",
-    text: "Alte Wand, neue Leitungen – hier beginnt Ihre neue Dusche.",
+    text: "Alte Wand, neue Leitungen – hier beginnen Ihre neuen Fliesen.",
   },
   {
     kicker: "Die Verwandlung",
