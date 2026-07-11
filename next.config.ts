@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // .next liegt auf einem exFAT-Laufwerk und hat dort einen korrupten,
+  // unlöschbaren Unterordner hinterlassen – Build-Ausgabe deshalb umgeleitet
+  distDir: ".next-build",
 };
 
 export default nextConfig;
