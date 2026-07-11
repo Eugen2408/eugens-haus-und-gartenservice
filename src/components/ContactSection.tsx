@@ -1,4 +1,5 @@
 import Reveal from "./Reveal";
+import ContactForm from "./ContactForm";
 
 const CONTACT_ITEMS = [
   {
@@ -88,60 +89,7 @@ export default function ContactSection() {
         </Reveal>
 
         <Reveal delay={0.15}>
-          <form className="rounded-2xl border border-forest-900/5 bg-white/70 p-6 shadow-sm sm:p-8">
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <div className="sm:col-span-1">
-                <label className="mb-1.5 block text-sm font-medium text-forest-900">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  className="w-full rounded-lg border border-forest-900/10 bg-sand-50 px-4 py-2.5 text-sm text-forest-950 outline-none transition-colors focus:border-leaf-500"
-                  placeholder="Ihr Name"
-                />
-              </div>
-              <div className="sm:col-span-1">
-                <label className="mb-1.5 block text-sm font-medium text-forest-900">
-                  Telefon
-                </label>
-                <input
-                  type="tel"
-                  name="phone"
-                  className="w-full rounded-lg border border-forest-900/10 bg-sand-50 px-4 py-2.5 text-sm text-forest-950 outline-none transition-colors focus:border-leaf-500"
-                  placeholder="Ihre Telefonnummer"
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <label className="mb-1.5 block text-sm font-medium text-forest-900">
-                  E-Mail
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  className="w-full rounded-lg border border-forest-900/10 bg-sand-50 px-4 py-2.5 text-sm text-forest-950 outline-none transition-colors focus:border-leaf-500"
-                  placeholder="ihre@email.de"
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <label className="mb-1.5 block text-sm font-medium text-forest-900">
-                  Nachricht
-                </label>
-                <textarea
-                  name="message"
-                  rows={4}
-                  className="w-full resize-none rounded-lg border border-forest-900/10 bg-sand-50 px-4 py-2.5 text-sm text-forest-950 outline-none transition-colors focus:border-leaf-500"
-                  placeholder="Beschreiben Sie kurz Ihr Anliegen…"
-                />
-              </div>
-            </div>
-            <button
-              type="submit"
-              className="mt-6 w-full rounded-full bg-terracotta-500 px-6 py-3.5 text-sm font-semibold text-sand-50 transition-transform duration-300 hover:scale-[1.02] hover:bg-terracotta-600"
-            >
-              Nachricht senden
-            </button>
-          </form>
+          <ContactForm />
         </Reveal>
       </div>
     </section>
