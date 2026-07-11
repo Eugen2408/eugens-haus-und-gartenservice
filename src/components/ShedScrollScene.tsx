@@ -8,9 +8,9 @@ gsap.registerPlugin(ScrollTrigger);
 
 // Scroll-gescrubbte Bildsequenz (Gartenpflege: zugewachsener Schuppen →
 // Feuer-Verwandlung sprengt das Dickicht weg → freigelegter Schuppen im
-// aufgeräumten Garten). Desktop: 157 Frames à 1280px, Mobile: 79 Frames à 768px.
-const DESKTOP = { count: 157, src: (i: number) => `/frames/schuppen/schuppen-${String(i).padStart(3, "0")}.webp` };
-const MOBILE = { count: 79, src: (i: number) => `/frames/schuppen/m/schuppen-${String(i).padStart(3, "0")}.webp` };
+// aufgeräumten Garten). Desktop: 137 Frames à 1280px, Mobile: 69 Frames à 768px.
+const DESKTOP = { count: 137, src: (i: number) => `/frames/schuppen/schuppen-${String(i).padStart(3, "0")}.webp` };
+const MOBILE = { count: 69, src: (i: number) => `/frames/schuppen/m/schuppen-${String(i).padStart(3, "0")}.webp` };
 
 type Chapter = {
   kicker: string;
