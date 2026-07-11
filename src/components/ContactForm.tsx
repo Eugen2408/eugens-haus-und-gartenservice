@@ -3,10 +3,12 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 
-// Web3Forms-Access-Key (kostenlos, an kontakt@eugens-hausundgartenservice.de
-// gebunden). Solange kein Key hinterlegt ist, fällt das Formular auf WhatsApp
-// mit vorausgefüllter Nachricht zurück, damit keine Anfrage verloren geht.
-const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
+// Versand über FormSubmit (kostenlos, kein Account). Web3Forms meldete zwar
+// success, hat aber nachweislich nie zugestellt (2026-07-11). FormSubmit
+// verlangt einmalig einen Aktivierungsklick per Mail an das Zielpostfach —
+// danach werden Anfragen zugestellt. Ziel vorerst Gmail (zuverlässige
+// Zustellung); nach Aktivierung auf den anonymisierten Alias umstellbar.
+const FORMSUBMIT_ENDPOINT = "https://formsubmit.co/ajax/eugenwermter200@gmail.com";
 const WHATSAPP_PHONE = "4915560691797";
 
 type Status = "idle" | "sending" | "success" | "error";
@@ -30,7 +32,31 @@ export default function ContactForm() {
     const email = String(data.get("email") ?? "").trim();
     const message = String(data.get("message") ?? "").trim();
 
-    if (!WEB3FORMS_KEY) {
+    setStatus("sending");
+    try {
+      const res = await fetch(FORMSUBMIT_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name,
+          phone,
+          email,
+          message,
+          _subject: `Neue Anfrage über die Website von ${name}`,
+          _template: "table",
+          _captcha: "false",
+        }),
+      });
+      const json = await res.json().catch(() => null);
+      if (res.ok && json && (json.success === true || json.success === "true")) {
+        setStatus("success");
+        form.reset();
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      // Versand fehlgeschlagen: als Rettungsanker WhatsApp mit der
+      // ausgefüllten Nachricht öffnen, damit die Anfrage nicht verloren geht
       const lines = [
         "Hallo! Ich interessiere mich für Ihren Haus- und Gartenservice.",
         "",
@@ -39,38 +65,11 @@ export default function ContactForm() {
       if (phone) lines.push(`Telefon: ${phone}`);
       if (email) lines.push(`E-Mail: ${email}`);
       lines.push("", message);
-      const text = lines.join("\n");
       window.open(
-        `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(text)}`,
+        `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(lines.join("\n"))}`,
         "_blank",
         "noopener"
       );
-      return;
-    }
-
-    setStatus("sending");
-    try {
-      const res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          access_key: WEB3FORMS_KEY,
-          subject: `Neue Anfrage über die Website von ${name}`,
-          from_name: "eugens-hausundgartenservice.de",
-          name,
-          phone,
-          email,
-          message,
-        }),
-      });
-      const json = await res.json();
-      if (json.success) {
-        setStatus("success");
-        form.reset();
-      } else {
-        setStatus("error");
-      }
-    } catch {
       setStatus("error");
     }
   }
