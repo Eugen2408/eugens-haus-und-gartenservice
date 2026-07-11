@@ -21,7 +21,16 @@ export default function QuickNavSidebar() {
       const threshold = target
         ? target.offsetTop + target.offsetHeight
         : window.innerHeight * 1.4;
-      setVisible(window.scrollY > threshold);
+      // Über der gepinnten Einsatz-Szene ausblenden, damit die Sidebar
+      // nicht mit der Bühne und deren Text kollidiert
+      const einsatz = document.getElementById("einsatz");
+      const overScene = einsatz
+        ? (() => {
+            const rect = einsatz.getBoundingClientRect();
+            return rect.top < window.innerHeight && rect.bottom > 0;
+          })()
+        : false;
+      setVisible(window.scrollY > threshold && !overScene);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });

@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import ServicesSection from "@/components/ServicesSection";
+import HedgeScrollScene from "@/components/HedgeScrollScene";
 import BeforeAfterSection from "@/components/BeforeAfterSection";
 import AboutSection from "@/components/AboutSection";
 import ReviewsSection from "@/components/ReviewsSection";
@@ -19,6 +20,7 @@ export default function Home() {
       <main>
         <Hero />
         <ServicesSection />
+        <HedgeScrollScene />
         <BeforeAfterSection />
         <AboutSection />
         <ReviewsSection />
