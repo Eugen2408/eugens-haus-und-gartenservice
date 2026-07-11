@@ -21,9 +21,9 @@ export default function QuickNavSidebar() {
       const threshold = target
         ? target.offsetTop + target.offsetHeight
         : window.innerHeight * 1.4;
-      // Über den gepinnten Szenen (Hecke, Farbe, Fliesen, Boden) ausblenden,
-      // damit die Sidebar nicht mit der Bühne und deren Text kollidiert
-      const overScene = ["einsatz", "farbe", "fliesen", "boden"].some((id) => {
+      // Über den gepinnten Szenen (Hecke, Farbe, Fliesen, Boden, Schuppen)
+      // ausblenden, damit die Sidebar nicht mit der Bühne und deren Text kollidiert
+      const overScene = ["einsatz", "farbe", "fliesen", "boden", "schuppen"].some((id) => {
         const el = document.getElementById(id);
         if (!el) return false;
         const rect = el.getBoundingClientRect();
