@@ -31,7 +31,7 @@ const CHAPTERS: Chapter[] = [
   },
   {
     kicker: "Das Ergebnis",
-    title: "Ein Weg, der bleibt.",
+    title: "Ein Weg, der bleibt. So sauber, fast wie neu.",
     text: "Fest verlegt und eben – bei jedem Wetter sicher durch den Garten.",
   },
 ];
