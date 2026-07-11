@@ -7,7 +7,8 @@ const SECTIONS = [
   { id: "top", label: "Start" },
   { id: "leistungen", label: "Leistungen" },
   { id: "vorher-nachher", label: "Vorher / Nachher" },
-  { id: "ueber-uns", label: "Über uns" },
+  { id: "ueber-uns", label: "Über mich" },
+  { id: "bewertungen", label: "Bewertungen" },
   { id: "kontakt", label: "Kontakt" },
 ];
 

@@ -54,7 +54,7 @@ export default function ServicesSection() {
               Meine Leistungen
             </p>
             <h2 className="mt-3 max-w-2xl font-display text-4xl font-semibold leading-[1.05] text-forest-950 sm:text-5xl md:text-6xl">
-              Wonach suchst du?
+              Wonach suchen Sie?
             </h2>
             <p className="mt-4 max-w-xl text-forest-800/70">
               Gartenpflege, Rückschnitt, Malerarbeiten, Flächenreinigung,

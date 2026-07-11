@@ -57,3 +57,16 @@ html {
     cursor: none;
   }
 }
+
+@keyframes tile-pop {
+  from {
+    scale: 0.85;
+  }
+  to {
+    scale: 1;
+  }
+}
+
+.tile-pop {
+  animation: tile-pop 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}

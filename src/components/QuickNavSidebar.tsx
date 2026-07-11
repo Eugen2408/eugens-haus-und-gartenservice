@@ -6,7 +6,8 @@ import { motion } from "framer-motion";
 const ITEMS = [
   { href: "#leistungen", label: "Leistungen" },
   { href: "#vorher-nachher", label: "Vorher / Nachher" },
-  { href: "#ueber-uns", label: "Über uns" },
+  { href: "#ueber-uns", label: "Über mich" },
+  { href: "#bewertungen", label: "Bewertungen" },
   { href: "#kontakt", label: "Kontakt" },
 ];
 
@@ -41,7 +42,7 @@ export default function QuickNavSidebar() {
     >
       <div className="rounded-2xl border border-forest-900/10 bg-white/70 p-4 shadow-lg shadow-forest-900/5 backdrop-blur-md">
         <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-forest-800/50">
-          Wonach suchst du?
+          Wonach suchen Sie?
         </p>
         <ul className="space-y-2">
           {ITEMS.map((item) => (

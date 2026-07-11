@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
+import tilesData from "@/data/hero-tiles.json";
 
 type TileData = {
   id: string;
@@ -43,6 +43,8 @@ const PANEL_TRACKS: PanelKeyframe[][] = [
   ],
 ];
 
+const TILES: TileData[] = (tilesData as TileData[]).slice(0, PANEL_TRACKS.length);
+
 const TRACK_END = 0.63; // letzter vermessener Zeitpunkt
 const FADE_IN_END = 0.15; // Sekunden ab Loop-Start, in denen der Text einblendet
 const FADE_OUT_START = 0.63; // ab hier verlässt die Position den vermessenen Bereich
@@ -71,9 +73,10 @@ function opacityAt(t: number): number {
 }
 
 export default function VideoTilesHero() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const tilesRef = useRef<HTMLDivElement[]>([]);
-  const [tiles, setTiles] = useState<TileData[] | null>(null);
+  const [inView, setInView] = useState(true);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -82,11 +85,31 @@ export default function VideoTilesHero() {
   }, []);
 
   useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.05 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Video und rAF-Sync laufen nur, solange der Hero im Viewport ist.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (!inView) {
+      video.pause();
+      return;
+    }
+    video.play().catch(() => {});
+
     let rafId: number;
 
     const tick = () => {
-      const video = videoRef.current;
-      if (video && video.duration) {
+      if (video.duration) {
         const t = video.currentTime;
         const opacity = Math.max(0, Math.min(1, opacityAt(t)));
 
@@ -104,38 +127,19 @@ export default function VideoTilesHero() {
 
     rafId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafId);
-  }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch("/data/hero-tiles.json")
-      .then((res) => res.json())
-      .then((data: TileData[]) => {
-        if (!cancelled) setTiles(data.slice(0, PANEL_TRACKS.length));
-      })
-      .catch(() => {
-        if (!cancelled) setTiles([]);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!tiles) return;
-    gsap.fromTo(
-      tilesRef.current.filter(Boolean),
-      { scale: 0.85 },
-      { scale: 1, duration: 0.8, stagger: 0.12, delay: 0.2, ease: "power3.out" }
-    );
-  }, [tiles]);
+  }, [inView]);
 
   return (
-    <div className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-3xl bg-black" style={{ aspectRatio: "1280 / 720" }}>
+    <div
+      ref={containerRef}
+      className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-3xl bg-black"
+      style={{ aspectRatio: "1280 / 720" }}
+    >
       <video
         ref={videoRef}
         className="absolute inset-0 h-full w-full object-cover"
         src="/videos/hero-bg.mp4"
+        poster="/images/hero-poster.jpg"
         autoPlay
         loop
         muted
@@ -144,7 +148,7 @@ export default function VideoTilesHero() {
       />
 
       <div className="absolute inset-0 hidden sm:block">
-        {tiles?.map((tile, i) => {
+        {TILES.map((tile, i) => {
           if (!PANEL_TRACKS[i]) return null;
           return (
             <div
@@ -155,7 +159,10 @@ export default function VideoTilesHero() {
               className="absolute flex w-[7%] -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center"
               style={{ opacity: 0 }}
             >
-              <h3 className="break-words font-display text-[clamp(0.5rem,0.9vw,0.85rem)] font-semibold leading-[1.15] text-sand-50 drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)]">
+              <h3
+                className="tile-pop break-words font-display text-[clamp(0.5rem,0.9vw,0.85rem)] font-semibold leading-[1.15] text-sand-50 drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)]"
+                style={{ animationDelay: `${0.2 + i * 0.12}s` }}
+              >
                 {tile.title}
               </h3>
             </div>

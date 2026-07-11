@@ -47,14 +47,14 @@ export default function ReviewsSection() {
   useHideFeaturableTitle();
 
   return (
-    <section className="bg-sand-100 px-5 py-24 md:py-32">
+    <section id="bewertungen" className="bg-sand-100 px-5 py-24 md:py-32">
       <div className="mx-auto max-w-6xl">
         <Reveal>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-leaf-500">
             Kundenstimmen
           </p>
           <h2 className="mt-3 max-w-xl font-display text-3xl font-semibold text-forest-950 sm:text-4xl">
-            Was unsere Kunden sagen
+            Was meine Kunden sagen
           </h2>
         </Reveal>
 

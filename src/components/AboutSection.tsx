@@ -20,7 +20,7 @@ export default function AboutSection() {
 
         <Reveal delay={0.15}>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-leaf-500">
-            Über uns
+            Über mich
           </p>
           <h2 className="mt-3 font-display text-4xl font-semibold leading-[1.05] tracking-tight text-forest-950 sm:text-5xl">
             Der Profi aus der Nachbarschaft
