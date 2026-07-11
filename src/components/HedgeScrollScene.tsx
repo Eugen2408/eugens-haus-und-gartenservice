@@ -57,6 +57,8 @@ export default function HedgeScrollScene() {
   const barRef = useRef<HTMLDivElement>(null);
   const sweepRef = useRef<HTMLDivElement>(null);
   const leafRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const fxCanvasRef = useRef<HTMLCanvasElement>(null);
+  const progressRef = useRef(0);
   const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
@@ -139,6 +141,195 @@ export default function HedgeScrollScene() {
     const ro = new ResizeObserver(() => drawFrame(currentFrame));
     ro.observe(stage);
 
+    // ── Funken-VFX an der Heckenscheren-Klinge (nur Desktop, dezent) ──
+    // Position der Schnittstelle über die Sequenz kalibriert (Bild-%,
+    // Frames 10/32/46 etc. gesichtet); Emission koppelt an Scroll-Tempo.
+    const BLADE_TRACK: { p: number; x: number; y: number }[] = [
+      { p: 0, x: 45, y: 13 },
+      { p: 0.13, x: 45, y: 22 },
+      { p: 0.19, x: 42, y: 19 },
+      { p: 0.42, x: 48, y: 25 },
+      { p: 0.6, x: 50, y: 24 },
+      { p: 0.87, x: 44, y: 20 },
+      { p: 1, x: 46, y: 24 },
+    ];
+
+    function bladeAt(p: number): { x: number; y: number } {
+      if (p <= BLADE_TRACK[0].p) return BLADE_TRACK[0];
+      for (let i = 1; i < BLADE_TRACK.length; i++) {
+        if (p <= BLADE_TRACK[i].p) {
+          const a = BLADE_TRACK[i - 1];
+          const b = BLADE_TRACK[i];
+          const f = (p - a.p) / (b.p - a.p);
+          return { x: a.x + (b.x - a.x) * f, y: a.y + (b.y - a.y) * f };
+        }
+      }
+      return BLADE_TRACK[BLADE_TRACK.length - 1];
+    }
+
+    type Particle = {
+      x: number; y: number; vx: number; vy: number;
+      life: number; maxLife: number; size: number;
+      color: string; kind: "spark" | "ember" | "leaf";
+    };
+
+    const fxCanvas = fxCanvasRef.current;
+    const fxCtx = fxCanvas?.getContext("2d");
+    let fxRaf = 0;
+    let fxRunning = false;
+    let lastT = 0;
+    let lastProg = 0;
+    let glow = 0;
+    let spawnCarry = 0;
+    const parts: Particle[] = [];
+    const SPARK_COLORS = ["#ffe9c4", "#ffc46b", "#ffc46b", "#ff9448"];
+    const BURSTS = [0.38, 0.62];
+    let lastBurstAt = 0;
+
+    function spawn(kind: Particle["kind"], bx: number, by: number, s: number) {
+      if (parts.length > 160) return;
+      const r = Math.random;
+      if (kind === "spark") {
+        parts.push({
+          x: bx + (r() - 0.5) * 30 * s, y: by + (r() - 0.5) * 8 * s,
+          vx: -(40 + r() * 200) * s, vy: -(30 + r() * 160) * s,
+          life: 0, maxLife: 0.35 + r() * 0.45,
+          size: (1 + r() * 1.5) * s,
+          color: SPARK_COLORS[Math.floor(r() * SPARK_COLORS.length)],
+          kind,
+        });
+      } else if (kind === "ember") {
+        parts.push({
+          x: bx + (r() - 0.5) * 40 * s, y: by + (r() - 0.5) * 14 * s,
+          vx: -(15 + r() * 80) * s, vy: -(5 + r() * 55) * s,
+          life: 0, maxLife: 1 + r() * 0.8,
+          size: (2 + r() * 1.8) * s,
+          color: r() > 0.5 ? "#ff9448" : "#ff6f3c",
+          kind,
+        });
+      } else {
+        parts.push({
+          x: bx + (r() - 0.5) * 30 * s, y: by + r() * 10 * s,
+          vx: -(60 + r() * 200) * s, vy: (10 + r() * 60) * s,
+          life: 0, maxLife: 0.6 + r() * 0.5,
+          size: (2 + r() * 2) * s,
+          color: r() > 0.5 ? "#3d5c2a" : "#54763a",
+          kind,
+        });
+      }
+    }
+
+    function fxTick(t: number) {
+      if (!fxCtx || !fxCanvas || !stage) return;
+      const dt = Math.min(0.05, (t - lastT) / 1000 || 0.016);
+      lastT = t;
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = stage.clientWidth;
+      const h = stage.clientHeight;
+      if (fxCanvas.width !== Math.round(w * dpr) || fxCanvas.height !== Math.round(h * dpr)) {
+        fxCanvas.width = Math.round(w * dpr);
+        fxCanvas.height = Math.round(h * dpr);
+      }
+      fxCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      fxCtx.clearRect(0, 0, w, h);
+
+      const prog = progressRef.current;
+      const speed = Math.abs(prog - lastProg) / dt; // Scroll-Tempo in Sequenz/s
+      const intensity = Math.min(1, speed / 0.45);
+      const s = w / 1152; // Größenskalierung relativ zur Desktop-Referenz
+      const blade = bladeAt(prog);
+      const bx = (blade.x / 100) * w;
+      const by = (blade.y / 100) * h;
+
+      // Funken nur, während wirklich geschnitten (gescrollt) wird
+      spawnCarry += 55 * intensity * dt;
+      while (spawnCarry >= 1) {
+        spawnCarry -= 1;
+        spawn(Math.random() > 0.22 ? "spark" : "ember", bx, by, s);
+      }
+
+      // Glut-Burst an zwei markanten Schnittmomenten (in beide Richtungen)
+      for (const b of BURSTS) {
+        if (((lastProg < b && prog >= b) || (lastProg > b && prog <= b)) && t - lastBurstAt > 400) {
+          lastBurstAt = t;
+          for (let i = 0; i < 12; i++) spawn("ember", bx, by, s);
+          for (let i = 0; i < 8; i++) spawn("leaf", bx, by, s);
+          glow = 1;
+        }
+      }
+
+      // Warmes Glühen um die Schnittstelle
+      glow += (intensity * 0.7 - glow) * Math.min(1, dt * 6);
+      if (glow > 0.02) {
+        const radius = 70 * s * (0.8 + glow * 0.5);
+        const grad = fxCtx.createRadialGradient(bx, by, 0, bx, by, radius);
+        grad.addColorStop(0, `rgba(255, 170, 80, ${0.28 * glow})`);
+        grad.addColorStop(0.5, `rgba(255, 130, 50, ${0.12 * glow})`);
+        grad.addColorStop(1, "rgba(255, 120, 40, 0)");
+        fxCtx.globalCompositeOperation = "lighter";
+        fxCtx.fillStyle = grad;
+        fxCtx.fillRect(bx - radius, by - radius, radius * 2, radius * 2);
+      }
+
+      // Partikel bewegen und zeichnen
+      for (let i = parts.length - 1; i >= 0; i--) {
+        const p = parts[i];
+        p.life += dt;
+        if (p.life >= p.maxLife) { parts.splice(i, 1); continue; }
+        const gravity = p.kind === "spark" ? 520 : p.kind === "ember" ? 70 : 420;
+        p.vy += gravity * s * dt;
+        p.vx *= 1 - 0.9 * dt;
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        const a = 1 - p.life / p.maxLife;
+
+        if (p.kind === "leaf") {
+          fxCtx.globalCompositeOperation = "source-over";
+          fxCtx.globalAlpha = a * 0.8;
+          fxCtx.fillStyle = p.color;
+          fxCtx.beginPath();
+          fxCtx.ellipse(p.x, p.y, p.size, p.size * 0.55, p.vx * 0.01, 0, Math.PI * 2);
+          fxCtx.fill();
+        } else {
+          fxCtx.globalCompositeOperation = "lighter";
+          fxCtx.globalAlpha = p.kind === "ember" ? a * 0.75 : a;
+          fxCtx.strokeStyle = p.color;
+          fxCtx.lineCap = "round";
+          fxCtx.lineWidth = p.size;
+          fxCtx.beginPath();
+          fxCtx.moveTo(p.x, p.y);
+          fxCtx.lineTo(p.x - p.vx * 0.025, p.y - p.vy * 0.025);
+          fxCtx.stroke();
+        }
+      }
+      fxCtx.globalAlpha = 1;
+
+      lastProg = prog;
+      if (fxRunning) fxRaf = requestAnimationFrame(fxTick);
+    }
+
+    function startFx() {
+      if (fxRunning || !fxCtx) return;
+      fxRunning = true;
+      lastT = performance.now();
+      lastProg = progressRef.current;
+      fxRaf = requestAnimationFrame(fxTick);
+    }
+    function stopFx() {
+      fxRunning = false;
+      cancelAnimationFrame(fxRaf);
+    }
+
+    let fxIo: IntersectionObserver | null = null;
+    if (!reducedMotion && !isMobile && fxCtx) {
+      fxIo = new IntersectionObserver(
+        ([entry]) => (entry.isIntersecting ? startFx() : stopFx()),
+        { threshold: 0 }
+      );
+      fxIo.observe(wrapper);
+    }
+
     if (reducedMotion) {
       // Ohne Animation: letztes Frame (Ergebnis) statisch zeigen
       currentFrame = SET.count - 1;
@@ -166,6 +357,7 @@ export default function HedgeScrollScene() {
         frame: SET.count - 1,
         duration: 1,
         onUpdate: () => {
+          progressRef.current = state.frame / (SET.count - 1);
           const next = Math.round(state.frame);
           if (next !== currentFrame) {
             currentFrame = next;
@@ -241,6 +433,8 @@ export default function HedgeScrollScene() {
     return () => {
       io.disconnect();
       ro.disconnect();
+      stopFx();
+      fxIo?.disconnect();
       gsapCtx.revert();
     };
   }, [reducedMotion]);
@@ -267,6 +461,15 @@ export default function HedgeScrollScene() {
 
           {/* Scrim für Textkontrast + Vignette */}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-forest-950/80 via-transparent to-forest-950/25" />
+
+          {/* Funken-/Glut-Overlay (nur Desktop) */}
+          {!reducedMotion && (
+            <canvas
+              ref={fxCanvasRef}
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 hidden h-full w-full md:block"
+            />
+          )}
 
           {/* Licht-Sweep */}
           {!reducedMotion && (
