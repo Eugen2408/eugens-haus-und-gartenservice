@@ -49,11 +49,3 @@ body {
 html {
   scroll-behavior: smooth;
 }
-
-@media (pointer: fine) {
-  html,
-  a,
-  button {
-    cursor: none;
-  }
-}

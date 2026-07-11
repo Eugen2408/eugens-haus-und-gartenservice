@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { Fraunces } from "next/font/google";
-import CustomCursor from "@/components/CustomCursor";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,7 +32,6 @@ export default function RootLayout({
       className={`${geistSans.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-sand-50 text-forest-950">
-        <CustomCursor />
         {children}
       </body>
     </html>

@@ -44,7 +44,11 @@
     ".next-build-1783807009/types/**/*.ts",
     ".next-build-1783807009/dev/types/**/*.ts",
     ".next-build-1783807188/types/**/*.ts",
-    ".next-build-1783807188/dev/types/**/*.ts"
+    ".next-build-1783807188/dev/types/**/*.ts",
+    ".next-build-1783807266/types/**/*.ts",
+    ".next-build-1783807266/dev/types/**/*.ts",
+    ".next-build-1783807384/types/**/*.ts",
+    ".next-build-1783807384/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
