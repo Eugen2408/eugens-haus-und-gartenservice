@@ -21,15 +21,14 @@ export default function QuickNavSidebar() {
       const threshold = target
         ? target.offsetTop + target.offsetHeight
         : window.innerHeight * 1.4;
-      // Über der gepinnten Einsatz-Szene ausblenden, damit die Sidebar
-      // nicht mit der Bühne und deren Text kollidiert
-      const einsatz = document.getElementById("einsatz");
-      const overScene = einsatz
-        ? (() => {
-            const rect = einsatz.getBoundingClientRect();
-            return rect.top < window.innerHeight && rect.bottom > 0;
-          })()
-        : false;
+      // Über den gepinnten Szenen (Hecke + Fliesen) ausblenden, damit die
+      // Sidebar nicht mit der Bühne und deren Text kollidiert
+      const overScene = ["einsatz", "fliesen"].some((id) => {
+        const el = document.getElementById(id);
+        if (!el) return false;
+        const rect = el.getBoundingClientRect();
+        return rect.top < window.innerHeight && rect.bottom > 0;
+      });
       setVisible(window.scrollY > threshold && !overScene);
     };
     onScroll();

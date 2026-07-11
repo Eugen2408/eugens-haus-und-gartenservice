@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import VideoTilesHero from "./VideoTilesHero";
 
 export default function Hero() {
   return (
@@ -55,15 +54,6 @@ export default function Hero() {
           </a>
         </motion.div>
       </div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.35 }}
-        className="mx-auto mt-14 w-full max-w-6xl px-5"
-      >
-        <VideoTilesHero />
-      </motion.div>
     </section>
   );
 }
