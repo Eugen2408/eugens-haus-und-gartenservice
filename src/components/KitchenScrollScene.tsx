@@ -13,14 +13,14 @@ gsap.registerPlugin(ScrollTrigger);
 // (Brand); das Karton-Explosions-Segment aus Küche 3.mp4 wurde auf
 // User-Wunsch wieder entfernt.
 // Desktop: 134 Steps (110 Dateien à 1280px), Mobile: 80 Steps (56 à 768px).
-const DESKTOP = {
+export const DESKTOP = {
   count: 134,
   src: (i: number) => {
     const n = i < 14 ? 0 : i < 122 ? i - 13 : 109;
     return `/frames/kueche/kueche-${String(n).padStart(3, "0")}.webp`;
   },
 };
-const MOBILE = {
+export const MOBILE = {
   count: 80,
   src: (i: number) => {
     const n = i < 14 ? 0 : i < 68 ? i - 13 : 55;
@@ -264,7 +264,7 @@ export default function KitchenScrollScene() {
           <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-sand-50/25 bg-forest-950/35 px-4 py-2 backdrop-blur-md">
             <span className="h-2 w-2 rounded-full bg-terracotta-500" />
             <span className="text-xs font-semibold uppercase tracking-[0.15em] text-sand-50">
-              Küchenmontage · Live-Einsatz
+              Küchenmontage
             </span>
           </div>
 

@@ -12,8 +12,8 @@ gsap.registerPlugin(ScrollTrigger);
 // das Video ab Explosionsbeginn. Desktop: 135 Steps (116 Dateien à 1280px),
 // Mobile: 78 Steps (59 Dateien à 768px).
 const HOLD = 20;
-const DESKTOP = { count: 135, src: (i: number) => `/frames/licht/licht-${String(Math.max(0, i - HOLD + 1)).padStart(3, "0")}.webp` };
-const MOBILE = { count: 78, src: (i: number) => `/frames/licht/m/licht-${String(Math.max(0, i - HOLD + 1)).padStart(3, "0")}.webp` };
+export const DESKTOP = { count: 135, src: (i: number) => `/frames/licht/licht-${String(Math.max(0, i - HOLD + 1)).padStart(3, "0")}.webp` };
+export const MOBILE = { count: 78, src: (i: number) => `/frames/licht/m/licht-${String(Math.max(0, i - HOLD + 1)).padStart(3, "0")}.webp` };
 
 type Chapter = {
   kicker: string;
@@ -231,7 +231,7 @@ export default function LightScrollScene() {
           <canvas
             ref={canvasRef}
             role="img"
-            aria-label="Elektroarbeiten im Zeitraffer – von der Lampenmontage über den Kurzschluss bis zum sauber verdrahteten Anschluss"
+            aria-label="Lichtmontage im Zeitraffer – von der Lampenmontage über den Kurzschluss bis zum sauber verdrahteten Anschluss"
             className="absolute inset-0 h-full w-full"
           />
 
@@ -251,7 +251,7 @@ export default function LightScrollScene() {
           <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-sand-50/25 bg-forest-950/35 px-4 py-2 backdrop-blur-md">
             <span className="h-2 w-2 rounded-full bg-terracotta-500" />
             <span className="text-xs font-semibold uppercase tracking-[0.15em] text-sand-50">
-              Elektroarbeiten · Live-Einsatz
+              Lichtmontage
             </span>
           </div>
 
@@ -285,7 +285,7 @@ export default function LightScrollScene() {
                     href="#kontakt"
                     className="mt-5 inline-flex items-center gap-2 rounded-full bg-terracotta-500 px-6 py-3 text-sm font-semibold text-sand-50 shadow-lg shadow-terracotta-500/25 transition-colors duration-200 hover:bg-terracotta-600"
                   >
-                    Elektroarbeiten anfragen
+                    Lichtmontage anfragen
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                       <path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>

@@ -10,8 +10,8 @@ gsap.registerPlugin(ScrollTrigger);
 // fertig geflieste Dusche). Bewusst ohne Partikel-Effekte — die Sequenz
 // bringt ihre eigene Feuer-Verwandlung mit.
 // Desktop: 41 Frames à 1280px, Mobile: 21 Frames à 768px.
-const DESKTOP = { count: 41, src: (i: number) => `/frames/fliesen/fliesen-${String(i).padStart(2, "0")}.webp` };
-const MOBILE = { count: 21, src: (i: number) => `/frames/fliesen/m/fliesen-${String(i).padStart(2, "0")}.webp` };
+export const DESKTOP = { count: 41, src: (i: number) => `/frames/fliesen/fliesen-${String(i).padStart(2, "0")}.webp` };
+export const MOBILE = { count: 21, src: (i: number) => `/frames/fliesen/m/fliesen-${String(i).padStart(2, "0")}.webp` };
 
 type Chapter = {
   kicker: string;
@@ -23,7 +23,7 @@ const CHAPTERS: Chapter[] = [
   {
     kicker: "So arbeite ich",
     title: "Vom Rohbau zur Form.",
-    text: "Alte Wand, neue Leitungen – hier beginnt Ihr neues Bad.",
+    text: "Alte Wand, neue Leitungen – hier beginnt Ihre neue Dusche.",
   },
   {
     kicker: "Die Verwandlung",
@@ -229,7 +229,7 @@ export default function TilesScrollScene() {
           <canvas
             ref={canvasRef}
             role="img"
-            aria-label="Badsanierung im Zeitraffer – von der rohen Wand mit neuen Leitungen bis zur fertig geflieste Dusche"
+            aria-label="Fliesenarbeiten im Zeitraffer – von der rohen Wand mit neuen Leitungen bis zur fertig gefliesten Dusche"
             className="absolute inset-0 h-full w-full"
           />
 
@@ -249,7 +249,7 @@ export default function TilesScrollScene() {
           <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-sand-50/25 bg-forest-950/35 px-4 py-2 backdrop-blur-md">
             <span className="h-2 w-2 rounded-full bg-terracotta-500" />
             <span className="text-xs font-semibold uppercase tracking-[0.15em] text-sand-50">
-              Fliesenarbeiten · Live-Einsatz
+              Fliesenarbeiten
             </span>
           </div>
 

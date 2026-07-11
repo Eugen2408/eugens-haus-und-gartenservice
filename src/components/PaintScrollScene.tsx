@@ -9,8 +9,8 @@ gsap.registerPlugin(ScrollTrigger);
 // Scroll-gescrubbte Bildsequenz (Malerarbeiten: Farbeimer → Farb-Durchbruch
 // durch die Wand → frisch gestrichenes Treppenhaus).
 // Desktop: 160 Frames à 1280px, Mobile: 80 Frames à 768px.
-const DESKTOP = { count: 160, src: (i: number) => `/frames/farbe/farbe-${String(i).padStart(3, "0")}.webp` };
-const MOBILE = { count: 80, src: (i: number) => `/frames/farbe/m/farbe-${String(i).padStart(3, "0")}.webp` };
+export const DESKTOP = { count: 160, src: (i: number) => `/frames/farbe/farbe-${String(i).padStart(3, "0")}.webp` };
+export const MOBILE = { count: 80, src: (i: number) => `/frames/farbe/m/farbe-${String(i).padStart(3, "0")}.webp` };
 
 type Chapter = {
   kicker: string;
@@ -248,7 +248,7 @@ export default function PaintScrollScene() {
           <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-sand-50/25 bg-forest-950/35 px-4 py-2 backdrop-blur-md">
             <span className="h-2 w-2 rounded-full bg-terracotta-500" />
             <span className="text-xs font-semibold uppercase tracking-[0.15em] text-sand-50">
-              Malerarbeiten · Live-Einsatz
+              Malerarbeiten
             </span>
           </div>
 

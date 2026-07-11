@@ -9,8 +9,8 @@ gsap.registerPlugin(ScrollTrigger);
 // Scroll-gescrubbte Bildsequenz (Bodenverlegung: altes Laminat-Chaos →
 // Verwandlung → fertig verlegter heller Boden).
 // Desktop: 127 Frames à 1280px, Mobile: 64 Frames à 768px.
-const DESKTOP = { count: 127, src: (i: number) => `/frames/boden/boden-${String(i).padStart(3, "0")}.webp` };
-const MOBILE = { count: 64, src: (i: number) => `/frames/boden/m/boden-${String(i).padStart(3, "0")}.webp` };
+export const DESKTOP = { count: 127, src: (i: number) => `/frames/boden/boden-${String(i).padStart(3, "0")}.webp` };
+export const MOBILE = { count: 64, src: (i: number) => `/frames/boden/m/boden-${String(i).padStart(3, "0")}.webp` };
 
 type Chapter = {
   kicker: string;
@@ -248,7 +248,7 @@ export default function FloorScrollScene() {
           <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-sand-50/25 bg-forest-950/35 px-4 py-2 backdrop-blur-md">
             <span className="h-2 w-2 rounded-full bg-terracotta-500" />
             <span className="text-xs font-semibold uppercase tracking-[0.15em] text-sand-50">
-              Bodenverlegung · Live-Einsatz
+              Bodenverlegung
             </span>
           </div>
 

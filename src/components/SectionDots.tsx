@@ -12,9 +12,14 @@ const SECTIONS = [
   { id: "kontakt", label: "Kontakt" },
 ];
 
+// Über den gepinnten Scroll-Szenen steht der Zähler sonst minutenlang
+// unverändert auf "02/06" – dort wird er ausgeblendet
+const SCENE_IDS = ["einsatz", "farbe", "fliesen", "boden", "schuppen", "platten", "bad", "kueche", "licht"];
+
 export default function SectionDots() {
   const [active, setActive] = useState("top");
   const [visible, setVisible] = useState(false);
+  const [overScene, setOverScene] = useState(false);
   const activeIndex = Math.max(
     0,
     SECTIONS.findIndex((s) => s.id === active)
@@ -41,7 +46,17 @@ export default function SectionDots() {
 
     els.forEach((el) => observer.observe(el));
 
-    const onScroll = () => setVisible(window.scrollY > window.innerHeight * 0.5);
+    const onScroll = () => {
+      setVisible(window.scrollY > window.innerHeight * 0.5);
+      setOverScene(
+        SCENE_IDS.some((id) => {
+          const el = document.getElementById(id);
+          if (!el) return false;
+          const rect = el.getBoundingClientRect();
+          return rect.top < window.innerHeight && rect.bottom > 0;
+        })
+      );
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
 
@@ -83,10 +98,10 @@ export default function SectionDots() {
 
       <motion.div
         initial={false}
-        animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : -8 }}
+        animate={{ opacity: visible && !overScene ? 1 : 0, y: visible && !overScene ? 0 : -8 }}
         transition={{ duration: 0.4 }}
         className="fixed right-5 top-20 z-40 hidden items-center gap-1 rounded-full border border-forest-900/10 bg-white/75 py-1.5 pl-1.5 pr-3 text-[11px] font-semibold tracking-wide text-forest-800 shadow-sm backdrop-blur-md sm:top-24 lg:flex"
-        style={{ pointerEvents: visible ? "auto" : "none" }}
+        style={{ pointerEvents: visible && !overScene ? "auto" : "none" }}
       >
         <button
           type="button"

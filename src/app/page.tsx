@@ -18,6 +18,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import QuickNavSidebar from "@/components/QuickNavSidebar";
 import SectionDots from "@/components/SectionDots";
+import FramePreloader from "@/components/FramePreloader";
 
 export default function Home() {
   return (
@@ -25,6 +26,7 @@ export default function Home() {
       <Navbar />
       <QuickNavSidebar />
       <SectionDots />
+      <FramePreloader />
       <main>
         <Hero />
         <ServicesSection />

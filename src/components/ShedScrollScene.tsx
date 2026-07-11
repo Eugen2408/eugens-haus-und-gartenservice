@@ -9,8 +9,8 @@ gsap.registerPlugin(ScrollTrigger);
 // Scroll-gescrubbte Bildsequenz (Gartenpflege: zugewachsener Schuppen →
 // Feuer-Verwandlung sprengt das Dickicht weg → freigelegter Schuppen im
 // aufgeräumten Garten). Desktop: 107 Frames à 1280px, Mobile: 54 Frames à 768px.
-const DESKTOP = { count: 107, src: (i: number) => `/frames/schuppen/schuppen-${String(i).padStart(3, "0")}.webp` };
-const MOBILE = { count: 54, src: (i: number) => `/frames/schuppen/m/schuppen-${String(i).padStart(3, "0")}.webp` };
+export const DESKTOP = { count: 107, src: (i: number) => `/frames/schuppen/schuppen-${String(i).padStart(3, "0")}.webp` };
+export const MOBILE = { count: 54, src: (i: number) => `/frames/schuppen/m/schuppen-${String(i).padStart(3, "0")}.webp` };
 
 type Chapter = {
   kicker: string;
@@ -181,10 +181,12 @@ export default function ShedScrollScene() {
 
       // Drei Text-Kapitel, an den Scrub gekoppelt; Titel-Wörter
       // schieben sich einzeln aus einer Maske hoch
+      // Kapitel 3 erst ab 78 %: der harte Schnitt zur Garten-Umgebung
+      // liegt bei ~81 %, vorher fliegen noch Trümmer durchs Bild
       const spans: [number, number][] = [
         [0.02, 0.24],
         [0.34, 0.56],
-        [0.7, 1.0],
+        [0.78, 1.0],
       ];
       captionRefs.current.forEach((el, i) => {
         if (!el) return;
@@ -248,7 +250,7 @@ export default function ShedScrollScene() {
           <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-sand-50/25 bg-forest-950/35 px-4 py-2 backdrop-blur-md">
             <span className="h-2 w-2 rounded-full bg-terracotta-500" />
             <span className="text-xs font-semibold uppercase tracking-[0.15em] text-sand-50">
-              Gartenpflege · Live-Einsatz
+              Gartenpflege
             </span>
           </div>
 

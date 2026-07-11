@@ -11,8 +11,8 @@ gsap.registerPlugin(ScrollTrigger);
 // nivellierter Boden). Zusammengeschnitten aus zwei Clips; der zweite
 // Teil läuft mit doppeltem Tempo. Desktop: 124 Frames à 1280px,
 // Mobile: 62 Frames à 768px.
-const DESKTOP = { count: 124, src: (i: number) => `/frames/bad/bad-${String(i).padStart(3, "0")}.webp` };
-const MOBILE = { count: 62, src: (i: number) => `/frames/bad/m/bad-${String(i).padStart(3, "0")}.webp` };
+export const DESKTOP = { count: 124, src: (i: number) => `/frames/bad/bad-${String(i).padStart(3, "0")}.webp` };
+export const MOBILE = { count: 62, src: (i: number) => `/frames/bad/m/bad-${String(i).padStart(3, "0")}.webp` };
 
 type Chapter = {
   kicker: string;
@@ -183,10 +183,12 @@ export default function BathScrollScene() {
 
       // Drei Text-Kapitel, an den Scrub gekoppelt; Titel-Wörter
       // schieben sich einzeln aus einer Maske hoch
+      // Kapitel 3 leicht nach hinten: bei 70 % fliegen noch Platten,
+      // ab ~74 % ist der neue Aufbau klar zu sehen
       const spans: [number, number][] = [
         [0.02, 0.24],
         [0.34, 0.56],
-        [0.7, 1.0],
+        [0.74, 1.0],
       ];
       captionRefs.current.forEach((el, i) => {
         if (!el) return;
@@ -250,7 +252,7 @@ export default function BathScrollScene() {
           <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-sand-50/25 bg-forest-950/35 px-4 py-2 backdrop-blur-md">
             <span className="h-2 w-2 rounded-full bg-terracotta-500" />
             <span className="text-xs font-semibold uppercase tracking-[0.15em] text-sand-50">
-              Badsanierung · Live-Einsatz
+              Badsanierung
             </span>
           </div>
 

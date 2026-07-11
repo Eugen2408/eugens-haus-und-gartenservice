@@ -8,8 +8,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 // Scroll-gescrubbte Bildsequenz (Kamerafahrt: Leiter → Heckenschnitt → Ergebnis).
 // Desktop: 54 Frames à 1280px, Mobile: 27 Frames à 768px (halbe Datenmenge).
-const DESKTOP = { count: 54, src: (i: number) => `/frames/hecke-${String(i).padStart(2, "0")}.webp` };
-const MOBILE = { count: 27, src: (i: number) => `/frames/m/hecke-${String(i).padStart(2, "0")}.webp` };
+export const DESKTOP = { count: 54, src: (i: number) => `/frames/hecke-${String(i).padStart(2, "0")}.webp` };
+export const MOBILE = { count: 27, src: (i: number) => `/frames/m/hecke-${String(i).padStart(2, "0")}.webp` };
 
 type Chapter = {
   kicker: string;
@@ -24,7 +24,7 @@ const CHAPTERS: Chapter[] = [
     text: "Sicherer Stand, klarer Plan – jede Hecke hat ihre Linie.",
   },
   {
-    kicker: "So arbeite ich",
+    kicker: "Im Detail",
     title: "Präzision, Schnitt für Schnitt.",
     text: "Saubere Kante statt Wildwuchs – mit Profi-Werkzeug und ruhiger Hand.",
   },
@@ -299,7 +299,7 @@ export default function HedgeScrollScene() {
           <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-sand-50/25 bg-forest-950/35 px-4 py-2 backdrop-blur-md">
             <span className="h-2 w-2 rounded-full bg-leaf-400" />
             <span className="text-xs font-semibold uppercase tracking-[0.15em] text-sand-50">
-              Heckenschnitt · Live-Einsatz
+              Heckenschnitt
             </span>
           </div>
 
