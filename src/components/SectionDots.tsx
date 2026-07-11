@@ -12,23 +12,9 @@ const SECTIONS = [
   { id: "kontakt", label: "Kontakt" },
 ];
 
-// Über den gepinnten Scroll-Szenen steht der Zähler sonst minutenlang
-// unverändert auf "02/06" – dort wird er ausgeblendet
-const SCENE_IDS = ["einsatz", "farbe", "fliesen", "boden", "schuppen", "platten", "bad", "kueche", "licht"];
-
 export default function SectionDots() {
   const [active, setActive] = useState("top");
   const [visible, setVisible] = useState(false);
-  const [overScene, setOverScene] = useState(false);
-  const activeIndex = Math.max(
-    0,
-    SECTIONS.findIndex((s) => s.id === active)
-  );
-
-  function goTo(index: number) {
-    const clamped = Math.min(SECTIONS.length - 1, Math.max(0, index));
-    document.getElementById(SECTIONS[clamped].id)?.scrollIntoView({ behavior: "smooth" });
-  }
 
   useEffect(() => {
     const els = SECTIONS.map((s) => document.getElementById(s.id)).filter(
@@ -46,17 +32,7 @@ export default function SectionDots() {
 
     els.forEach((el) => observer.observe(el));
 
-    const onScroll = () => {
-      setVisible(window.scrollY > window.innerHeight * 0.5);
-      setOverScene(
-        SCENE_IDS.some((id) => {
-          const el = document.getElementById(id);
-          if (!el) return false;
-          const rect = el.getBoundingClientRect();
-          return rect.top < window.innerHeight && rect.bottom > 0;
-        })
-      );
-    };
+    const onScroll = () => setVisible(window.scrollY > window.innerHeight * 0.5);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
 
@@ -96,34 +72,6 @@ export default function SectionDots() {
         ))}
       </motion.div>
 
-      <motion.div
-        initial={false}
-        animate={{ opacity: visible && !overScene ? 1 : 0, y: visible && !overScene ? 0 : -8 }}
-        transition={{ duration: 0.4 }}
-        className="fixed right-5 top-20 z-40 hidden items-center gap-1 rounded-full border border-forest-900/10 bg-white/75 py-1.5 pl-1.5 pr-3 text-[11px] font-semibold tracking-wide text-forest-800 shadow-sm backdrop-blur-md sm:top-24 lg:flex"
-        style={{ pointerEvents: visible && !overScene ? "auto" : "none" }}
-      >
-        <button
-          type="button"
-          onClick={() => goTo(activeIndex - 1)}
-          aria-label="Vorherige Sektion"
-          className="flex h-6 w-6 items-center justify-center rounded-full text-forest-800/60 transition-colors hover:bg-leaf-200 hover:text-forest-900"
-        >
-          ‹‹
-        </button>
-        <span className="whitespace-nowrap px-1.5 tabular-nums">
-          {String(activeIndex + 1).padStart(2, "0")} / {String(SECTIONS.length).padStart(2, "0")}
-          <span className="ml-1.5 text-forest-800/50">{SECTIONS[activeIndex].label}</span>
-        </span>
-        <button
-          type="button"
-          onClick={() => goTo(activeIndex + 1)}
-          aria-label="Nächste Sektion"
-          className="flex h-6 w-6 items-center justify-center rounded-full text-forest-800/60 transition-colors hover:bg-leaf-200 hover:text-forest-900"
-        >
-          ››
-        </button>
-      </motion.div>
     </>
   );
 }
