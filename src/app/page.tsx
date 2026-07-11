@@ -2,7 +2,9 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import ServicesSection from "@/components/ServicesSection";
 import HedgeScrollScene from "@/components/HedgeScrollScene";
+import PaintScrollScene from "@/components/PaintScrollScene";
 import TilesScrollScene from "@/components/TilesScrollScene";
+import FloorScrollScene from "@/components/FloorScrollScene";
 import BeforeAfterSection from "@/components/BeforeAfterSection";
 import AboutSection from "@/components/AboutSection";
 import ReviewsSection from "@/components/ReviewsSection";
@@ -22,7 +24,9 @@ export default function Home() {
         <Hero />
         <ServicesSection />
         <HedgeScrollScene />
+        <PaintScrollScene />
         <TilesScrollScene />
+        <FloorScrollScene />
         <BeforeAfterSection />
         <AboutSection />
         <ReviewsSection />
