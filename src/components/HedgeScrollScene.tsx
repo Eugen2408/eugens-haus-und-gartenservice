@@ -35,12 +35,28 @@ const CHAPTERS: Chapter[] = [
   },
 ];
 
+// Deterministische Blatt-Partikel (kein Math.random im Render → kein
+// Hydration-Mismatch). left in %, size in px, drift als Anteil der
+// Bühnenbreite, start als Position im Scrub-Verlauf (0–1).
+const LEAVES = [
+  { left: 12, size: 26, drift: 0.06, rot: 210, start: 0.1, opacity: 0.85 },
+  { left: 28, size: 18, drift: -0.05, rot: -160, start: 0.2, opacity: 0.7 },
+  { left: 44, size: 30, drift: 0.09, rot: 280, start: 0.14, opacity: 0.9 },
+  { left: 57, size: 16, drift: -0.07, rot: -240, start: 0.32, opacity: 0.65 },
+  { left: 66, size: 24, drift: 0.05, rot: 190, start: 0.26, opacity: 0.8 },
+  { left: 78, size: 20, drift: -0.04, rot: -300, start: 0.42, opacity: 0.75 },
+  { left: 35, size: 22, drift: 0.08, rot: 250, start: 0.5, opacity: 0.85 },
+  { left: 87, size: 17, drift: -0.06, rot: -200, start: 0.58, opacity: 0.7 },
+];
+
 export default function HedgeScrollScene() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const captionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const barRef = useRef<HTMLDivElement>(null);
+  const sweepRef = useRef<HTMLDivElement>(null);
+  const leafRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
@@ -141,7 +157,8 @@ export default function HedgeScrollScene() {
           trigger: wrapper,
           start: "top top",
           end: "bottom bottom",
-          scrub: 0.6,
+          scrub: 0.35,
+          invalidateOnRefresh: true,
         },
       });
 
@@ -157,14 +174,46 @@ export default function HedgeScrollScene() {
         },
       }, 0);
 
-      // Leichter Kamera-Push: Bühne fährt von 1.06 auf 1 zurück
+      // Leichter Kamera-Push + 3D-Kippeffekt beim Einstieg
       tl.fromTo(stage, { scale: 1.06 }, { scale: 1, duration: 1 }, 0);
+      tl.fromTo(
+        stage,
+        { rotateX: 5, transformPerspective: 1200 },
+        { rotateX: 0, duration: 0.38, ease: "power1.out" },
+        0
+      );
 
       if (barRef.current) {
         tl.fromTo(barRef.current, { scaleX: 0 }, { scaleX: 1, duration: 1 }, 0);
       }
 
-      // Drei Text-Kapitel, an den Scrub gekoppelt
+      // Licht-Sweep zieht einmal diagonal über die Bühne
+      if (sweepRef.current) {
+        tl.fromTo(sweepRef.current, { xPercent: -60 }, { xPercent: 520, duration: 0.34 }, 0.16);
+      }
+
+      // Blatt-Partikel wehen während des Scrubs über die Bühne
+      LEAVES.forEach((leaf, i) => {
+        const el = leafRefs.current[i];
+        if (!el) return;
+        const dur = 0.3;
+        tl.fromTo(
+          el,
+          { y: 0, x: 0, rotation: 0 },
+          {
+            y: () => -stage!.clientHeight * 1.25,
+            x: () => stage!.clientWidth * leaf.drift,
+            rotation: leaf.rot,
+            duration: dur,
+          },
+          leaf.start
+        );
+        tl.fromTo(el, { autoAlpha: 0 }, { autoAlpha: leaf.opacity, duration: dur * 0.15 }, leaf.start);
+        tl.to(el, { autoAlpha: 0, duration: dur * 0.3 }, leaf.start + dur * 0.7);
+      });
+
+      // Drei Text-Kapitel, an den Scrub gekoppelt; Titel-Wörter
+      // schieben sich einzeln aus einer Maske hoch
       const spans: [number, number][] = [
         [0.02, 0.26],
         [0.36, 0.6],
@@ -174,6 +223,15 @@ export default function HedgeScrollScene() {
         if (!el) return;
         const [inAt, outAt] = spans[i];
         tl.fromTo(el, { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.07 }, inAt);
+        const words = el.querySelectorAll<HTMLElement>(".hedge-word");
+        if (words.length) {
+          tl.fromTo(
+            words,
+            { yPercent: 115 },
+            { yPercent: 0, duration: 0.06, stagger: 0.014, ease: "power2.out" },
+            inAt
+          );
+        }
         if (i < 2) {
           tl.to(el, { autoAlpha: 0, y: -28, duration: 0.06 }, outAt);
         }
@@ -191,7 +249,7 @@ export default function HedgeScrollScene() {
     <section
       id="einsatz"
       ref={wrapperRef}
-      className={`relative bg-forest-950 ${reducedMotion ? "" : "h-[350svh]"}`}
+      className={`relative bg-forest-950 ${reducedMotion ? "" : "h-[240svh]"}`}
     >
       <div
         className={`${reducedMotion ? "relative py-24" : "sticky top-0 h-[100svh]"} flex items-center justify-center overflow-hidden px-5`}
@@ -209,6 +267,33 @@ export default function HedgeScrollScene() {
 
           {/* Scrim für Textkontrast + Vignette */}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-forest-950/80 via-transparent to-forest-950/25" />
+
+          {/* Licht-Sweep */}
+          {!reducedMotion && (
+            <div
+              ref={sweepRef}
+              className="pointer-events-none absolute inset-y-[-25%] left-[-45%] w-1/3 rotate-12 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+              style={{ opacity: 0.9 }}
+            />
+          )}
+
+          {/* Wehende Blätter */}
+          {!reducedMotion &&
+            LEAVES.map((leaf, i) => (
+              <div
+                key={i}
+                ref={(el) => {
+                  leafRefs.current[i] = el;
+                }}
+                className="pointer-events-none absolute text-leaf-400"
+                style={{ left: `${leaf.left}%`, bottom: "-8%", opacity: 0 }}
+                aria-hidden="true"
+              >
+                <svg width={leaf.size} height={leaf.size} viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 3c-9.5.8-15 6-16.5 15.5l-.5 2.5 2.5-.5C15 19 20.2 13.5 21 4l.1-1.2L20 3zM6.8 17.2C10 10 14 6.5 19 5c-1.5 5-5 9-12.2 12.2z" />
+                </svg>
+              </div>
+            ))}
 
           {/* Glas-Badge oben links */}
           <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-sand-50/25 bg-forest-950/35 px-4 py-2 backdrop-blur-md">
@@ -234,7 +319,11 @@ export default function HedgeScrollScene() {
                   {chapter.kicker}
                 </p>
                 <h3 className="mt-2 font-display text-3xl font-semibold leading-[1.05] text-sand-50 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl">
-                  {chapter.title}
+                  {chapter.title.split(" ").map((word, wi) => (
+                    <span key={wi} className="mr-[0.26em] inline-block overflow-hidden pb-1 align-top">
+                      <span className="hedge-word inline-block">{word}</span>
+                    </span>
+                  ))}
                 </h3>
                 <p className="mt-3 max-w-md text-sm leading-relaxed text-sand-100/85 sm:text-base">
                   {chapter.text}
