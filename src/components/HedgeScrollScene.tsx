@@ -58,7 +58,6 @@ export default function HedgeScrollScene() {
   const sweepRef = useRef<HTMLDivElement>(null);
   const leafRefs = useRef<(HTMLDivElement | null)[]>([]);
   const fxCanvasRef = useRef<HTMLCanvasElement>(null);
-  const flareRef = useRef<HTMLImageElement>(null);
   const progressRef = useRef(0);
   const [reducedMotion, setReducedMotion] = useState(false);
 
@@ -385,18 +384,6 @@ export default function HedgeScrollScene() {
         tl.fromTo(sweepRef.current, { xPercent: -60 }, { xPercent: 520, duration: 0.34 }, 0.16);
       }
 
-      // Feuer-Standbild aus dem Original-Video: blitzt genau am zweiten
-      // Glut-Burst (0.62) auf – kurzer Höhepunkt mit Funkenfontäne
-      if (flareRef.current) {
-        tl.fromTo(
-          flareRef.current,
-          { autoAlpha: 0, scale: 1.05 },
-          { autoAlpha: 1, scale: 1, duration: 0.05, ease: "power1.in" },
-          0.58
-        );
-        tl.to(flareRef.current, { autoAlpha: 0, duration: 0.07, ease: "power1.out" }, 0.66);
-      }
-
       // Blatt-Partikel wehen während des Scrubs über die Bühne
       LEAVES.forEach((leaf, i) => {
         const el = leafRefs.current[i];
@@ -471,19 +458,6 @@ export default function HedgeScrollScene() {
             aria-label="Eugen Wermter schneidet eine hohe Hecke von der Leiter aus – Kamerafahrt vom Fuß der Leiter bis zur fertig geschnittenen Kante"
             className="absolute inset-0 h-full w-full"
           />
-
-          {/* Feuer-Höhepunkt: Standbild mit Funkenfontäne an der Klinge */}
-          {!reducedMotion && (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
-              ref={flareRef}
-              src="/frames/hecke-flare.webp"
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-              className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-0"
-            />
-          )}
 
           {/* Scrim für Textkontrast + Vignette */}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-forest-950/80 via-transparent to-forest-950/25" />
