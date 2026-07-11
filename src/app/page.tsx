@@ -7,6 +7,7 @@ import TilesScrollScene from "@/components/TilesScrollScene";
 import FloorScrollScene from "@/components/FloorScrollScene";
 import ShedScrollScene from "@/components/ShedScrollScene";
 import PathScrollScene from "@/components/PathScrollScene";
+import BathScrollScene from "@/components/BathScrollScene";
 import BeforeAfterSection from "@/components/BeforeAfterSection";
 import AboutSection from "@/components/AboutSection";
 import ReviewsSection from "@/components/ReviewsSection";
@@ -31,6 +32,7 @@ export default function Home() {
         <FloorScrollScene />
         <ShedScrollScene />
         <PathScrollScene />
+        <BathScrollScene />
         <BeforeAfterSection />
         <AboutSection />
         <ReviewsSection />
