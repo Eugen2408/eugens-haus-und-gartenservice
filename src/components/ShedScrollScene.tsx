@@ -8,9 +8,9 @@ gsap.registerPlugin(ScrollTrigger);
 
 // Scroll-gescrubbte Bildsequenz (Gartenpflege: zugewachsener Schuppen →
 // Feuer-Verwandlung sprengt das Dickicht weg → freigelegter Schuppen im
-// aufgeräumten Garten). Desktop: 107 Frames à 1280px, Mobile: 54 Frames à 768px.
-export const DESKTOP = { count: 107, src: (i: number) => `/frames/schuppen/schuppen-${String(i).padStart(3, "0")}.webp` };
-export const MOBILE = { count: 54, src: (i: number) => `/frames/schuppen/m/schuppen-${String(i).padStart(3, "0")}.webp` };
+// aufgeräumten Garten). Desktop: 98 Frames à 1280px, Mobile: 49 Frames à 768px.
+export const DESKTOP = { count: 98, src: (i: number) => `/frames/schuppen/schuppen-${String(i).padStart(3, "0")}.webp` };
+export const MOBILE = { count: 49, src: (i: number) => `/frames/schuppen/m/schuppen-${String(i).padStart(3, "0")}.webp` };
 
 type Chapter = {
   kicker: string;
@@ -143,7 +143,7 @@ export default function ShedScrollScene() {
           trigger: wrapper,
           start: "top top",
           end: "bottom bottom",
-          scrub: 0.6,
+          scrub: 1,
           invalidateOnRefresh: true,
         },
       });
@@ -184,25 +184,25 @@ export default function ShedScrollScene() {
       // Kapitel 3 erst ab 78 %: der harte Schnitt zur Garten-Umgebung
       // liegt bei ~81 %, vorher fliegen noch Trümmer durchs Bild
       const spans: [number, number][] = [
-        [0.02, 0.24],
-        [0.34, 0.56],
+        [0.02, 0.3],
+        [0.34, 0.74],
         [0.78, 1.0],
       ];
       captionRefs.current.forEach((el, i) => {
         if (!el) return;
         const [inAt, outAt] = spans[i];
-        tl.fromTo(el, { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.07 }, inAt);
+        tl.fromTo(el, { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.05 }, inAt);
         const words = el.querySelectorAll<HTMLElement>(".shed-word");
         if (words.length) {
           tl.fromTo(
             words,
             { yPercent: 115 },
-            { yPercent: 0, duration: 0.06, stagger: 0.014, ease: "power2.out" },
+            { yPercent: 0, duration: 0.05, stagger: 0.01, ease: "power2.out" },
             inAt
           );
         }
         if (i < 2) {
-          tl.to(el, { autoAlpha: 0, y: -28, duration: 0.06 }, outAt);
+          tl.to(el, { autoAlpha: 0, y: -28, duration: 0.05 }, outAt);
         }
       });
     }, wrapper);
@@ -218,7 +218,7 @@ export default function ShedScrollScene() {
     <section
       id="schuppen"
       ref={wrapperRef}
-      className={`relative bg-forest-950 ${reducedMotion ? "" : "h-[180svh]"}`}
+      className={`relative bg-forest-950 ${reducedMotion ? "" : "h-[240svh]"}`}
     >
       <div
         className={`${reducedMotion ? "relative py-24" : "sticky top-0 h-[100svh]"} flex items-center justify-center overflow-hidden px-5`}

@@ -38,15 +38,7 @@ function NavLink({
 }
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -56,18 +48,12 @@ export default function Navbar() {
   }, [open]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4">
-      <nav
-        className={`mx-auto flex max-w-6xl items-center justify-between rounded-full px-5 py-3 transition-all duration-300 ${
-          scrolled && !open
-            ? "bg-sand-50/90 shadow-md shadow-forest-900/5 backdrop-blur"
-            : "bg-transparent"
-        }`}
-      >
+    <header className="absolute inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between rounded-full bg-transparent px-5 py-3">
         <a
           href="#top"
           className={`font-display text-lg font-semibold tracking-tight transition-colors ${
-            (scrolled && !open) || open ? "text-forest-900" : "text-sand-50"
+            open ? "text-forest-900" : "text-sand-50"
           }`}
         >
           Eugens <span className="text-leaf-500">Haus- &amp; Gartenservice</span>
@@ -75,7 +61,7 @@ export default function Navbar() {
 
         <div className="hidden items-center gap-8 md:flex">
           {LINKS.map((link) => (
-            <NavLink key={link.href} {...link} dark={scrolled} />
+            <NavLink key={link.href} {...link} dark={false} />
           ))}
           <a
             href="#kontakt"
@@ -91,7 +77,7 @@ export default function Navbar() {
           aria-expanded={open}
           onClick={() => setOpen((o) => !o)}
           className={`relative z-10 flex h-11 w-11 items-center justify-center rounded-full md:hidden ${
-            (scrolled && !open) || open ? "text-forest-900" : "text-sand-50"
+            open ? "text-forest-900" : "text-sand-50"
           }`}
         >
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none">

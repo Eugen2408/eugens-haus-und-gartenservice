@@ -7,9 +7,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 // Scroll-gescrubbte Bildsequenz (Kamerafahrt: Leiter → Heckenschnitt → Ergebnis).
-// Desktop: 54 Frames à 1280px, Mobile: 27 Frames à 768px (halbe Datenmenge).
-export const DESKTOP = { count: 54, src: (i: number) => `/frames/hecke-${String(i).padStart(2, "0")}.webp` };
-export const MOBILE = { count: 27, src: (i: number) => `/frames/m/hecke-${String(i).padStart(2, "0")}.webp` };
+// Desktop: 53 Frames à 1280px, Mobile: 26 Frames à 768px (halbe Datenmenge).
+export const DESKTOP = { count: 53, src: (i: number) => `/frames/hecke-${String(i).padStart(2, "0")}.webp` };
+export const MOBILE = { count: 26, src: (i: number) => `/frames/m/hecke-${String(i).padStart(2, "0")}.webp` };
 
 type Chapter = {
   kicker: string;
@@ -157,7 +157,7 @@ export default function HedgeScrollScene() {
           trigger: wrapper,
           start: "top top",
           end: "bottom bottom",
-          scrub: 0.6,
+          scrub: 1,
           invalidateOnRefresh: true,
         },
       });
@@ -215,25 +215,25 @@ export default function HedgeScrollScene() {
       // Drei Text-Kapitel, an den Scrub gekoppelt; Titel-Wörter
       // schieben sich einzeln aus einer Maske hoch
       const spans: [number, number][] = [
-        [0.02, 0.26],
-        [0.36, 0.6],
+        [0.02, 0.32],
+        [0.36, 0.68],
         [0.72, 1.0],
       ];
       captionRefs.current.forEach((el, i) => {
         if (!el) return;
         const [inAt, outAt] = spans[i];
-        tl.fromTo(el, { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.07 }, inAt);
+        tl.fromTo(el, { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.05 }, inAt);
         const words = el.querySelectorAll<HTMLElement>(".hedge-word");
         if (words.length) {
           tl.fromTo(
             words,
             { yPercent: 115 },
-            { yPercent: 0, duration: 0.06, stagger: 0.014, ease: "power2.out" },
+            { yPercent: 0, duration: 0.05, stagger: 0.01, ease: "power2.out" },
             inAt
           );
         }
         if (i < 2) {
-          tl.to(el, { autoAlpha: 0, y: -28, duration: 0.06 }, outAt);
+          tl.to(el, { autoAlpha: 0, y: -28, duration: 0.05 }, outAt);
         }
       });
     }, wrapper);
@@ -249,7 +249,7 @@ export default function HedgeScrollScene() {
     <section
       id="einsatz"
       ref={wrapperRef}
-      className={`relative bg-forest-950 ${reducedMotion ? "" : "h-[180svh]"}`}
+      className={`relative bg-forest-950 ${reducedMotion ? "" : "h-[240svh]"}`}
     >
       <div
         className={`${reducedMotion ? "relative py-24" : "sticky top-0 h-[100svh]"} flex items-center justify-center overflow-hidden px-5`}

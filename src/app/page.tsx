@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import ServiceWheel from "@/components/ServiceWheel";
 import ServicesSection from "@/components/ServicesSection";
 import HedgeScrollScene from "@/components/HedgeScrollScene";
 import PaintScrollScene from "@/components/PaintScrollScene";
@@ -27,6 +28,7 @@ export default function Home() {
       <FramePreloader />
       <main>
         <Hero />
+        <ServiceWheel />
         <ServicesSection />
         <HedgeScrollScene />
         <PaintScrollScene />
