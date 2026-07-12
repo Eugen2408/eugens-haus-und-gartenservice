@@ -22,9 +22,9 @@ export default function QuickNavSidebar() {
         ? target.offsetTop + target.offsetHeight
         : window.innerHeight * 1.4;
       // Über den gepinnten Szenen (Hecke, Farbe, Fliesen, Boden, Schuppen,
-      // Platten, Bad, Küche, Licht) ausblenden, damit die Sidebar nicht mit
-      // der Bühne kollidiert
-      const overScene = ["einsatz", "farbe", "fliesen", "boden", "schuppen", "platten", "bad", "kueche", "licht"].some((id) => {
+      // Platten, Bad, Küche, Licht) und der Leistungs-Walze ausblenden,
+      // damit die Sidebar nicht mit der Bühne kollidiert
+      const overScene = ["einsatz", "farbe", "fliesen", "boden", "schuppen", "platten", "bad", "kueche", "licht", "beste-wahl"].some((id) => {
         const el = document.getElementById(id);
         if (!el) return false;
         const rect = el.getBoundingClientRect();

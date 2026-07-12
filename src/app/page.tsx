@@ -28,7 +28,6 @@ export default function Home() {
       <FramePreloader />
       <main>
         <Hero />
-        <ServiceWheel />
         <ServicesSection />
         <HedgeScrollScene />
         <PaintScrollScene />
@@ -39,6 +38,7 @@ export default function Home() {
         <BathScrollScene />
         <KitchenScrollScene />
         <LightScrollScene />
+        <ServiceWheel />
         <BeforeAfterSection />
         <AboutSection />
         <ReviewsSection />

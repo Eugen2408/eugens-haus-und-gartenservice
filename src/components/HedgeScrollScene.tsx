@@ -7,9 +7,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 // Scroll-gescrubbte Bildsequenz (Kamerafahrt: Leiter → Heckenschnitt → Ergebnis).
-// Desktop: 53 Frames à 1280px, Mobile: 26 Frames à 768px (halbe Datenmenge).
-export const DESKTOP = { count: 53, src: (i: number) => `/frames/hecke-${String(i).padStart(2, "0")}.webp` };
-export const MOBILE = { count: 26, src: (i: number) => `/frames/m/hecke-${String(i).padStart(2, "0")}.webp` };
+// Desktop: 54 Frames à 1280px, Mobile: 27 Frames à 768px (halbe Datenmenge).
+// Letzter Frame = Totale (User-Wunsch: genau dort endet die Szene).
+export const DESKTOP = { count: 54, src: (i: number) => `/frames/hecke-${String(i).padStart(2, "0")}.webp` };
+export const MOBILE = { count: 27, src: (i: number) => `/frames/m/hecke-${String(i).padStart(2, "0")}.webp` };
 
 type Chapter = {
   kicker: string;
