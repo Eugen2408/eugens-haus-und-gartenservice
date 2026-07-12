@@ -16,23 +16,47 @@ const PAIRS = [
     afterSrc: "/images/nachher-platten.jpg",
     alt: "Gehwegplatten gereinigt",
   },
+  {
+    label: "Badsanierung",
+    beforeSrc: "/images/vorher-bad.jpg",
+    afterSrc: "/images/nachher-bad.jpg",
+    alt: "Badezimmer entkernt und neu aufgebaut",
+  },
+  {
+    label: "Bodenverlegung",
+    beforeSrc: "/images/vorher-boden.jpg",
+    afterSrc: "/images/nachher-boden.jpg",
+    alt: "Neuer Bodenbelag verlegt",
+  },
+  {
+    label: "Wandfliesen",
+    beforeSrc: "/images/vorher-fliesen.jpg",
+    afterSrc: "/images/nachher-fliesen.jpg",
+    alt: "Wand neu gefliest",
+  },
+  {
+    label: "Heckenschnitt",
+    beforeSrc: "/images/vorher-hecke.jpg",
+    afterSrc: "/images/nachher-hecke.jpg",
+    alt: "Hecke in Form geschnitten",
+  },
 ];
 
 export default function BeforeAfterSection() {
   return (
     <section
       id="vorher-nachher"
-      className="bg-forest-950 px-5 py-24 text-sand-50 md:py-32"
+      className="bg-white px-5 py-24 text-forest-950 md:py-32"
     >
       <div className="mx-auto max-w-5xl">
         <Reveal>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-leaf-300">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-leaf-500">
             Ergebnisse, die überzeugen
           </p>
           <h2 className="mt-3 max-w-xl font-display text-3xl font-semibold sm:text-4xl">
             Vorher &amp; Nachher
           </h2>
-          <p className="mt-4 max-w-xl text-sand-100/70">
+          <p className="mt-4 max-w-xl text-forest-800/70">
             Ziehen Sie den Regler nach rechts und sehen Sie selbst, was ein
             bisschen Pflege bewirken kann.
           </p>
@@ -41,7 +65,7 @@ export default function BeforeAfterSection() {
         <div className="mt-12 space-y-16">
           {PAIRS.map((pair, i) => (
             <Reveal key={pair.label} delay={i * 0.1}>
-              <p className="mb-4 text-sm font-semibold uppercase tracking-[0.15em] text-sand-100/60">
+              <p className="mb-4 text-sm font-semibold uppercase tracking-[0.15em] text-forest-800/60">
                 {pair.label}
               </p>
               <BeforeAfterSlider

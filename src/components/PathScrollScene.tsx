@@ -216,7 +216,7 @@ export default function PathScrollScene() {
     <section
       id="platten"
       ref={wrapperRef}
-      className={`relative bg-forest-950 ${reducedMotion ? "" : "h-[240svh]"}`}
+      className={`relative bg-white ${reducedMotion ? "" : "h-[240svh]"}`}
     >
       <div
         className={`${reducedMotion ? "relative py-24" : "sticky top-0 h-[100svh]"} flex items-center justify-center overflow-hidden px-5`}
@@ -246,7 +246,7 @@ export default function PathScrollScene() {
 
           {/* Glas-Badge oben links */}
           <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-sand-50/25 bg-forest-950/35 px-4 py-2 backdrop-blur-md">
-            <span className="h-2 w-2 rounded-full bg-terracotta-500" />
+            <span className="h-2 w-2 rounded-full bg-leaf-500" />
             <span className="text-xs font-semibold uppercase tracking-[0.15em] text-sand-50">
               Pflasterarbeiten
             </span>
@@ -264,7 +264,7 @@ export default function PathScrollScene() {
                 }}
                 className={`absolute inset-x-5 bottom-8 max-w-xl sm:inset-x-10 sm:bottom-12 ${visibleStatic}`}
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-leaf-300 sm:text-sm">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sand-100 sm:text-sm">
                   {chapter.kicker}
                 </p>
                 <h3 className="mt-2 font-display text-3xl font-semibold leading-[1.05] text-sand-50 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl">
@@ -280,7 +280,7 @@ export default function PathScrollScene() {
                 {isLast && (
                   <a
                     href="#kontakt"
-                    className="mt-5 inline-flex items-center gap-2 rounded-full bg-terracotta-500 px-6 py-3 text-sm font-semibold text-sand-50 shadow-lg shadow-terracotta-500/25 transition-colors duration-200 hover:bg-terracotta-600"
+                    className="mt-5 inline-flex items-center gap-2 rounded-full bg-leaf-500 px-6 py-3 text-sm font-semibold text-sand-50 shadow-lg shadow-leaf-500/25 transition-colors duration-200 hover:bg-forest-600"
                   >
                     Pflasterarbeiten anfragen
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">

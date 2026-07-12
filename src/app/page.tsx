@@ -1,7 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import ServiceWheel from "@/components/ServiceWheel";
-import ServicesSection from "@/components/ServicesSection";
 import HedgeScrollScene from "@/components/HedgeScrollScene";
 import PaintScrollScene from "@/components/PaintScrollScene";
 import TilesScrollScene from "@/components/TilesScrollScene";
@@ -17,18 +16,15 @@ import ReviewsSection from "@/components/ReviewsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
-import QuickNavSidebar from "@/components/QuickNavSidebar";
 import FramePreloader from "@/components/FramePreloader";
 
 export default function Home() {
   return (
     <>
       <Navbar />
-      <QuickNavSidebar />
       <FramePreloader />
       <main>
         <Hero />
-        <ServicesSection />
         <HedgeScrollScene />
         <PaintScrollScene />
         <TilesScrollScene />

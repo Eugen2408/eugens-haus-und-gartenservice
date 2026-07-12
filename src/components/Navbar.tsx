@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 
 const LINKS = [
-  { href: "#leistungen", label: "Leistungen" },
   { href: "#vorher-nachher", label: "Vorher/Nachher" },
   { href: "#ueber-uns", label: "Über mich" },
   { href: "#bewertungen", label: "Bewertungen" },
@@ -50,13 +50,15 @@ export default function Navbar() {
   return (
     <header className="absolute inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4">
       <nav className="mx-auto flex max-w-6xl items-center justify-between rounded-full bg-transparent px-5 py-3">
-        <a
-          href="#top"
-          className={`font-display text-lg font-semibold tracking-tight transition-colors ${
-            open ? "text-forest-900" : "text-sand-50"
-          }`}
-        >
-          Eugens <span className="text-leaf-500">Haus- &amp; Gartenservice</span>
+        <a href="#top" className="relative z-10 block">
+          <Image
+            src="/images/logo.webp"
+            alt="Eugens Haus- und Gartenservice – in guten Händen"
+            width={562}
+            height={256}
+            priority
+            className="h-14 w-auto rounded-xl shadow-sm sm:h-16"
+          />
         </a>
 
         <div className="hidden items-center gap-8 md:flex">
@@ -65,7 +67,7 @@ export default function Navbar() {
           ))}
           <a
             href="#kontakt"
-            className="rounded-full bg-terracotta-500 px-5 py-2.5 text-sm font-semibold text-sand-50 shadow-sm transition-transform duration-300 hover:scale-105 hover:bg-terracotta-600"
+            className="rounded-full bg-leaf-500 px-5 py-2.5 text-sm font-semibold text-sand-50 shadow-sm transition-transform duration-300 hover:scale-105 hover:bg-forest-600"
           >
             Kostenlos anfragen
           </a>
@@ -119,7 +121,7 @@ export default function Navbar() {
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.08 * LINKS.length, ease: [0.22, 1, 0.36, 1] }}
-                className="mt-6 inline-flex w-fit items-center rounded-full bg-terracotta-500 px-7 py-3.5 text-sm font-semibold text-sand-50"
+                className="mt-6 inline-flex w-fit items-center rounded-full bg-leaf-500 px-7 py-3.5 text-sm font-semibold text-sand-50"
               >
                 Kostenlos anfragen
               </motion.a>

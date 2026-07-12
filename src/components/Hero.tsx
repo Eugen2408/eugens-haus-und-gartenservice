@@ -1,76 +1,39 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-// Ken-Burns-Slideshow: alle Arbeitsfotos aus Bilder/bei der arbeit,
-// vereinheitlicht auf 1920×1080 (siehe public/images/hero/)
-const SLIDES = [
-  "/images/hero/hero-1.jpg",
-  "/images/hero/hero-2.jpg",
-  "/images/hero/hero-3.jpg",
-  "/images/hero/hero-4.jpg",
-  "/images/hero/hero-5.jpg",
-  "/images/hero/hero-6.jpg",
-  "/images/hero/hero-7.jpg",
-];
-const SLIDE_MS = 5500;
+// Statisches Headerbild: Eugen beim Flexen (rote Jacke), 4×-KI-hochskaliert.
+// Das Foto wird komplett gezeigt (object-contain), die Ränder füllt dasselbe
+// Motiv stark weichgezeichnet.
+const HERO_IMAGE = "/images/hero/hero-1.jpg";
 
 export default function Hero() {
-  const [index, setIndex] = useState(0);
-  // Slides erst mounten, wenn sie (bald) gebraucht werden – so lädt der
-  // Hero zunächst nur das erste Bild plus den Nachfolger
-  const [mounted, setMounted] = useState(2);
-  const [reducedMotion, setReducedMotion] = useState(false);
-
-  useEffect(() => {
-    setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-  }, []);
-
-  useEffect(() => {
-    if (reducedMotion) return;
-    const id = setInterval(() => {
-      setIndex((i) => (i + 1) % SLIDES.length);
-    }, SLIDE_MS);
-    return () => clearInterval(id);
-  }, [reducedMotion]);
-
-  useEffect(() => {
-    setMounted((m) => Math.max(m, Math.min(SLIDES.length, index + 2)));
-  }, [index]);
-
   return (
     <section
       id="top"
       className="relative flex min-h-[92svh] w-full items-center overflow-hidden bg-forest-950"
     >
-      {/* Hintergrund-Slideshow */}
+      {/* Hintergrundbild */}
       <div className="absolute inset-0" aria-hidden="true">
-        {SLIDES.slice(0, mounted).map((src, i) => {
-          const isActive = i === index;
-          return (
-            <div
-              key={src}
-              className="absolute inset-0"
-              style={{
-                opacity: isActive ? 1 : 0,
-                transform: reducedMotion ? "none" : isActive ? "scale(1.1)" : "scale(1)",
-                transformOrigin: i % 2 === 0 ? "70% 30%" : "30% 70%",
-                transition: "opacity 1.5s ease-in-out, transform 7s linear",
-              }}
-            >
-              <Image
-                src={src}
-                alt=""
-                fill
-                priority={i === 0}
-                sizes="100vw"
-                className="object-cover"
-              />
-            </div>
-          );
-        })}
+        {/* Weichgezeichnete Füllfläche hinter dem eigentlichen Foto */}
+        <Image
+          src={HERO_IMAGE}
+          alt=""
+          fill
+          priority
+          sizes="60vw"
+          className="scale-110 object-cover blur-2xl brightness-[0.55]"
+        />
+        {/* Das Foto selbst – vollständig sichtbar, rechtsbündig */}
+        <Image
+          src={HERO_IMAGE}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-contain object-right"
+        />
         {/* Scrim für Textkontrast */}
         <div className="absolute inset-0 bg-gradient-to-r from-forest-950/90 via-forest-950/65 to-forest-950/35" />
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-forest-950/80 to-transparent" />
@@ -114,12 +77,12 @@ export default function Hero() {
         >
           <a
             href="#kontakt"
-            className="rounded-full bg-terracotta-500 px-7 py-3.5 text-sm font-semibold text-sand-50 shadow-lg shadow-terracotta-500/20 transition-transform hover:scale-[1.03] hover:bg-terracotta-600"
+            className="rounded-full bg-leaf-500 px-7 py-3.5 text-sm font-semibold text-sand-50 shadow-lg shadow-leaf-500/20 transition-transform hover:scale-[1.03] hover:bg-forest-600"
           >
             Kostenloses Angebot einholen
           </a>
           <a
-            href="#leistungen"
+            href="#beste-wahl"
             className="rounded-full border border-sand-50/40 bg-sand-50/10 px-7 py-3.5 text-sm font-semibold text-sand-50 backdrop-blur transition-colors hover:bg-sand-50/20"
           >
             Leistungen ansehen

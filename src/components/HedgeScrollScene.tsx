@@ -91,6 +91,17 @@ export default function HedgeScrollScene() {
       }
     }
 
+    // Während der Nahaufnahmen (Kamera direkt hinter dem Kopf) sanft auf
+    // Hecke + Schere zoomen, damit der Hinterkopf oben aus dem Bild wandert;
+    // zur End-Totale wieder komplett herauszoomen (User-Wunsch).
+    function zoomAt(progress: number) {
+      const a = 0.3, b = 0.44, c = 0.9, d = 0.97, Z = 1.6;
+      if (progress <= a || progress >= d) return 1;
+      if (progress < b) return 1 + (Z - 1) * ((progress - a) / (b - a));
+      if (progress <= c) return Z;
+      return Z - (Z - 1) * ((progress - c) / (d - c));
+    }
+
     // Nächstliegenden bereits geladenen Frame zeichnen, damit beim
     // progressiven Laden nie ein schwarzes Bild aufblitzt.
     function drawFrame(index: number) {
@@ -105,10 +116,18 @@ export default function HedgeScrollScene() {
       resizeCanvas();
       const cw = canvas!.width;
       const ch = canvas!.height;
-      const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+      const progress = SET.count > 1 ? index / (SET.count - 1) : 0;
+      const zoom = zoomAt(progress);
+      const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight) * zoom;
       const dw = img.naturalWidth * scale;
       const dh = img.naturalHeight * scale;
-      ctx2d!.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+      // Fokuspunkt links-unten (Hecke/Schere), an die Canvas-Ränder geklemmt;
+      // dy tief genug, damit der Kopf oben sicher aus dem Bild fällt
+      let dx = cw / 2 - 0.32 * dw;
+      let dy = ch / 2 - 0.66 * dh;
+      dx = Math.min(0, Math.max(cw - dw, dx));
+      dy = Math.min(0, Math.max(ch - dh, dy));
+      ctx2d!.drawImage(img, dx, dy, dw, dh);
     }
 
     function loadFrames() {
@@ -250,7 +269,7 @@ export default function HedgeScrollScene() {
     <section
       id="einsatz"
       ref={wrapperRef}
-      className={`relative bg-forest-950 ${reducedMotion ? "" : "h-[240svh]"}`}
+      className={`relative bg-white ${reducedMotion ? "" : "h-[240svh]"}`}
     >
       <div
         className={`${reducedMotion ? "relative py-24" : "sticky top-0 h-[100svh]"} flex items-center justify-center overflow-hidden px-5`}
@@ -298,7 +317,7 @@ export default function HedgeScrollScene() {
 
           {/* Glas-Badge oben links */}
           <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-sand-50/25 bg-forest-950/35 px-4 py-2 backdrop-blur-md">
-            <span className="h-2 w-2 rounded-full bg-leaf-400" />
+            <span className="h-2 w-2 rounded-full bg-terracotta-500" />
             <span className="text-xs font-semibold uppercase tracking-[0.15em] text-sand-50">
               Heckenschnitt
             </span>
@@ -316,7 +335,7 @@ export default function HedgeScrollScene() {
                 }}
                 className={`absolute inset-x-5 bottom-8 max-w-xl sm:inset-x-10 sm:bottom-12 ${visibleStatic}`}
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-leaf-300 sm:text-sm">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sand-100 sm:text-sm">
                   {chapter.kicker}
                 </p>
                 <h3 className="mt-2 font-display text-3xl font-semibold leading-[1.05] text-sand-50 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl">
@@ -332,7 +351,7 @@ export default function HedgeScrollScene() {
                 {isLast && (
                   <a
                     href="#kontakt"
-                    className="mt-5 inline-flex items-center gap-2 rounded-full bg-terracotta-500 px-6 py-3 text-sm font-semibold text-sand-50 shadow-lg shadow-terracotta-500/25 transition-colors duration-200 hover:bg-terracotta-600"
+                    className="mt-5 inline-flex items-center gap-2 rounded-full bg-leaf-500 px-6 py-3 text-sm font-semibold text-sand-50 shadow-lg shadow-leaf-500/25 transition-colors duration-200 hover:bg-forest-600"
                   >
                     Heckenschnitt anfragen
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">

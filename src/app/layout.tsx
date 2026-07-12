@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { Bricolage_Grotesque } from "next/font/google";
+import ConsentBanner from "@/components/ConsentBanner";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -29,8 +30,9 @@ export default function RootLayout({
       lang="de"
       className={`${geistSans.variable} ${bricolage.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-sand-50 text-forest-950">
+      <body className="min-h-full flex flex-col bg-white text-forest-950">
         {children}
+        <ConsentBanner />
       </body>
     </html>
   );

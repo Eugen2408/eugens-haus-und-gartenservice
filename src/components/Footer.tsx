@@ -22,12 +22,28 @@ export default function Footer() {
           >
             040 36935718
           </a>
+          <a
+            href="mailto:kontakt@eugens-hausundgartenservice.de"
+            className="rounded px-1 py-1 transition-colors hover:text-leaf-300"
+          >
+            kontakt@eugens-hausundgartenservice.de
+          </a>
         </div>
       </div>
 
-      <div className="mx-auto mt-8 max-w-6xl border-t border-sand-50/10 pt-6 text-center text-xs">
-        © {new Date().getFullYear()} Eugens Haus- und Gartenservice · Eugen
-        Wermter
+      <div className="mx-auto mt-8 flex max-w-6xl flex-col items-center gap-3 border-t border-sand-50/10 pt-6 text-center text-xs sm:flex-row sm:justify-between">
+        <p>
+          © {new Date().getFullYear()} Eugens Haus- und Gartenservice · Eugen
+          Wermter
+        </p>
+        <p className="flex gap-4">
+          <a href="/impressum" className="transition-colors hover:text-leaf-300">
+            Impressum
+          </a>
+          <a href="/datenschutz" className="transition-colors hover:text-leaf-300">
+            Datenschutz
+          </a>
+        </p>
       </div>
     </footer>
   );
