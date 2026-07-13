@@ -114,6 +114,7 @@ export default function ContactForm() {
             type="text"
             name="name"
             required
+            maxLength={100}
             autoComplete="name"
             className={inputClass}
             placeholder="Ihr Name"
@@ -127,6 +128,7 @@ export default function ContactForm() {
             id="contact-phone"
             type="tel"
             name="phone"
+            maxLength={40}
             autoComplete="tel"
             className={inputClass}
             placeholder="Ihre Telefonnummer"
@@ -141,6 +143,7 @@ export default function ContactForm() {
             type="email"
             name="email"
             required
+            maxLength={150}
             autoComplete="email"
             className={inputClass}
             placeholder="ihre@email.de"
@@ -154,6 +157,7 @@ export default function ContactForm() {
             id="contact-message"
             name="message"
             required
+            maxLength={2000}
             rows={4}
             className={`${inputClass} resize-none`}
             placeholder="Beschreiben Sie kurz Ihr Anliegen…"
