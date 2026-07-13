@@ -92,16 +92,20 @@ export default function ReviewsWheel({ reviews, summary, googleUrl }: Props) {
   const [active, setActive] = useState(0);
   const [radius, setRadius] = useState(RADIUS_DESKTOP);
   const [reducedMotion, setReducedMotion] = useState(false);
+  // Auf schmalen Screens passen die langen Volltext-Karten nicht ins 3D-Rad
+  // (sie überlappen sich), daher dort eine ruhige gestapelte Liste zeigen.
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    setIsMobile(window.matchMedia("(max-width: 767px)").matches);
     setRadius(window.matchMedia("(max-width: 639px)").matches ? RADIUS_MOBILE : RADIUS_DESKTOP);
   }, []);
 
   useEffect(() => {
     const wrapper = wrapperRef.current;
     const wheel = wheelRef.current;
-    if (!wrapper || !wheel || reducedMotion || reviews.length < 2) return;
+    if (!wrapper || !wheel || reducedMotion || isMobile || reviews.length < 2) return;
 
     const gsapCtx = gsap.context(() => {
       const state = { step: 0 };
@@ -126,7 +130,7 @@ export default function ReviewsWheel({ reviews, summary, googleUrl }: Props) {
     }, wrapper);
 
     return () => gsapCtx.revert();
-  }, [reducedMotion, radius, reviews.length]);
+  }, [reducedMotion, isMobile, radius, reviews.length]);
 
   const header = (
     // z-20 + weißer Grund, damit keine ausgeblendete Karte die Überschrift überlagert
@@ -160,8 +164,9 @@ export default function ReviewsWheel({ reviews, summary, googleUrl }: Props) {
     </a>
   );
 
-  // Reduced Motion: ruhige, vollständig lesbare Liste statt Rad
-  if (reducedMotion) {
+  // Reduced Motion ODER Mobile: ruhige, vollständig lesbare Liste statt Rad
+  // (auf Mobile würden sich die langen Karten im 3D-Rad überlappen)
+  if (reducedMotion || isMobile) {
     return (
       <section id="bewertungen" className="bg-white px-5 py-14 md:py-20">
         <div className="mx-auto max-w-6xl">

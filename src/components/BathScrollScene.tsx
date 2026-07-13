@@ -259,7 +259,7 @@ export default function BathScrollScene() {
       >
         <div
           ref={stageRef}
-          className="relative h-[68svh] w-full max-w-6xl overflow-hidden rounded-3xl bg-forest-900 shadow-2xl shadow-black/40 md:h-auto md:aspect-video"
+          className="relative h-[86svh] w-full max-w-6xl overflow-hidden rounded-3xl bg-forest-900 shadow-2xl shadow-black/40 md:h-auto md:aspect-video"
         >
           <canvas
             ref={canvasRef}

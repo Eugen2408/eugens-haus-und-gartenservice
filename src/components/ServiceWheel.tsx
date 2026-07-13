@@ -144,21 +144,21 @@ export default function ServiceWheel() {
               return (
                 <div
                   key={item.label}
-                  className="absolute inset-x-0 top-1/2 -mt-16 flex h-32 items-center justify-center gap-3 transition-opacity duration-300 sm:-mt-[6.5rem] sm:h-52 sm:gap-6"
+                  className="absolute inset-x-0 top-1/2 -mt-16 flex h-32 items-center justify-center gap-2 transition-opacity duration-300 sm:-mt-[6.5rem] sm:h-52 sm:gap-6"
                   style={{
                     transform: `rotateX(${-i * ANGLE}deg) translateZ(${radius}px)`,
                     opacity,
                   }}
                 >
                   <span
-                    className={`whitespace-nowrap font-display text-2xl font-semibold leading-none transition-colors duration-300 sm:text-5xl md:text-6xl ${
+                    className={`whitespace-nowrap font-display text-lg font-semibold leading-none transition-colors duration-300 sm:text-5xl md:text-6xl ${
                       isActive ? "text-terracotta-600" : "text-forest-900"
                     }`}
                   >
                     {item.label}
                   </span>
                   <span
-                    className={`relative block h-32 w-52 flex-none overflow-hidden rounded-2xl shadow-lg ring-1 ring-forest-900/10 transition-transform duration-300 sm:h-52 sm:w-80 ${
+                    className={`relative block h-28 w-40 flex-none overflow-hidden rounded-2xl shadow-lg ring-1 ring-forest-900/10 transition-transform duration-300 sm:h-52 sm:w-80 ${
                       isActive ? "scale-105" : "scale-90"
                     }`}
                   >
