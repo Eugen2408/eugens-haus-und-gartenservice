@@ -50,8 +50,9 @@ export default function Navbar() {
 
   return (
     <header className="absolute inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between rounded-full bg-transparent px-5 py-3">
-        <a href="#top" className="relative z-10 block">
+      <nav className="relative mx-auto flex max-w-6xl items-center justify-between rounded-full bg-transparent px-5 py-3">
+        {/* Logo: auf Mobile mittig (mx-auto), ab md linksbündig */}
+        <a href="#top" className="relative z-10 mx-auto block md:mx-0">
           <Image
             src="/images/logo.webp"
             alt="Eugens Haus- und Gartenservice – in guten Händen"
@@ -79,7 +80,7 @@ export default function Navbar() {
           aria-label={open ? "Menü schließen" : "Menü öffnen"}
           aria-expanded={open}
           onClick={() => setOpen((o) => !o)}
-          className={`relative z-10 flex h-11 w-11 items-center justify-center rounded-full md:hidden ${
+          className={`absolute right-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full md:hidden ${
             open ? "text-forest-900" : "text-sand-50"
           }`}
         >

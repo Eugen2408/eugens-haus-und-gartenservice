@@ -60,7 +60,7 @@ export default function BeforeAfterSlider({
           alt={`${alt} – ${afterLabel}`}
           fill
           className="object-cover"
-          sizes="(max-width: 768px) 100vw, 50vw"
+          sizes="(max-width: 1024px) 100vw, 1024px"
         />
         <span className="absolute right-4 top-4 rounded-full bg-forest-900/80 px-3 py-1 text-xs font-medium tracking-wide text-sand-50">
           {afterLabel}
@@ -76,7 +76,7 @@ export default function BeforeAfterSlider({
           alt={`${alt} – ${beforeLabel}`}
           fill
           className="object-cover"
-          sizes="(max-width: 768px) 100vw, 50vw"
+          sizes="(max-width: 1024px) 100vw, 1024px"
         />
         <span className="absolute left-4 top-4 rounded-full bg-sand-50/90 px-3 py-1 text-xs font-medium tracking-wide text-forest-900">
           {beforeLabel}

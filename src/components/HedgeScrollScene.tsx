@@ -108,24 +108,37 @@ export default function HedgeScrollScene() {
       resizeCanvas();
       const cw = canvas!.width;
       const ch = canvas!.height;
-      const progress = SET.count > 1 ? frame / (SET.count - 1) : 0;
-      const zoom = zoomAt(progress);
-      const scale = Math.max(cw / imgA.naturalWidth, ch / imgA.naturalHeight) * zoom;
-      const dw = imgA.naturalWidth * scale;
-      const dh = imgA.naturalHeight * scale;
-      // Horizontal zentriert, Bild unten bündig – so fällt die gesamte
-      // vertikale Überlappung oben raus (dort ist der Kopf), die Szene bleibt
-      // sonst nahezu vollständig sichtbar.
-      let dx = cw / 2 - 0.5 * dw;
-      let dy = ch - dh;
-      dx = Math.min(0, Math.max(cw - dw, dx));
-      dy = Math.min(0, Math.max(ch - dh, dy));
+      const nw = imgA.naturalWidth;
+      const nh = imgA.naturalHeight;
+      // Quell-/Zielrechteck. Mobile (Hochformat): volle Breite zeigen (contain),
+      // die obersten 14% (Kopf, wirkt KI-generiert) per Source-Crop weglassen –
+      // so keine Seiten-Beschneidung. Desktop: formatfüllend (cover) mit leichtem
+      // Zoom, unten bündig, sodass der Kopf oben aus dem Bild fällt.
+      let sx = 0, sy = 0, sW = nw, sH = nh;
+      let dx: number, dy: number, dw: number, dh: number;
+      if (isMobile) {
+        sy = nh * 0.14;
+        sH = nh * 0.86;
+        const s = cw / nw;
+        dw = cw;
+        dh = sH * s;
+        dx = 0;
+        dy = (ch - dh) / 2;
+      } else {
+        const progress = SET.count > 1 ? frame / (SET.count - 1) : 0;
+        const zoom = zoomAt(progress);
+        const scale = Math.max(cw / nw, ch / nh) * zoom;
+        dw = nw * scale;
+        dh = nh * scale;
+        dx = Math.min(0, Math.max(cw - dw, cw / 2 - 0.5 * dw));
+        dy = ch - dh;
+      }
       ctx2d!.globalAlpha = 1;
-      ctx2d!.drawImage(imgA, dx, dy, dw, dh);
+      ctx2d!.drawImage(imgA, sx, sy, sW, sH, dx, dy, dw, dh);
       const imgB = upper !== base && mix > 0.01 ? nearestLoaded(upper) : null;
       if (imgB && imgB !== imgA) {
         ctx2d!.globalAlpha = mix;
-        ctx2d!.drawImage(imgB, dx, dy, dw, dh);
+        ctx2d!.drawImage(imgB, sx, sy, sW, sH, dx, dy, dw, dh);
         ctx2d!.globalAlpha = 1;
       }
     }

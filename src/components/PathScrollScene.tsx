@@ -99,7 +99,11 @@ export default function PathScrollScene() {
       resizeCanvas();
       const cw = canvas!.width;
       const ch = canvas!.height;
-      const scale = Math.max(cw / imgA.naturalWidth, ch / imgA.naturalHeight);
+      // Mobile (Hochformat): ganzes Bild in voller Breite zeigen (contain),
+      // Desktop: Bühne formatfüllend (cover). Beschneidet auf Mobile nicht die Seiten.
+      const scale = isMobile
+        ? Math.min(cw / imgA.naturalWidth, ch / imgA.naturalHeight)
+        : Math.max(cw / imgA.naturalWidth, ch / imgA.naturalHeight);
       const dw = imgA.naturalWidth * scale;
       const dh = imgA.naturalHeight * scale;
       const dx = (cw - dw) / 2;
