@@ -52,7 +52,7 @@ export default async function ReviewsSection() {
 
   if (!widget) {
     return (
-      <section id="bewertungen" className="bg-white px-5 py-24 md:py-32">
+      <section id="bewertungen" className="bg-white px-5 py-14 md:py-20">
         <div className="mx-auto max-w-6xl text-center">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-leaf-500">
             Kundenstimmen

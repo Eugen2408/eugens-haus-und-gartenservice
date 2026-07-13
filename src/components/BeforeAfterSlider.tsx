@@ -19,7 +19,7 @@ export default function BeforeAfterSlider({
   alt,
 }: Props) {
   const [position, setPosition] = useState(90);
-  const [dragging, setDragging] = useState(false);
+  const draggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const updateFromClientX = useCallback((clientX: number) => {
@@ -30,14 +30,26 @@ export default function BeforeAfterSlider({
     setPosition(Math.min(100, Math.max(0, pct)));
   }, []);
 
+  // Pointer Events decken Maus UND Touch ab; touch-action: pan-y lässt
+  // vertikales Scrollen über dem Bild zu, horizontales Ziehen stellt den
+  // Regler. Tippen/Klicken auf das Bild springt direkt zur Position.
   return (
     <div
       ref={containerRef}
       className="relative aspect-[4/3] w-full select-none overflow-hidden rounded-2xl shadow-xl md:aspect-[16/10]"
-      onMouseMove={(e) => dragging && updateFromClientX(e.clientX)}
-      onMouseUp={() => setDragging(false)}
-      onMouseLeave={() => setDragging(false)}
-      onTouchMove={(e) => updateFromClientX(e.touches[0].clientX)}
+      style={{ touchAction: "pan-y" }}
+      onPointerDown={(e) => {
+        draggingRef.current = true;
+        e.currentTarget.setPointerCapture(e.pointerId);
+        updateFromClientX(e.clientX);
+      }}
+      onPointerMove={(e) => draggingRef.current && updateFromClientX(e.clientX)}
+      onPointerUp={() => {
+        draggingRef.current = false;
+      }}
+      onPointerCancel={() => {
+        draggingRef.current = false;
+      }}
     >
       <div className="absolute inset-0">
         <Image
@@ -69,16 +81,10 @@ export default function BeforeAfterSlider({
       </div>
 
       <div
-        className="absolute inset-y-0 z-10 w-1 -translate-x-1/2 bg-sand-50 shadow-md"
+        className="pointer-events-none absolute inset-y-0 z-10 w-1 -translate-x-1/2 bg-sand-50 shadow-md"
         style={{ left: `${position}%` }}
       >
-        <button
-          type="button"
-          aria-label="Vorher/Nachher Regler"
-          onMouseDown={() => setDragging(true)}
-          onTouchStart={() => setDragging(true)}
-          className="absolute top-1/2 left-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full bg-sand-50 text-forest-800 shadow-lg ring-2 ring-forest-800/10 active:scale-95"
-        >
+        <span className="absolute top-1/2 left-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-sand-50 text-forest-800 shadow-lg ring-2 ring-forest-800/10">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
             <path
               d="M8 6L2 12L8 18M16 6L22 12L16 18"
@@ -88,7 +94,7 @@ export default function BeforeAfterSlider({
               strokeLinejoin="round"
             />
           </svg>
-        </button>
+        </span>
       </div>
 
       <input
@@ -98,7 +104,7 @@ export default function BeforeAfterSlider({
         value={position}
         onChange={(e) => setPosition(Number(e.target.value))}
         aria-label="Vorher/Nachher Vergleich"
-        className="absolute inset-x-0 bottom-2 z-20 mx-auto w-1/2 opacity-0 md:hidden"
+        className="sr-only"
       />
     </div>
   );

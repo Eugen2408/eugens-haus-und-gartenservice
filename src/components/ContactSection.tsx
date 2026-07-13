@@ -27,21 +27,23 @@ const CONTACT_ITEMS = [
 
 export default function ContactSection() {
   return (
-    <section id="kontakt" className="mx-auto max-w-6xl px-5 py-24 md:py-32">
-      <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
-        <Reveal>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-leaf-500">
-            Kontakt
-          </p>
-          <h2 className="mt-3 font-display text-4xl font-semibold leading-[1.05] tracking-tight text-forest-950 sm:text-5xl">
-            Lassen Sie uns über Ihr Projekt sprechen
-          </h2>
-          <p className="mt-4 max-w-md text-forest-800/70">
-            Rufen Sie an oder schreiben Sie mir – ich melde mich in der Regel
-            innerhalb eines Werktags mit einem unverbindlichen Angebot.
-          </p>
+    <section id="kontakt" className="mx-auto max-w-6xl px-5 py-14 md:py-20">
+      <Reveal className="text-center">
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-leaf-500">
+          Kontakt
+        </p>
+        <h2 className="mt-3 font-display text-4xl font-semibold leading-[1.05] tracking-tight text-forest-950 sm:text-5xl">
+          Lassen Sie uns über Ihr Projekt sprechen
+        </h2>
+        <p className="mx-auto mt-4 max-w-md text-forest-800/70">
+          Rufen Sie an oder schreiben Sie mir – ich melde mich in der Regel
+          innerhalb eines Werktags mit einem unverbindlichen Angebot.
+        </p>
+      </Reveal>
 
-          <div className="mt-8 space-y-4">
+      <div className="mt-10 grid grid-cols-1 gap-12 lg:grid-cols-2">
+        <Reveal>
+          <div className="space-y-4">
             {CONTACT_ITEMS.map((item) => (
               <a
                 key={item.label}

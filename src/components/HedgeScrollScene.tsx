@@ -91,15 +91,14 @@ export default function HedgeScrollScene() {
       }
     }
 
-    // Während der Nahaufnahmen (Kamera direkt hinter dem Kopf) sanft auf
-    // Hecke + Schere zoomen, damit der Hinterkopf oben aus dem Bild wandert;
-    // zur End-Totale wieder komplett herauszoomen (User-Wunsch).
+    // Ab den Nahaufnahmen auf Hecke + Schere zoomen, damit der Kopf oben aus
+    // dem Bild wandert – und bis zum Szenen-Ende gezoomt BLEIBEN (User-Wunsch
+    // 2026-07-12: Kopf darf nirgends sichtbar sein, auch nicht in der Totale).
     function zoomAt(progress: number) {
-      const a = 0.3, b = 0.44, c = 0.9, d = 0.97, Z = 1.6;
-      if (progress <= a || progress >= d) return 1;
+      const a = 0.3, b = 0.44, Z = 1.6;
+      if (progress <= a) return 1;
       if (progress < b) return 1 + (Z - 1) * ((progress - a) / (b - a));
-      if (progress <= c) return Z;
-      return Z - (Z - 1) * ((progress - c) / (d - c));
+      return Z;
     }
 
     // Nächstliegenden bereits geladenen Frame zeichnen, damit beim
@@ -317,7 +316,7 @@ export default function HedgeScrollScene() {
 
           {/* Glas-Badge oben links */}
           <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-sand-50/25 bg-forest-950/35 px-4 py-2 backdrop-blur-md">
-            <span className="h-2 w-2 rounded-full bg-terracotta-500" />
+            <span className="h-2 w-2 rounded-full bg-leaf-500" />
             <span className="text-xs font-semibold uppercase tracking-[0.15em] text-sand-50">
               Heckenschnitt
             </span>

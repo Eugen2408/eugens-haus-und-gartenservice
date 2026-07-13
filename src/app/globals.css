@@ -49,3 +49,13 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
+/* Sanfter Dauer-Zoom fürs Hero-Bild */
+@keyframes hero-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}

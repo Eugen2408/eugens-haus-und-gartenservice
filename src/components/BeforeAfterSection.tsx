@@ -46,26 +46,26 @@ export default function BeforeAfterSection() {
   return (
     <section
       id="vorher-nachher"
-      className="bg-white px-5 py-24 text-forest-950 md:py-32"
+      className="bg-white px-5 py-14 text-forest-950 md:py-20"
     >
       <div className="mx-auto max-w-5xl">
-        <Reveal>
+        <Reveal className="text-center">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-leaf-500">
             Ergebnisse, die überzeugen
           </p>
-          <h2 className="mt-3 max-w-xl font-display text-3xl font-semibold sm:text-4xl">
+          <h2 className="mt-3 font-display text-3xl font-semibold sm:text-4xl">
             Vorher &amp; Nachher
           </h2>
-          <p className="mt-4 max-w-xl text-forest-800/70">
+          <p className="mx-auto mt-4 max-w-xl text-forest-800/70">
             Ziehen Sie den Regler nach rechts und sehen Sie selbst, was ein
             bisschen Pflege bewirken kann.
           </p>
         </Reveal>
 
-        <div className="mt-12 space-y-16">
+        <div className="mt-10 space-y-12">
           {PAIRS.map((pair, i) => (
             <Reveal key={pair.label} delay={i * 0.1}>
-              <p className="mb-4 text-sm font-semibold uppercase tracking-[0.15em] text-forest-800/60">
+              <p className="mb-4 text-center text-sm font-semibold uppercase tracking-[0.15em] text-forest-800/60">
                 {pair.label}
               </p>
               <BeforeAfterSlider

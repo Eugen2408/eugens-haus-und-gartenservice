@@ -167,7 +167,7 @@ export default function ReviewsWheel({ reviews, summary, googleUrl }: Props) {
   // Reduced Motion: ruhige, vollständig lesbare Liste statt Rad
   if (reducedMotion) {
     return (
-      <section id="bewertungen" className="bg-white px-5 py-24 md:py-32">
+      <section id="bewertungen" className="bg-white px-5 py-14 md:py-20">
         <div className="mx-auto max-w-6xl">
           {header}
           <div className="mt-10 columns-1 gap-6 sm:columns-2 lg:columns-3">

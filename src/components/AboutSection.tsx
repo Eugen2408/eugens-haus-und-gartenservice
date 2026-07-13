@@ -4,8 +4,17 @@ import TiltCard from "./TiltCard";
 
 export default function AboutSection() {
   return (
-    <section id="ueber-uns" className="mx-auto max-w-6xl px-5 py-24 md:py-32">
-      <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
+    <section id="ueber-uns" className="mx-auto max-w-6xl px-5 py-14 md:py-20">
+      <Reveal className="text-center">
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-leaf-500">
+          Über mich
+        </p>
+        <h2 className="mt-3 font-display text-4xl font-semibold leading-[1.05] tracking-tight text-forest-950 sm:text-5xl">
+          Der Profi aus der Nachbarschaft
+        </h2>
+      </Reveal>
+
+      <div className="mt-10 grid grid-cols-1 items-center gap-12 md:grid-cols-2">
         <Reveal>
           <TiltCard className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl shadow-2xl">
             <Image
@@ -19,13 +28,7 @@ export default function AboutSection() {
         </Reveal>
 
         <Reveal delay={0.15}>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-leaf-500">
-            Über mich
-          </p>
-          <h2 className="mt-3 font-display text-4xl font-semibold leading-[1.05] tracking-tight text-forest-950 sm:text-5xl">
-            Der Profi aus der Nachbarschaft
-          </h2>
-          <p className="mt-5 text-forest-800/80 leading-relaxed">
+          <p className="text-forest-800/80 leading-relaxed">
             Mein Name ist Eugen Wermter. Mit Eugens Haus- und Gartenservice
             stehe ich in Hamburg für zuverlässige, saubere Arbeit – vom
             gepflegten Rasen bis zur fertig verlegten Bodenfliese. Ich packe

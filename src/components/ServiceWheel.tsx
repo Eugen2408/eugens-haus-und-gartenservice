@@ -75,7 +75,7 @@ export default function ServiceWheel() {
   // Reduced Motion: alle Leistungen als ruhige, vollständig sichtbare Liste
   if (reducedMotion) {
     return (
-      <section className="bg-white px-5 py-24">
+      <section className="bg-white px-5 py-14 md:py-20">
         <div className="mx-auto max-w-3xl">
           <h2 className="text-center font-display text-3xl font-semibold text-forest-950 sm:text-5xl">
             Die beste Wahl für:
