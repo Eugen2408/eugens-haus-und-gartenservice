@@ -46,8 +46,10 @@ body {
   color: var(--foreground);
 }
 
+/* Kein CSS-Smooth-Scroll: Anker-Sprünge werden von SmoothAnchors per GSAP
+   ScrollTo gesteuert (synchron mit den ScrollTrigger-Szenen). */
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 /* Sanfter Dauer-Zoom fürs Hero-Bild */

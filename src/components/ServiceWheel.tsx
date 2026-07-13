@@ -27,8 +27,8 @@ const ITEMS: { label: string; image: string; pos?: string }[] = [
 const ANGLE = 360 / ITEMS.length;
 // Frontebene liegt durch translateZ(-radius) auf z=0, sonst skaliert die
 // Perspektive die vorderste Zeile über den Container hinaus.
-const RADIUS_DESKTOP = 400;
-const RADIUS_MOBILE = 240;
+const RADIUS_DESKTOP = 440;
+const RADIUS_MOBILE = 270;
 
 export default function ServiceWheel() {
   const wrapperRef = useRef<HTMLElement>(null);
@@ -111,17 +111,22 @@ export default function ServiceWheel() {
       </p>
 
       <div className="sticky top-0 h-[100svh] overflow-hidden px-5">
-        {/* Überschrift fest am oberen Rand – bleibt beim Scrollen stehen, während das Rad darunter läuft */}
-        <h2 className="absolute inset-x-0 top-[13svh] z-20 px-5 text-center font-display text-3xl font-semibold text-forest-950 sm:top-[15svh] sm:text-5xl">
-          Die beste Wahl für:
-        </h2>
+        {/* Fester Kopf oben: weißes Band mit hohem z-Index maskiert alles
+            dahinter, damit kein Rad-Element in die Überschrift hineinragt */}
+        <div className="absolute inset-x-0 top-0 z-30 bg-white px-5 pt-[6svh] pb-3 text-center sm:pt-[7svh]">
+          <h2 className="font-display text-3xl font-semibold text-forest-950 sm:text-5xl">
+            Die beste Wahl für:
+          </h2>
+        </div>
 
+        {/* Rad direkt unter dem Kopf, kompaktes Fenster + overflow-hidden,
+            damit kein Element nach oben in die Überschrift ausbricht */}
         <div
           aria-hidden="true"
-          className="absolute left-1/2 top-1/2 h-[340px] w-full max-w-5xl -translate-x-1/2 -translate-y-1/2 [perspective:1200px] sm:h-[460px]"
+          className="absolute left-1/2 top-[15svh] h-[70svh] w-full max-w-5xl -translate-x-1/2 overflow-hidden [perspective:1300px]"
         >
-          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-14 bg-gradient-to-b from-white to-transparent sm:h-20" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-14 bg-gradient-to-t from-white to-transparent sm:h-20" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-20 bg-gradient-to-b from-white to-transparent sm:h-28" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-20 bg-gradient-to-t from-white to-transparent sm:h-28" />
 
           <div
             ref={wheelRef}
@@ -135,7 +140,7 @@ export default function ServiceWheel() {
               return (
                 <div
                   key={item.label}
-                  className="absolute inset-x-0 top-1/2 -mt-14 flex h-28 items-center justify-center gap-3 transition-opacity duration-300 sm:-mt-24 sm:h-48 sm:gap-6"
+                  className="absolute inset-x-0 top-1/2 -mt-16 flex h-32 items-center justify-center gap-3 transition-opacity duration-300 sm:-mt-[6.5rem] sm:h-52 sm:gap-6"
                   style={{
                     transform: `rotateX(${-i * ANGLE}deg) translateZ(${radius}px)`,
                     opacity,
@@ -149,7 +154,7 @@ export default function ServiceWheel() {
                     {item.label}
                   </span>
                   <span
-                    className={`relative block h-28 w-44 flex-none overflow-hidden rounded-2xl shadow-lg ring-1 ring-forest-900/10 transition-transform duration-300 sm:h-48 sm:w-72 ${
+                    className={`relative block h-32 w-52 flex-none overflow-hidden rounded-2xl shadow-lg ring-1 ring-forest-900/10 transition-transform duration-300 sm:h-52 sm:w-80 ${
                       isActive ? "scale-105" : "scale-90"
                     }`}
                   >
@@ -157,7 +162,7 @@ export default function ServiceWheel() {
                       src={item.image}
                       alt=""
                       fill
-                      sizes="(max-width: 640px) 176px, 288px"
+                      sizes="(max-width: 640px) 208px, 320px"
                       className="object-cover"
                       style={{ objectPosition: item.pos ?? "50% 50%" }}
                     />

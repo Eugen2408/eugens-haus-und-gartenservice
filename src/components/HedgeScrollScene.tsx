@@ -76,14 +76,13 @@ export default function HedgeScrollScene() {
       }
     }
 
-    // Ab den Nahaufnahmen auf Hecke + Schere zoomen, damit der Kopf oben aus
-    // dem Bild wandert – und bis zum Szenen-Ende gezoomt BLEIBEN (User-Wunsch
-    // 2026-07-12: Kopf darf nirgends sichtbar sein, auch nicht in der Totale).
-    // Durchgehend stark genug gezoomt, dass der Kopf von der ersten Sekunde an
-    // oben aus dem Bild fällt (User: Gesicht darf nirgends sichtbar sein).
-    // Leichter Push von 1,5× auf 1,65× hält zusätzlich Bewegung in der Szene.
+    // Der Kopf sitzt in allen Frames in den obersten ~10 % des Bildes. Statt
+    // stark zu zoomen (wirkte übertrieben), nur leicht vergrößern und die
+    // Überlappung komplett oben abschneiden – so bleibt fast die ganze Szene
+    // sichtbar, nur der KI-wirkende Kopf fällt oben raus (User 2026-07-13:
+    // "wie vorher, nur ohne Kopf"). Sanfter Push für etwas Bewegung.
     function zoomAt(progress: number) {
-      return 1.5 + 0.15 * progress;
+      return 1.18 + 0.05 * progress;
     }
 
     // Nächstliegenden bereits geladenen Frame liefern, damit beim
@@ -114,10 +113,11 @@ export default function HedgeScrollScene() {
       const scale = Math.max(cw / imgA.naturalWidth, ch / imgA.naturalHeight) * zoom;
       const dw = imgA.naturalWidth * scale;
       const dh = imgA.naturalHeight * scale;
-      // Fokuspunkt links-unten (Hecke/Schere), an die Canvas-Ränder geklemmt;
-      // dy tief genug, damit der Kopf oben sicher aus dem Bild fällt
-      let dx = cw / 2 - 0.32 * dw;
-      let dy = ch / 2 - 0.66 * dh;
+      // Horizontal zentriert, Bild unten bündig – so fällt die gesamte
+      // vertikale Überlappung oben raus (dort ist der Kopf), die Szene bleibt
+      // sonst nahezu vollständig sichtbar.
+      let dx = cw / 2 - 0.5 * dw;
+      let dy = ch - dh;
       dx = Math.min(0, Math.max(cw - dw, dx));
       dy = Math.min(0, Math.max(ch - dh, dy));
       ctx2d!.globalAlpha = 1;

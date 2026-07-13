@@ -19,7 +19,9 @@ export default function BeforeAfterSlider({
   afterLabel = "Nachher",
   alt,
 }: Props) {
-  const [position, setPosition] = useState(50);
+  // Startposition: Regler weit rechts, sodass ca. ein Viertel des
+  // Nachher-Bildes (rechts) sichtbar ist (User-Wunsch 2026-07-13).
+  const [position, setPosition] = useState(75);
   const draggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
 

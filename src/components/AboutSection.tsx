@@ -29,11 +29,16 @@ export default function AboutSection() {
 
         <Reveal delay={0.15}>
           <p className="text-forest-800/80 leading-relaxed">
-            Mein Name ist Eugen Wermter. Mit Eugens Haus- und Gartenservice
-            stehe ich in Hamburg für zuverlässige, saubere Arbeit – vom
-            gepflegten Rasen bis zur fertig verlegten Bodenfliese. Ich packe
-            selbst mit an, halte Termine ein und erkläre offen, was wie
-            gemacht wird.
+            Mein Name ist Eugen Wermter – und Eugens Haus- und Gartenservice
+            ist für mich mehr als nur ein Job. Ob verwilderter Garten, ein in
+            die Jahre gekommenes Bad oder die Kleinigkeit, für die sonst
+            niemand kommt: Ich packe selbst mit an, arbeite sauber und
+            behandle jedes Grundstück, als wäre es mein eigenes.
+          </p>
+          <p className="mt-4 text-forest-800/80 leading-relaxed">
+            Vom ersten Anruf bis zum letzten Handgriff haben Sie einen festen
+            Ansprechpartner, klare Absprachen und einen Preis, auf den Sie
+            sich verlassen können – hier in Hamburg und Umgebung.
           </p>
 
           <ul className="mt-8 space-y-3">
@@ -59,6 +64,16 @@ export default function AboutSection() {
               </li>
             ))}
           </ul>
+
+          <a
+            href="#kontakt"
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-leaf-500 px-6 py-3 text-sm font-semibold text-sand-50 shadow-sm transition-colors duration-200 hover:bg-forest-600"
+          >
+            Lernen wir uns kennen
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </a>
         </Reveal>
       </div>
     </section>
