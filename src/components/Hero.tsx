@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import WaveDivider from "./WaveDivider";
 
 // Statisches Headerbild: Eugen beim Flexen (rote Jacke), 4×-KI-hochskaliert.
 // Das Foto wird komplett gezeigt (object-contain), die Ränder füllt dasselbe
@@ -38,6 +39,9 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-r from-forest-950/90 via-forest-950/65 to-forest-950/35" />
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-forest-950/80 to-transparent" />
       </div>
+
+      {/* Weicher, organischer Übergang in die weißen Inhalts-Sektionen */}
+      <WaveDivider fill="text-white" className="absolute inset-x-0 bottom-0 z-10" />
 
       <div className="relative mx-auto w-full max-w-6xl px-5 pb-16 pt-32 md:pt-36">
         <motion.p

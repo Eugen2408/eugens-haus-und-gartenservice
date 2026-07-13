@@ -5,10 +5,10 @@ import Reveal from "./Reveal";
 
 const PAIRS = [
   {
-    label: "Gartenschuppen",
+    label: "Gartenpflege",
     beforeSrc: "/images/vorher-schuppen.jpg",
     afterSrc: "/images/nachher-schuppen.jpg",
-    alt: "Gartenschuppen freigeschnitten",
+    alt: "Verwilderter Garten freigeschnitten und aufgeräumt",
   },
   {
     label: "Gehweg-Reinigung",
@@ -34,19 +34,13 @@ const PAIRS = [
     afterSrc: "/images/nachher-fliesen.jpg",
     alt: "Wand neu gefliest",
   },
-  {
-    label: "Heckenschnitt",
-    beforeSrc: "/images/vorher-hecke.jpg",
-    afterSrc: "/images/nachher-hecke.jpg",
-    alt: "Hecke in Form geschnitten",
-  },
 ];
 
 export default function BeforeAfterSection() {
   return (
     <section
       id="vorher-nachher"
-      className="bg-white px-5 py-14 text-forest-950 md:py-20"
+      className="bg-white px-5 pb-14 pt-4 text-forest-950 md:pb-20 md:pt-8"
     >
       <div className="mx-auto max-w-5xl">
         <Reveal className="text-center">

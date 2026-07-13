@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+import type { PointerEvent as ReactPointerEvent } from "react";
 import Image from "next/image";
 
 type Props = {
@@ -18,7 +19,7 @@ export default function BeforeAfterSlider({
   afterLabel = "Nachher",
   alt,
 }: Props) {
-  const [position, setPosition] = useState(90);
+  const [position, setPosition] = useState(50);
   const draggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -30,26 +31,26 @@ export default function BeforeAfterSlider({
     setPosition(Math.min(100, Math.max(0, pct)));
   }, []);
 
-  // Pointer Events decken Maus UND Touch ab; touch-action: pan-y lässt
-  // vertikales Scrollen über dem Bild zu, horizontales Ziehen stellt den
-  // Regler. Tippen/Klicken auf das Bild springt direkt zur Position.
+  // Ziehen ausschließlich über den Griff (Maus wie Touch). Pointer-Capture
+  // hält das Dragging, auch wenn der Zeiger den Griff verlässt. Das Bild
+  // selbst reagiert nicht auf Tippen – nur der Griff bewegt den Regler.
+  function onPointerDown(e: ReactPointerEvent<HTMLButtonElement>) {
+    draggingRef.current = true;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    updateFromClientX(e.clientX);
+  }
+  function onPointerMove(e: ReactPointerEvent<HTMLButtonElement>) {
+    if (draggingRef.current) updateFromClientX(e.clientX);
+  }
+  function onPointerUp(e: ReactPointerEvent<HTMLButtonElement>) {
+    draggingRef.current = false;
+    e.currentTarget.releasePointerCapture?.(e.pointerId);
+  }
+
   return (
     <div
       ref={containerRef}
       className="relative aspect-[4/3] w-full select-none overflow-hidden rounded-2xl shadow-xl md:aspect-[16/10]"
-      style={{ touchAction: "pan-y" }}
-      onPointerDown={(e) => {
-        draggingRef.current = true;
-        e.currentTarget.setPointerCapture(e.pointerId);
-        updateFromClientX(e.clientX);
-      }}
-      onPointerMove={(e) => draggingRef.current && updateFromClientX(e.clientX)}
-      onPointerUp={() => {
-        draggingRef.current = false;
-      }}
-      onPointerCancel={() => {
-        draggingRef.current = false;
-      }}
     >
       <div className="absolute inset-0">
         <Image
@@ -80,12 +81,23 @@ export default function BeforeAfterSlider({
         </span>
       </div>
 
+      {/* Trennlinie + Griff – der Griff ist die einzige Zieh-Fläche */}
       <div
-        className="pointer-events-none absolute inset-y-0 z-10 w-1 -translate-x-1/2 bg-sand-50 shadow-md"
+        className="absolute inset-y-0 z-10 -translate-x-1/2"
         style={{ left: `${position}%` }}
       >
-        <span className="absolute top-1/2 left-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-sand-50 text-forest-800 shadow-lg ring-2 ring-forest-800/10">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <div className="pointer-events-none absolute inset-y-0 left-1/2 w-1 -translate-x-1/2 bg-sand-50 shadow-md" />
+        <button
+          type="button"
+          aria-label="Vorher/Nachher-Regler ziehen"
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
+          style={{ touchAction: "none" }}
+          className="absolute top-1/2 left-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize touch-none items-center justify-center rounded-full bg-sand-50 text-forest-800 shadow-lg ring-2 ring-forest-800/10 transition-transform active:scale-95"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
             <path
               d="M8 6L2 12L8 18M16 6L22 12L16 18"
               stroke="currentColor"
@@ -94,9 +106,10 @@ export default function BeforeAfterSlider({
               strokeLinejoin="round"
             />
           </svg>
-        </span>
+        </button>
       </div>
 
+      {/* Tastatur-Zugänglichkeit */}
       <input
         type="range"
         min={0}

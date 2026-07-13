@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { Outfit } from "next/font/google";
 import ConsentBanner from "@/components/ConsentBanner";
+import ScrollProgress from "@/components/ScrollProgress";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -81,6 +82,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
         />
+        <ScrollProgress />
         {children}
         <ConsentBanner />
       </body>

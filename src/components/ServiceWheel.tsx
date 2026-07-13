@@ -105,20 +105,20 @@ export default function ServiceWheel() {
   }
 
   return (
-    <section id="beste-wahl" ref={wrapperRef} className="relative h-[350svh] bg-white">
+    <section id="beste-wahl" ref={wrapperRef} className="relative h-[300svh] bg-white">
       <p className="sr-only">
         Die beste Wahl für: {ITEMS.map((item) => item.label).join(", ")}.
       </p>
 
-      <div className="sticky top-0 flex h-[100svh] flex-col items-center justify-center overflow-hidden px-5">
-        {/* z-20 + weißer Grund, damit keine ausgeblendete Rad-Zeile die Überschrift überlagert */}
-        <h2 className="relative z-20 w-full bg-white pb-2 text-center font-display text-3xl font-semibold text-forest-950 sm:text-5xl">
+      <div className="sticky top-0 h-[100svh] overflow-hidden px-5">
+        {/* Überschrift fest am oberen Rand – bleibt beim Scrollen stehen, während das Rad darunter läuft */}
+        <h2 className="absolute inset-x-0 top-[13svh] z-20 px-5 text-center font-display text-3xl font-semibold text-forest-950 sm:top-[15svh] sm:text-5xl">
           Die beste Wahl für:
         </h2>
 
         <div
           aria-hidden="true"
-          className="relative -mt-4 h-[340px] w-full max-w-5xl [perspective:1200px] sm:-mt-8 sm:h-[460px]"
+          className="absolute left-1/2 top-1/2 h-[340px] w-full max-w-5xl -translate-x-1/2 -translate-y-1/2 [perspective:1200px] sm:h-[460px]"
         >
           <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-14 bg-gradient-to-b from-white to-transparent sm:h-20" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-14 bg-gradient-to-t from-white to-transparent sm:h-20" />

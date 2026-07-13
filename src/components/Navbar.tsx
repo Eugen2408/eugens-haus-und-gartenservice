@@ -57,7 +57,7 @@ export default function Navbar() {
             width={562}
             height={256}
             priority
-            className={`h-14 w-auto transition sm:h-16 ${open ? "brightness-0" : ""}`}
+            className={`h-20 w-auto transition sm:h-24 ${open ? "brightness-0" : ""}`}
           />
         </a>
 

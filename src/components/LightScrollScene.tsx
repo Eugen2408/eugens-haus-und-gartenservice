@@ -330,7 +330,7 @@ export default function LightScrollScene() {
           {/* Scroll-Fortschritt */}
           {!reducedMotion && (
             <div className="absolute inset-x-0 bottom-0 h-1 bg-sand-50/10">
-              <div ref={barRef} className="h-full origin-left bg-terracotta-500" style={{ transform: "scaleX(0)" }} />
+              <div ref={barRef} className="h-full origin-left bg-leaf-500" style={{ transform: "scaleX(0)" }} />
             </div>
           )}
         </div>

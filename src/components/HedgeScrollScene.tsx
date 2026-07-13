@@ -79,11 +79,11 @@ export default function HedgeScrollScene() {
     // Ab den Nahaufnahmen auf Hecke + Schere zoomen, damit der Kopf oben aus
     // dem Bild wandert – und bis zum Szenen-Ende gezoomt BLEIBEN (User-Wunsch
     // 2026-07-12: Kopf darf nirgends sichtbar sein, auch nicht in der Totale).
+    // Durchgehend stark genug gezoomt, dass der Kopf von der ersten Sekunde an
+    // oben aus dem Bild fällt (User: Gesicht darf nirgends sichtbar sein).
+    // Leichter Push von 1,5× auf 1,65× hält zusätzlich Bewegung in der Szene.
     function zoomAt(progress: number) {
-      const a = 0.3, b = 0.44, Z = 1.6;
-      if (progress <= a) return 1;
-      if (progress < b) return 1 + (Z - 1) * ((progress - a) / (b - a));
-      return Z;
+      return 1.5 + 0.15 * progress;
     }
 
     // Nächstliegenden bereits geladenen Frame liefern, damit beim
@@ -342,7 +342,7 @@ export default function HedgeScrollScene() {
           {/* Scroll-Fortschritt */}
           {!reducedMotion && (
             <div className="absolute inset-x-0 bottom-0 h-1 bg-sand-50/10">
-              <div ref={barRef} className="h-full origin-left bg-terracotta-500" style={{ transform: "scaleX(0)" }} />
+              <div ref={barRef} className="h-full origin-left bg-leaf-500" style={{ transform: "scaleX(0)" }} />
             </div>
           )}
         </div>
