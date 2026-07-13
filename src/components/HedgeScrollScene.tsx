@@ -101,32 +101,48 @@ export default function HedgeScrollScene() {
       return Z;
     }
 
-    // Nächstliegenden bereits geladenen Frame zeichnen, damit beim
+    // Nächstliegenden bereits geladenen Frame liefern, damit beim
     // progressiven Laden nie ein schwarzes Bild aufblitzt.
-    function drawFrame(index: number) {
-      let img: HTMLImageElement | null = null;
+    function nearestLoaded(index: number): HTMLImageElement | null {
       for (let d = 0; d < SET.count; d++) {
         const before = index - d;
         const after = index + d;
-        if (before >= 0 && loaded[before]) { img = images[before]; break; }
-        if (after < SET.count && loaded[after]) { img = images[after]; break; }
+        if (before >= 0 && loaded[before]) return images[before];
+        if (after < SET.count && loaded[after]) return images[after];
       }
-      if (!img) return;
+      return null;
+    }
+
+    // Frame-Überblendung + Zoom: zeichnet einen Zwischenwert, indem die
+    // beiden Nachbar-Frames alpha-gemischt werden (12,7 → 30 % #12 + 70 % #13).
+    function drawFrame(frame: number) {
+      const base = Math.max(0, Math.min(SET.count - 1, Math.floor(frame)));
+      const upper = Math.min(SET.count - 1, base + 1);
+      const mix = Math.min(1, Math.max(0, frame - base));
+      const imgA = nearestLoaded(base);
+      if (!imgA) return;
       resizeCanvas();
       const cw = canvas!.width;
       const ch = canvas!.height;
-      const progress = SET.count > 1 ? index / (SET.count - 1) : 0;
+      const progress = SET.count > 1 ? frame / (SET.count - 1) : 0;
       const zoom = zoomAt(progress);
-      const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight) * zoom;
-      const dw = img.naturalWidth * scale;
-      const dh = img.naturalHeight * scale;
+      const scale = Math.max(cw / imgA.naturalWidth, ch / imgA.naturalHeight) * zoom;
+      const dw = imgA.naturalWidth * scale;
+      const dh = imgA.naturalHeight * scale;
       // Fokuspunkt links-unten (Hecke/Schere), an die Canvas-Ränder geklemmt;
       // dy tief genug, damit der Kopf oben sicher aus dem Bild fällt
       let dx = cw / 2 - 0.32 * dw;
       let dy = ch / 2 - 0.66 * dh;
       dx = Math.min(0, Math.max(cw - dw, dx));
       dy = Math.min(0, Math.max(ch - dh, dy));
-      ctx2d!.drawImage(img, dx, dy, dw, dh);
+      ctx2d!.globalAlpha = 1;
+      ctx2d!.drawImage(imgA, dx, dy, dw, dh);
+      const imgB = upper !== base && mix > 0.01 ? nearestLoaded(upper) : null;
+      if (imgB && imgB !== imgA) {
+        ctx2d!.globalAlpha = mix;
+        ctx2d!.drawImage(imgB, dx, dy, dw, dh);
+        ctx2d!.globalAlpha = 1;
+      }
     }
 
     function loadFrames() {
@@ -138,7 +154,7 @@ export default function HedgeScrollScene() {
         img.onload = () => {
           images[i] = img;
           loaded[i] = true;
-          if (i === currentFrame || (i === 0 && !loaded[currentFrame])) drawFrame(currentFrame);
+          if (i === Math.round(currentFrame) || (i === 0 && !loaded[Math.round(currentFrame)])) drawFrame(currentFrame);
         };
       }
     }
@@ -168,6 +184,23 @@ export default function HedgeScrollScene() {
       };
     }
 
+    // Geglätteter Frame-Verlauf: der Scroll setzt nur das Ziel (targetFrame),
+    // eine eigene rAF-Schleife zieht den sichtbaren Frame exponentiell nach –
+    // gleichmäßige Bewegung unabhängig von der Scroll-Geschwindigkeit.
+    let targetFrame = 0;
+    let rafId = 0;
+    let lastT = 0;
+    function tick(t: number) {
+      rafId = requestAnimationFrame(tick);
+      const dt = lastT ? Math.min((t - lastT) / 1000, 0.1) : 0.016;
+      lastT = t;
+      const diff = targetFrame - currentFrame;
+      if (Math.abs(diff) < 0.002) return;
+      currentFrame += Math.abs(diff) < 0.02 ? diff : diff * (1 - Math.exp(-dt * 9));
+      drawFrame(currentFrame);
+    }
+    rafId = requestAnimationFrame(tick);
+
     const gsapCtx = gsap.context(() => {
       const state = { frame: 0 };
       const tl = gsap.timeline({
@@ -185,11 +218,7 @@ export default function HedgeScrollScene() {
         frame: SET.count - 1,
         duration: 1,
         onUpdate: () => {
-          const next = Math.round(state.frame);
-          if (next !== currentFrame) {
-            currentFrame = next;
-            drawFrame(next);
-          }
+          targetFrame = state.frame;
         },
       }, 0);
 
@@ -260,6 +289,7 @@ export default function HedgeScrollScene() {
     return () => {
       io.disconnect();
       ro.disconnect();
+      cancelAnimationFrame(rafId);
       gsapCtx.revert();
     };
   }, [reducedMotion]);

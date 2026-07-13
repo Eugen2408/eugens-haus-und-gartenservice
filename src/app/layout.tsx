@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
-import { Bricolage_Grotesque } from "next/font/google";
+import { Outfit } from "next/font/google";
 import ConsentBanner from "@/components/ConsentBanner";
 import "./globals.css";
 
@@ -9,8 +9,8 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
 });
 
@@ -74,7 +74,7 @@ export default function RootLayout({
   return (
     <html
       lang="de"
-      className={`${geistSans.variable} ${bricolage.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${outfit.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-white text-forest-950">
         <script
