@@ -41,12 +41,21 @@ export default function AboutSection() {
             sich verlassen können – hier in Hamburg und Umgebung.
           </p>
 
+          {/* Persönlicher, handschriftlicher Namenszug */}
+          <p
+            aria-hidden="true"
+            className="mt-6 text-5xl leading-none text-leaf-500 sm:text-6xl"
+            style={{ fontFamily: "var(--font-signature)" }}
+          >
+            Eugen
+          </p>
+
           <ul className="mt-8 space-y-3">
             {[
               "Zuverlässig & termintreu",
               "Persönlicher Ansprechpartner vor Ort",
               "Faire, transparente Preise",
-              "Aus Hamburg, für Hamburg",
+              "Aus Hamburg – für Hamburg",
             ].map((item) => (
               <li key={item} className="flex items-center gap-3 text-forest-900">
                 <span className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-leaf-200 text-forest-700">

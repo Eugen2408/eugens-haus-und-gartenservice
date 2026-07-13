@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { Outfit } from "next/font/google";
+import { Dancing_Script } from "next/font/google";
 import ConsentBanner from "@/components/ConsentBanner";
 import ScrollProgress from "@/components/ScrollProgress";
 import SmoothAnchors from "@/components/SmoothAnchors";
@@ -14,6 +15,13 @@ const geistSans = Geist({
 const outfit = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
+});
+
+// Schreibschrift für den persönlichen Namenszug in "Über mich"
+const signature = Dancing_Script({
+  variable: "--font-signature",
+  subsets: ["latin"],
+  weight: ["600", "700"],
 });
 
 const SITE_URL = "https://eugens-haus-und-gartenservice.vercel.app";
@@ -76,7 +84,7 @@ export default function RootLayout({
   return (
     <html
       lang="de"
-      className={`${geistSans.variable} ${outfit.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${outfit.variable} ${signature.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-white text-forest-950">
         <script
