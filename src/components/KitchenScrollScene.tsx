@@ -37,13 +37,13 @@ type Chapter = {
 const CHAPTERS: Chapter[] = [
   {
     kicker: "So arbeite ich",
-    title: "Maßarbeit an der Platte.",
-    text: "Ausschnitte gesägt, alles vorbereitet – die neue Küche nimmt Form an.",
+    title: "Maßarbeit an der Arbeitsplatte.",
+    text: "Ausschnitte gesägt, alles eingepasst – die neue Küche nimmt Form an.",
   },
   {
     kicker: "Die Verwandlung",
-    title: "Die alte Küche muss weichen.",
-    text: "Ein Brand im Zeitraffer – Platz für den Neuanfang.",
+    title: "Die alte Küche macht Platz.",
+    text: "Ein Brand im Zeitraffer – Raum für einen frischen Start.",
   },
   {
     kicker: "Das Ergebnis",

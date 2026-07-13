@@ -21,13 +21,13 @@ type Chapter = {
 const CHAPTERS: Chapter[] = [
   {
     kicker: "So arbeite ich",
-    title: "Vom Dickicht verschluckt.",
-    text: "Jahrelang gewuchert – unter dem Grün steckt mehr, als man denkt.",
+    title: "Vom Grün verschluckt.",
+    text: "Jahrelang zugewuchert – unter dem Dickicht steckt mehr, als man denkt.",
   },
   {
     kicker: "Die Verwandlung",
-    title: "Platz schaffen, radikal.",
-    text: "Roden, schneiden, abtransportieren – bis wieder Luft zum Atmen ist.",
+    title: "Platz geschaffen.",
+    text: "Roden, schneiden, abtransportieren – Stück für Stück zurück ans Licht.",
   },
   {
     kicker: "Das Ergebnis",

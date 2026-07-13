@@ -27,12 +27,12 @@ const CHAPTERS: Chapter[] = [
   {
     kicker: "Die Verwandlung",
     title: "Platte für Platte ins Lot.",
-    text: "Setzen, ausrichten, abrütteln – bis jede Fuge sauber fluchtet.",
+    text: "Gesetzt, ausgerichtet, abgerüttelt – bis jede Fuge sauber fluchtet.",
   },
   {
     kicker: "Das Ergebnis",
-    title: "Ein Weg, der bleibt. So sauber, fast wie neu.",
-    text: "Fest verlegt und eben – bei jedem Wetter sicher durch den Garten.",
+    title: "Ein Weg, der bleibt.",
+    text: "Fest verlegt und eben – bei jedem Wetter trittsicher durch den Garten.",
   },
 ];
 

@@ -49,8 +49,8 @@ export default function ImpressumPage() {
               Festnetz: <a className="underline hover:text-leaf-500" href="tel:+494036935718">040 36935718</a>
               <br />
               E-Mail:{" "}
-              <a className="underline hover:text-leaf-500" href="mailto:eugenwermter200@gmail.com">
-                eugenwermter200@gmail.com
+              <a className="underline hover:text-leaf-500" href="mailto:kontakt@eugens-hausundgartenservice.de">
+                kontakt@eugens-hausundgartenservice.de
               </a>
             </p>
           </section>

@@ -24,11 +24,11 @@ type Props = {
 // Gleiche Mechanik wie ServiceWheel: scroll-getriebenes 3D-Rad um die X-Achse.
 // Das Rad wickelt nie komplett herum (Rotation 0 … n-1 Schritte), daher darf
 // der Winkel unabhängig von der Kartenzahl gewählt werden.
-const ANGLE = 24;
+const ANGLE = 30;
 // Frontebene liegt durch translateZ(-radius) auf z=0, sonst skaliert die
 // Perspektive die vorderste Karte über den Container hinaus.
-const RADIUS_DESKTOP = 460;
-const RADIUS_MOBILE = 300;
+const RADIUS_DESKTOP = 560;
+const RADIUS_MOBILE = 380;
 
 function Stars({ value }: { value: number }) {
   return (
@@ -51,7 +51,7 @@ function Stars({ value }: { value: number }) {
   );
 }
 
-function ReviewCard({ review, clamp }: { review: WheelReview; clamp?: boolean }) {
+function ReviewCard({ review }: { review: WheelReview }) {
   return (
     <article className="w-full max-w-lg rounded-2xl border border-forest-900/10 bg-white p-5 shadow-lg shadow-forest-900/5">
       <div className="flex items-center gap-3">
@@ -79,11 +79,7 @@ function ReviewCard({ review, clamp }: { review: WheelReview; clamp?: boolean })
           <Stars value={review.rating} />
         </span>
       </div>
-      <p
-        className={`mt-3 text-sm leading-relaxed text-forest-800/85 ${
-          clamp ? "line-clamp-3 sm:line-clamp-4" : "whitespace-pre-line"
-        }`}
-      >
+      <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-forest-800/85">
         {review.text}
       </p>
     </article>
@@ -204,7 +200,7 @@ export default function ReviewsWheel({ reviews, summary, googleUrl }: Props) {
 
         <div
           aria-hidden="true"
-          className="relative h-[340px] w-full max-w-3xl [perspective:1400px] sm:h-[440px]"
+          className="relative h-[440px] w-full max-w-3xl [perspective:1600px] sm:h-[560px]"
         >
           <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-12 bg-gradient-to-b from-white to-transparent sm:h-16" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-12 bg-gradient-to-t from-white to-transparent sm:h-16" />
@@ -220,13 +216,13 @@ export default function ReviewsWheel({ reviews, summary, googleUrl }: Props) {
               return (
                 <div
                   key={review.id}
-                  className="absolute inset-x-0 top-1/2 -mt-24 flex h-48 items-start justify-center transition-opacity duration-300 sm:-mt-28 sm:h-56"
+                  className="absolute inset-x-0 top-1/2 -mt-36 flex h-72 items-center justify-center transition-opacity duration-300 sm:-mt-40 sm:h-80"
                   style={{
                     transform: `rotateX(${-i * ANGLE}deg) translateZ(${radius}px)`,
                     opacity,
                   }}
                 >
-                  <ReviewCard review={review} clamp />
+                  <ReviewCard review={review} />
                 </div>
               );
             })}

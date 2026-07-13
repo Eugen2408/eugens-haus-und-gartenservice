@@ -24,17 +24,17 @@ const CHAPTERS: Chapter[] = [
   {
     kicker: "So arbeite ich",
     title: "Altes Bad, klarer Plan.",
-    text: "Müde Fliesen, alte Technik – hier hilft nur ein sauberer Rückbau.",
+    text: "Müde Fliesen, alte Technik – hier beginnt der saubere Rückbau.",
   },
   {
     kicker: "Die Verwandlung",
-    title: "Alles raus, Schicht für Schicht.",
-    text: "Entkernen, abdichten, neu aufbauen – bis auf den Kern und wieder zurück.",
+    title: "Bis auf den Kern – und zurück.",
+    text: "Entkernen, abdichten, neu aufbauen – Schritt für Schritt zum neuen Bad.",
   },
   {
     kicker: "Das Ergebnis",
     title: "Bereit für Ihr neues Bad.",
-    text: "Wände gestellt, Dusche gesetzt, Boden nivelliert – die Basis für ein Bad wie neu.",
+    text: "Wände gestellt, Dusche gesetzt, Boden nivelliert – die Basis steht.",
   },
 ];
 

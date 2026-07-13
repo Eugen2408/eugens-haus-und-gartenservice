@@ -30,12 +30,12 @@ const CHAPTERS: Chapter[] = [
   {
     kicker: "Die Verwandlung",
     title: "Wenn alte Leitungen aufgeben.",
-    text: "Ein Kurzschluss zeigt, was im Verborgenen schlummert – Zeit für klare Verhältnisse.",
+    text: "Ein Kurzschluss bringt ans Licht, was verborgen war – Zeit für klare Verhältnisse.",
   },
   {
     kicker: "Das Ergebnis",
     title: "Sauber verdrahtet, sicher verbunden.",
-    text: "Neue Klemmen, saubere Ordnung – Licht, auf das Verlass ist.",
+    text: "Neue Klemmen, klare Ordnung – Licht, auf das Verlass ist.",
   },
 ];
 

@@ -23,17 +23,17 @@ const CHAPTERS: Chapter[] = [
   {
     kicker: "So arbeite ich",
     title: "Vom Rohbau zur Form.",
-    text: "Alte Wand, neue Leitungen – hier beginnen Ihre neuen Fliesen.",
+    text: "Untergrund vorbereitet, Leitungen gesetzt – hier beginnen Ihre neuen Fliesen.",
   },
   {
     kicker: "Die Verwandlung",
-    title: "Präzision in jedem Detail.",
-    text: "Abdichtung, Ausrichtung, Fugenbild – alles greift ineinander.",
+    title: "Fliese trifft Präzision.",
+    text: "Abdichtung, Ausrichtung, Fugenbild – jeder Schritt greift sauber ineinander.",
   },
   {
     kicker: "Das Ergebnis",
     title: "Fliese für Fliese perfekt.",
-    text: "Eine saubere Kante, ein ruhiges Fugenbild – fertig zum Einziehen.",
+    text: "Klare Kanten, ein ruhiges Fugenbild – fertig zum Einziehen.",
   },
 ];
 

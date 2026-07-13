@@ -3,12 +3,11 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 
-// Versand über FormSubmit (kostenlos, kein Account). Web3Forms meldete zwar
-// success, hat aber nachweislich nie zugestellt (2026-07-11). FormSubmit
-// verlangt einmalig einen Aktivierungsklick per Mail an das Zielpostfach —
-// danach werden Anfragen zugestellt. Ziel vorerst Gmail (zuverlässige
-// Zustellung); nach Aktivierung auf den anonymisierten Alias umstellbar.
-const FORMSUBMIT_ENDPOINT = "https://formsubmit.co/ajax/eugenwermter200@gmail.com";
+// Versand über FormSubmit (kostenlos, kein Account). FormSubmit verlangt
+// einmalig einen Aktivierungsklick per Mail an das Zielpostfach — danach
+// werden Anfragen zugestellt. Ziel: geschäftliche Adresse.
+const FORMSUBMIT_ENDPOINT =
+  "https://formsubmit.co/ajax/kontakt@eugens-hausundgartenservice.de";
 const WHATSAPP_PHONE = "4915560691797";
 
 type Status = "idle" | "sending" | "success" | "error";

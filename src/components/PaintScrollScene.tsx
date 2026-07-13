@@ -21,18 +21,18 @@ type Chapter = {
 const CHAPTERS: Chapter[] = [
   {
     kicker: "So arbeite ich",
-    title: "Gute Farbe, sauberer Start.",
-    text: "Markenqualität und sorgfältige Vorbereitung – so beginnt jeder Anstrich.",
+    title: "Sauberer Start mit guter Farbe.",
+    text: "Gründlich abgeklebt, sorgfältig grundiert – die Basis für ein makelloses Ergebnis.",
   },
   {
     kicker: "Die Verwandlung",
-    title: "Farbe bricht durch.",
-    text: "Aus alt wird neu – Schicht für Schicht entsteht ein frisches Zuhause.",
+    title: "Frische Farbe, neuer Raum.",
+    text: "Schicht für Schicht wird aus müden Wänden ein helles Zuhause.",
   },
   {
     kicker: "Das Ergebnis",
-    title: "Wände wie am ersten Tag.",
-    text: "Scharfe Kanten, gleichmäßiger Auftrag – sauber abgeklebt, sauber gestrichen.",
+    title: "Wände wie neu.",
+    text: "Gleichmäßiger Auftrag, scharfe Kanten – sauber gestrichen bis in jede Ecke.",
   },
 ];
 

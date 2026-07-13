@@ -21,18 +21,18 @@ type Chapter = {
 const CHAPTERS: Chapter[] = [
   {
     kicker: "So arbeite ich",
-    title: "Alter Boden, neuer Plan.",
-    text: "Rausreißen, ausgleichen, vorbereiten – die Basis muss stimmen.",
+    title: "Neuer Boden, solide Basis.",
+    text: "Alten Belag raus, Untergrund ausgeglichen – tragfähig für viele Jahre.",
   },
   {
     kicker: "Die Verwandlung",
     title: "Diele für Diele verlegt.",
-    text: "Trittschalldämmung, sauberer Verbund, exakte Abstände zur Wand.",
+    text: "Trittschalldämmung, sauberer Verbund, exakte Randabstände zur Wand.",
   },
   {
     kicker: "Das Ergebnis",
     title: "Ein Boden zum Wohlfühlen.",
-    text: "Fugenlos verlegt, sauber abgeschlossen – bereit zum Einrichten.",
+    text: "Passgenau verlegt und sauber abgeschlossen – bereit zum Einrichten.",
   },
 ];
 

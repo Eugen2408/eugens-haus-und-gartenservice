@@ -40,7 +40,7 @@ export default function DatenschutzPage() {
             <br />
             Reembroden 14, 22339 Hamburg
             <br />
-            Telefon: 0155 60691797 · E-Mail: eugenwermter200@gmail.com
+            Telefon: 0155 60691797 · E-Mail: kontakt@eugens-hausundgartenservice.de
           </p>
 
           <H2>2. Allgemeines zur Datenverarbeitung</H2>
