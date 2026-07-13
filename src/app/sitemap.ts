@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL = "https://eugens-haus-und-gartenservice.vercel.app";
+const SITE_URL = "https://www.eugens-hausundgartenservice.de";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

@@ -24,7 +24,7 @@ const signature = Dancing_Script({
   weight: ["600", "700"],
 });
 
-const SITE_URL = "https://eugens-haus-und-gartenservice.vercel.app";
+const SITE_URL = "https://www.eugens-hausundgartenservice.de";
 const DESCRIPTION =
   "Eugens Haus- und Gartenservice in Hamburg: Gartenpflege, Heckenschnitt, Malerarbeiten, Badsanierung, Bodenverlegung, Montage, Reparaturen und mehr – zuverlässig, termintreu, aus einer Hand.";
 
