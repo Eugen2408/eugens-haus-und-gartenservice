@@ -3,7 +3,8 @@
 import { motion } from "framer-motion";
 
 const PHONE = "4915560691797";
-const MESSAGE = "Hallo! Ich interessiere mich für Ihren Haus- und Gartenservice.";
+const MESSAGE =
+  "Hallo Eugen, ich habe Ihre Website gesehen und interessiere mich für Ihren Haus- und Gartenservice. Können Sie mir ein unverbindliches Angebot machen?";
 
 export default function WhatsAppButton() {
   return (

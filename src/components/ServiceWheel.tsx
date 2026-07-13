@@ -54,6 +54,9 @@ export default function ServiceWheel() {
         scrollTrigger: {
           trigger: wrapper,
           start: "top top",
+          // Rad genau bei Sektionsende durch; die kompakte Bühne (top-[18svh]
+          // + 64svh) bleibt kurz gepinnt, während Vorher/Nachher schon eng
+          // von unten einläuft – kein großer weißer Zwischenraum.
           end: "bottom bottom",
           scrub: 1,
           invalidateOnRefresh: true,
@@ -105,28 +108,29 @@ export default function ServiceWheel() {
   }
 
   return (
-    <section id="beste-wahl" ref={wrapperRef} className="relative h-[300svh] bg-white">
+    <section id="beste-wahl" ref={wrapperRef} className="relative h-[220svh] bg-white">
       <p className="sr-only">
         Die beste Wahl für: {ITEMS.map((item) => item.label).join(", ")}.
       </p>
 
-      <div className="sticky top-0 h-[100svh] overflow-hidden px-5">
+      {/* Kompakte, mittig platzierte Bühne (64svh): kurze Ränder oben (kleiner
+          Abstand zur Überschrift) UND unten (enger Sprung zu Vorher/Nachher). */}
+      <div className="sticky top-[18svh] mx-auto flex h-[64svh] w-full max-w-5xl flex-col overflow-hidden px-5">
         {/* Fester Kopf oben: weißes Band mit hohem z-Index maskiert alles
             dahinter, damit kein Rad-Element in die Überschrift hineinragt */}
-        <div className="absolute inset-x-0 top-0 z-30 bg-white px-5 pt-[6svh] pb-3 text-center sm:pt-[7svh]">
+        <div className="z-30 shrink-0 bg-white pb-2 text-center">
           <h2 className="font-display text-3xl font-semibold text-forest-950 sm:text-5xl">
             Die beste Wahl für:
           </h2>
         </div>
 
-        {/* Rad direkt unter dem Kopf, kompaktes Fenster + overflow-hidden,
-            damit kein Element nach oben in die Überschrift ausbricht */}
+        {/* Rad füllt den Rest der Bühne, overflow-hidden verhindert Ausbrechen */}
         <div
           aria-hidden="true"
-          className="absolute left-1/2 top-[15svh] h-[70svh] w-full max-w-5xl -translate-x-1/2 overflow-hidden [perspective:1300px]"
+          className="relative mt-2 flex-1 overflow-hidden [perspective:1300px]"
         >
-          <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-20 bg-gradient-to-b from-white to-transparent sm:h-28" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-20 bg-gradient-to-t from-white to-transparent sm:h-28" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-16 bg-gradient-to-b from-white to-transparent sm:h-24" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-16 bg-gradient-to-t from-white to-transparent sm:h-24" />
 
           <div
             ref={wheelRef}

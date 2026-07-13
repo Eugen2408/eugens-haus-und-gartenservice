@@ -6,7 +6,9 @@ const CONTACT_ITEMS = [
     label: "WhatsApp",
     value: "Direkt chatten",
     href: "https://wa.me/4915560691797?text=" +
-      encodeURIComponent("Hallo! Ich interessiere mich für Ihren Haus- und Gartenservice."),
+      encodeURIComponent(
+        "Hallo Eugen, ich habe Ihre Website gesehen und interessiere mich für Ihren Haus- und Gartenservice. Können Sie mir ein unverbindliches Angebot machen?"
+      ),
   },
   {
     label: "Telefon",

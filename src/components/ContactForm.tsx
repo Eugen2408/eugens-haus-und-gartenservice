@@ -57,7 +57,7 @@ export default function ContactForm() {
       // Versand fehlgeschlagen: als Rettungsanker WhatsApp mit der
       // ausgefüllten Nachricht öffnen, damit die Anfrage nicht verloren geht
       const lines = [
-        "Hallo! Ich interessiere mich für Ihren Haus- und Gartenservice.",
+        "Hallo Eugen, ich habe Ihre Website gesehen und interessiere mich für Ihren Haus- und Gartenservice.",
         "",
         `Name: ${name}`,
       ];
