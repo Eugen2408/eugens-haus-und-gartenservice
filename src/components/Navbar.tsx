@@ -5,9 +5,10 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 
 const LINKS = [
+  { href: "#beste-wahl", label: "Leistungen" },
   { href: "#vorher-nachher", label: "Vorher/Nachher" },
   { href: "#ueber-uns", label: "Über mich" },
-  { href: "#bewertungen", label: "Bewertungen" },
+  { href: "#bewertungen", label: "Kundenstimmen" },
   { href: "#kontakt", label: "Kontakt" },
 ];
 
