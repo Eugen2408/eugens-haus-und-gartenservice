@@ -18,23 +18,14 @@ type Chapter = {
   text: string;
 };
 
-const CHAPTERS: Chapter[] = [
-  {
-    kicker: "So arbeite ich",
-    title: "Auf den Millimeter vorbereitet.",
-    text: "Sandbett abgezogen, Richtschnur gespannt – ein guter Weg beginnt im Untergrund.",
-  },
-  {
-    kicker: "Die Verwandlung",
-    title: "Platte für Platte ins Lot.",
-    text: "Gesetzt, ausgerichtet, abgerüttelt – bis jede Fuge sauber fluchtet.",
-  },
-  {
-    kicker: "Das Ergebnis",
-    title: "Ein Weg, der bleibt.",
-    text: "Fest verlegt und eben – bei jedem Wetter trittsicher durch den Garten.",
-  },
-];
+// EIN zusammengefasster Ergebnis-Text (statt 3 Kapiteln waehrend des Scrollens)
+// - der Effekt laeuft ungestoert durch, der Text erscheint erst, wenn das
+// Ergebnis steht (siehe FRAME_END/CAPTION_AT weiter unten).
+const RESULT: Chapter = {
+  kicker: "Die Verwandlung",
+  title: "Ein Weg, der bleibt.",
+  text: "Sandbett abgezogen, Richtschnur gespannt, Platte für Platte gesetzt und abgerüttelt, bis jede Fuge fluchtet – fest verlegt und eben, bei jedem Wetter trittsicher.",
+};
 
 export default function PathScrollScene() {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -157,9 +148,13 @@ export default function PathScrollScene() {
       };
     }
 
-    // Geglätteter Frame-Verlauf: der Scroll setzt nur das Ziel (targetFrame),
-    // eine eigene rAF-Schleife zieht den sichtbaren Frame exponentiell nach –
-    // gleichmäßige Bewegung unabhängig von der Scroll-Geschwindigkeit.
+    // Feste Wiedergabegeschwindigkeit: der Scroll setzt nur das Ziel (targetFrame),
+    // eine eigene rAF-Schleife bewegt den sichtbaren Frame mit KONSTANTEM Tempo
+    // dorthin (kein Exponential-Nachziehen) – die Animation läuft immer gleich
+    // schnell durch, egal wie schnell gescrollt wird. Bleibt der Scroll stehen,
+    // bleibt auch das Bild stehen; rückwärts scrollen läuft symmetrisch zurück.
+    const MIN_PLAY_SECONDS = 1.3; // Mindestdauer fuer einen kompletten Durchlauf
+    const maxFramesPerSecond = SET.count / MIN_PLAY_SECONDS;
     let targetFrame = 0;
     let rafId = 0;
     let lastT = 0;
@@ -169,34 +164,39 @@ export default function PathScrollScene() {
       lastT = t;
       const diff = targetFrame - currentFrame;
       if (Math.abs(diff) < 0.002) return;
-      currentFrame += Math.abs(diff) < 0.02 ? diff : diff * (1 - Math.exp(-dt * 9));
+      const maxStep = maxFramesPerSecond * dt;
+      currentFrame += Math.abs(diff) <= maxStep ? diff : Math.sign(diff) * maxStep;
       drawFrame(currentFrame);
     }
     rafId = requestAnimationFrame(tick);
 
     const gsapCtx = gsap.context(() => {
       const state = { frame: 0 };
+      // Frame-Fortschritt laeuft nur bis FRAME_END der Scroll-Strecke, der Rest
+      // bleibt Lese-Pause auf dem stehenden Ergebnis-Frame (Pin haelt weiter).
+      const FRAME_END = 0.78;
+      const CAPTION_AT = 0.82;
       const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: {
           trigger: wrapper,
           start: "top top",
           end: "bottom bottom",
-          scrub: 1,
+          scrub: true, // sofort, keine GSAP-Traegheit - die Tick-Schleife regelt das Tempo
           invalidateOnRefresh: true,
         },
       });
 
       tl.to(state, {
         frame: SET.count - 1,
-        duration: 1,
+        duration: FRAME_END,
         onUpdate: () => {
           targetFrame = state.frame;
         },
       }, 0);
 
       // Leichter Kamera-Push + 3D-Kippeffekt beim Einstieg
-      tl.fromTo(stage, { scale: 1.06 }, { scale: 1, duration: 1 }, 0);
+      tl.fromTo(stage, { scale: 1.06 }, { scale: 1, duration: FRAME_END }, 0);
       tl.fromTo(
         stage,
         { rotateX: 5, transformPerspective: 1200 },
@@ -208,36 +208,28 @@ export default function PathScrollScene() {
         tl.fromTo(barRef.current, { scaleX: 0 }, { scaleX: 1, duration: 1 }, 0);
       }
 
-      // Licht-Sweep zieht einmal diagonal über die Bühne – passend zum
-      // Moment, in dem die Platten sichtbar werden
+      // Licht-Sweep zieht einmal diagonal ueber die Buehne, kurz bevor das
+      // Ergebnis steht - Uebergang zum Text.
       if (sweepRef.current) {
-        tl.fromTo(sweepRef.current, { xPercent: -60 }, { xPercent: 520, duration: 0.34 }, 0.5);
+        tl.fromTo(sweepRef.current, { xPercent: -60 }, { xPercent: 520, duration: 0.3 }, FRAME_END - 0.14);
       }
 
-      // Drei Text-Kapitel, an den Scrub gekoppelt; Titel-Wörter
-      // schieben sich einzeln aus einer Maske hoch
-      const spans: [number, number][] = [
-        [0.02, 0.3],
-        [0.34, 0.66],
-        [0.7, 1.0],
-      ];
-      captionRefs.current.forEach((el, i) => {
-        if (!el) return;
-        const [inAt, outAt] = spans[i];
-        tl.fromTo(el, { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.05 }, inAt);
-        const words = el.querySelectorAll<HTMLElement>(".path-word");
+      // EIN Ergebnis-Text erscheint erst, wenn der Effekt fertig durchgelaufen ist
+      // (siehe FRAME_END) - Titel-Woerter schieben sich einmal aus einer Maske
+      // hoch und bleiben stehen (kein Ausblenden mehr, das ist der Schlusspunkt).
+      const captionEl = captionRefs.current[0];
+      if (captionEl) {
+        tl.fromTo(captionEl, { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.07 }, CAPTION_AT);
+        const words = captionEl.querySelectorAll<HTMLElement>(".path-word");
         if (words.length) {
           tl.fromTo(
             words,
             { yPercent: 115 },
-            { yPercent: 0, duration: 0.05, stagger: 0.01, ease: "power2.out" },
-            inAt
+            { yPercent: 0, duration: 0.07, stagger: 0.012, ease: "power2.out" },
+            CAPTION_AT
           );
         }
-        if (i < 2) {
-          tl.to(el, { autoAlpha: 0, y: -28, duration: 0.05 }, outAt);
-        }
-      });
+      }
     }, wrapper);
 
     return () => {
@@ -288,45 +280,37 @@ export default function PathScrollScene() {
             </span>
           </div>
 
-          {/* Text-Kapitel */}
-          {CHAPTERS.map((chapter, i) => {
-            const isLast = i === CHAPTERS.length - 1;
-            const visibleStatic = reducedMotion ? (isLast ? "opacity-100" : "hidden") : "opacity-0";
-            return (
-              <div
-                key={chapter.title}
-                ref={(el) => {
-                  captionRefs.current[i] = el;
-                }}
-                className={`absolute inset-x-5 bottom-8 max-w-xl sm:inset-x-10 sm:bottom-12 ${visibleStatic}`}
-              >
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sand-100 sm:text-sm">
-                  {chapter.kicker}
-                </p>
-                <h3 className="mt-2 font-display text-3xl font-semibold leading-[1.05] text-sand-50 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl">
-                  {chapter.title.split(" ").map((word, wi) => (
-                    <span key={wi} className="mr-[0.26em] inline-block overflow-hidden pb-1 align-top">
-                      <span className="path-word inline-block">{word}</span>
-                    </span>
-                  ))}
-                </h3>
-                <p className="mt-3 max-w-md text-sm leading-relaxed text-sand-100/85 sm:text-base">
-                  {chapter.text}
-                </p>
-                {isLast && (
-                  <a
-                    href="#kontakt"
-                    className="mt-5 inline-flex items-center gap-2 rounded-full bg-leaf-500 px-6 py-3 text-sm font-semibold text-sand-50 shadow-lg shadow-leaf-500/25 transition-colors duration-200 hover:bg-forest-600"
-                  >
-                    Pflasterarbeiten anfragen
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </a>
-                )}
-              </div>
-            );
-          })}
+          {/* Ergebnis-Text: erscheint erst, wenn der Effekt durchgelaufen ist und
+              das Ergebnisbild steht (FRAME_END/CAPTION_AT oben) */}
+          <div
+            ref={(el) => {
+              captionRefs.current[0] = el;
+            }}
+            className={`absolute inset-x-5 bottom-8 max-w-xl sm:inset-x-10 sm:bottom-12 ${reducedMotion ? "opacity-100" : "opacity-0"}`}
+          >
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sand-100 sm:text-sm">
+              {RESULT.kicker}
+            </p>
+            <h3 className="mt-2 font-display text-3xl font-semibold leading-[1.05] text-sand-50 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl">
+              {RESULT.title.split(" ").map((word, wi) => (
+                <span key={wi} className="mr-[0.26em] inline-block overflow-hidden pb-1 align-top">
+                  <span className="path-word inline-block">{word}</span>
+                </span>
+              ))}
+            </h3>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-sand-100/85 sm:text-base">
+              {RESULT.text}
+            </p>
+            <a
+              href="#kontakt"
+              className="mt-5 inline-flex items-center gap-2 rounded-full bg-leaf-500 px-6 py-3 text-sm font-semibold text-sand-50 shadow-lg shadow-leaf-500/25 transition-colors duration-200 hover:bg-forest-600"
+            >
+              Pflasterarbeiten anfragen
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </a>
+          </div>
 
           {/* Scroll-Fortschritt */}
           {!reducedMotion && (
