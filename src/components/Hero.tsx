@@ -17,23 +17,25 @@ export default function Hero() {
     >
       {/* Hintergrundbild */}
       <div className="absolute inset-0" aria-hidden="true">
-        {/* Weichgezeichnete Füllfläche hinter dem eigentlichen Foto */}
+        {/* Weichgezeichnete Füllfläche hinter dem eigentlichen Foto – nur Desktop.
+            Auf Mobile stört die Doppelung, dort füllt das Foto selbst formatfüllend. */}
         <Image
           src={HERO_IMAGE}
           alt=""
           fill
           priority
           sizes="60vw"
-          className="scale-110 object-cover blur-2xl brightness-[0.55]"
+          className="hidden scale-110 object-cover blur-2xl brightness-[0.55] md:block"
         />
-        {/* Das Foto selbst – vollständig sichtbar, rechtsbündig, mit sanftem Dauer-Zoom */}
+        {/* Das Foto selbst – Mobile formatfüllend (cover, ohne zweites Bild),
+            Desktop vollständig sichtbar rechtsbündig (contain) mit sanftem Dauer-Zoom */}
         <Image
           src={HERO_IMAGE}
           alt=""
           fill
           priority
           sizes="100vw"
-          className="object-contain object-right motion-safe:animate-[hero-zoom_22s_ease-out_forwards]"
+          className="object-cover object-center md:object-contain md:object-right motion-safe:animate-[hero-zoom_22s_ease-out_forwards]"
         />
         {/* Scrim für Textkontrast */}
         <div className="absolute inset-0 bg-gradient-to-r from-forest-950/90 via-forest-950/65 to-forest-950/35" />

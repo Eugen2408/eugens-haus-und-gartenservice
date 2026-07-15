@@ -115,10 +115,10 @@ export default function KitchenScrollScene() {
       resizeCanvas();
       const cw = canvas!.width;
       const ch = canvas!.height;
-      // Mobile (Hochformat): ganzes Bild in voller Breite zeigen (contain),
-      // Desktop: Bühne formatfüllend (cover). Beschneidet auf Mobile nicht die Seiten.
+      // Mobile (Hochformat): formatfuellend (cover) - Szene fuellt den Schirm,
+      // Desktop: Buehne ebenso formatfuellend (cover).
       const scale = isMobile
-        ? Math.min(cw / imgA.naturalWidth, ch / imgA.naturalHeight)
+        ? Math.max(cw / imgA.naturalWidth, ch / imgA.naturalHeight)
         : Math.max(cw / imgA.naturalWidth, ch / imgA.naturalHeight);
       const dw = imgA.naturalWidth * scale;
       const dh = imgA.naturalHeight * scale;
@@ -271,11 +271,11 @@ export default function KitchenScrollScene() {
       className={`relative bg-white ${reducedMotion ? "" : "h-[240svh]"}`}
     >
       <div
-        className={`${reducedMotion ? "relative py-24" : "sticky top-0 h-[100svh]"} flex items-center justify-center overflow-hidden px-5`}
+        className={`${reducedMotion ? "relative py-24" : "sticky top-0 h-[100svh]"} flex items-center justify-center overflow-hidden px-0 md:px-5`}
       >
         <div
           ref={stageRef}
-          className="relative h-[86svh] w-full max-w-6xl md:max-w-[86vw] overflow-hidden rounded-3xl bg-forest-900 shadow-2xl shadow-black/40 md:h-auto md:aspect-video"
+          className="relative h-[100svh] w-full max-w-6xl md:max-w-[86vw] overflow-hidden md:rounded-3xl bg-forest-900 shadow-2xl shadow-black/40 md:h-auto md:aspect-video"
         >
           <canvas
             ref={canvasRef}

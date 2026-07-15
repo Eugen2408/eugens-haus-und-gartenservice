@@ -98,16 +98,21 @@ export default function ReviewsWheel({ reviews, summary, googleUrl }: Props) {
   const [active, setActive] = useState(0);
   const [radius, setRadius] = useState(RADIUS_DESKTOP);
   const [reducedMotion, setReducedMotion] = useState(false);
+  // Auf Mobile das 3D-Rad durch die vollständige Liste ersetzen, damit die
+  // Bewertungen komplett lesbar sind (im Rad würden lange Texte abgeschnitten).
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-    setRadius(window.matchMedia("(max-width: 639px)").matches ? RADIUS_MOBILE : RADIUS_DESKTOP);
+    const mobile = window.matchMedia("(max-width: 639px)").matches;
+    setIsMobile(mobile);
+    setRadius(mobile ? RADIUS_MOBILE : RADIUS_DESKTOP);
   }, []);
 
   useEffect(() => {
     const wrapper = wrapperRef.current;
     const wheel = wheelRef.current;
-    if (!wrapper || !wheel || reducedMotion || reviews.length < 2) return;
+    if (!wrapper || !wheel || reducedMotion || isMobile || reviews.length < 2) return;
 
     const gsapCtx = gsap.context(() => {
       const state = { step: 0 };
@@ -132,7 +137,7 @@ export default function ReviewsWheel({ reviews, summary, googleUrl }: Props) {
     }, wrapper);
 
     return () => gsapCtx.revert();
-  }, [reducedMotion, radius, reviews.length]);
+  }, [reducedMotion, isMobile, radius, reviews.length]);
 
   const header = (
     // z-20 + weißer Grund, damit keine ausgeblendete Karte die Überschrift überlagert
@@ -166,8 +171,8 @@ export default function ReviewsWheel({ reviews, summary, googleUrl }: Props) {
     </a>
   );
 
-  // Reduced Motion: ruhige, vollständig lesbare Liste statt Rad
-  if (reducedMotion) {
+  // Reduced Motion ODER Mobile: ruhige, vollständig lesbare Liste statt Rad
+  if (reducedMotion || isMobile) {
     return (
       <section id="bewertungen" className="bg-white px-5 py-14 md:py-20">
         <div className="mx-auto max-w-6xl lg:max-w-[80vw]">

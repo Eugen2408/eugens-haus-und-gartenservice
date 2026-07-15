@@ -110,19 +110,21 @@ export default function HedgeScrollScene() {
       const ch = canvas!.height;
       const nw = imgA.naturalWidth;
       const nh = imgA.naturalHeight;
-      // Quell-/Zielrechteck. Mobile (Hochformat): volle Breite zeigen (contain),
-      // die obersten 14% (Kopf, wirkt KI-generiert) per Source-Crop weglassen –
-      // so keine Seiten-Beschneidung. Desktop: formatfüllend (cover) mit leichtem
-      // Zoom, unten bündig, sodass der Kopf oben aus dem Bild fällt.
+      // Quell-/Zielrechteck. Mobile (Hochformat): formatfüllend (cover), die
+      // obersten 14% (Kopf, wirkt KI-generiert) per Source-Crop weglassen.
+      // Desktop: formatfüllend (cover) mit leichtem Zoom, unten bündig,
+      // sodass der Kopf oben aus dem Bild fällt.
       let sx = 0, sy = 0, sW = nw, sH = nh;
       let dx: number, dy: number, dw: number, dh: number;
       if (isMobile) {
+        // Oberste 14% (Kopf, wirkt KI-generiert) weg-croppen, Rest formatfuellend
+        // (cover) auf die Vollbild-Buehne – kein Letterbox mehr.
         sy = nh * 0.14;
         sH = nh * 0.86;
-        const s = cw / nw;
-        dw = cw;
-        dh = sH * s;
-        dx = 0;
+        const scale = Math.max(cw / nw, ch / sH);
+        dw = nw * scale;
+        dh = sH * scale;
+        dx = (cw - dw) / 2;
         dy = (ch - dh) / 2;
       } else {
         const progress = SET.count > 1 ? frame / (SET.count - 1) : 0;
@@ -279,11 +281,11 @@ export default function HedgeScrollScene() {
       className={`relative bg-white ${reducedMotion ? "" : "h-[240svh]"}`}
     >
       <div
-        className={`${reducedMotion ? "relative py-24" : "sticky top-0 h-[100svh]"} flex items-center justify-center overflow-hidden px-5`}
+        className={`${reducedMotion ? "relative py-24" : "sticky top-0 h-[100svh]"} flex items-center justify-center overflow-hidden px-0 md:px-5`}
       >
         <div
           ref={stageRef}
-          className="relative h-[86svh] w-full max-w-6xl md:max-w-[86vw] overflow-hidden rounded-3xl bg-forest-900 shadow-2xl shadow-black/40 md:h-auto md:aspect-video"
+          className="relative h-[100svh] w-full max-w-6xl md:max-w-[86vw] overflow-hidden md:rounded-3xl bg-forest-900 shadow-2xl shadow-black/40 md:h-auto md:aspect-video"
         >
           <canvas
             ref={canvasRef}
