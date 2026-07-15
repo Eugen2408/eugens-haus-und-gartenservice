@@ -27,7 +27,7 @@ const ITEMS: { label: string; image: string; pos?: string }[] = [
 const ANGLE = 360 / ITEMS.length;
 // Frontebene liegt durch translateZ(-radius) auf z=0, sonst skaliert die
 // Perspektive die vorderste Zeile über den Container hinaus.
-const RADIUS_DESKTOP = 440;
+const RADIUS_DESKTOP = 540;
 const RADIUS_MOBILE = 270;
 
 export default function ServiceWheel() {
@@ -79,22 +79,22 @@ export default function ServiceWheel() {
   if (reducedMotion) {
     return (
       <section id="beste-wahl" className="bg-white px-5 py-14 md:py-20">
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto max-w-4xl">
           <h2 className="text-center font-display text-3xl font-semibold text-forest-950 sm:text-5xl">
             Die beste Wahl für:
           </h2>
           <ul className="mt-12 space-y-6">
             {ITEMS.map((item) => (
               <li key={item.label} className="flex items-center justify-between gap-4">
-                <span className="font-display text-2xl font-semibold text-forest-950 sm:text-3xl">
+                <span className="font-display text-2xl font-semibold text-forest-950 sm:text-4xl">
                   {item.label}
                 </span>
-                <span className="relative block h-20 w-32 flex-none overflow-hidden rounded-xl shadow-md ring-1 ring-forest-900/10">
+                <span className="relative block h-24 w-40 flex-none overflow-hidden rounded-xl shadow-md ring-1 ring-forest-900/10">
                   <Image
                     src={item.image}
                     alt=""
                     fill
-                    sizes="128px"
+                    sizes="160px"
                     className="object-cover"
                     style={{ objectPosition: item.pos ?? "50% 50%" }}
                   />
@@ -115,7 +115,7 @@ export default function ServiceWheel() {
 
       {/* Kompakte, mittig platzierte Bühne (64svh): kurze Ränder oben (kleiner
           Abstand zur Überschrift) UND unten (enger Sprung zu Vorher/Nachher). */}
-      <div className="sticky top-[18svh] mx-auto flex h-[64svh] w-full max-w-5xl flex-col overflow-hidden px-5">
+      <div className="sticky top-[18svh] mx-auto flex h-[64svh] w-full max-w-6xl flex-col overflow-hidden px-5 lg:max-w-[86vw]">
         {/* Fester Kopf oben: weißes Band mit hohem z-Index maskiert alles
             dahinter, damit kein Rad-Element in die Überschrift hineinragt */}
         <div className="z-30 shrink-0 bg-white pb-2 text-center">
@@ -144,21 +144,21 @@ export default function ServiceWheel() {
               return (
                 <div
                   key={item.label}
-                  className="absolute inset-x-0 top-1/2 -mt-16 flex h-32 items-center justify-center gap-2 transition-opacity duration-300 sm:-mt-[6.5rem] sm:h-52 sm:gap-6"
+                  className="absolute inset-x-0 top-1/2 -mt-16 flex h-32 items-center justify-center gap-2 transition-opacity duration-300 sm:-mt-32 sm:h-64 sm:gap-8"
                   style={{
                     transform: `rotateX(${-i * ANGLE}deg) translateZ(${radius}px)`,
                     opacity,
                   }}
                 >
                   <span
-                    className={`whitespace-nowrap font-display text-lg font-semibold leading-none transition-colors duration-300 sm:text-5xl md:text-6xl ${
+                    className={`whitespace-nowrap font-display text-lg font-semibold leading-none transition-colors duration-300 sm:text-5xl md:text-6xl lg:text-7xl ${
                       isActive ? "text-terracotta-600" : "text-forest-900"
                     }`}
                   >
                     {item.label}
                   </span>
                   <span
-                    className={`relative block h-28 w-40 flex-none overflow-hidden rounded-2xl shadow-lg ring-1 ring-forest-900/10 transition-transform duration-300 sm:h-52 sm:w-80 ${
+                    className={`relative block h-28 w-40 flex-none overflow-hidden rounded-2xl shadow-lg ring-1 ring-forest-900/10 transition-transform duration-300 sm:h-64 sm:w-[25rem] ${
                       isActive ? "scale-105" : "scale-90"
                     }`}
                   >
@@ -166,7 +166,7 @@ export default function ServiceWheel() {
                       src={item.image}
                       alt=""
                       fill
-                      sizes="(max-width: 640px) 208px, 320px"
+                      sizes="(max-width: 640px) 160px, 400px"
                       className="object-cover"
                       style={{ objectPosition: item.pos ?? "50% 50%" }}
                     />

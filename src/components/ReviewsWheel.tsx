@@ -55,34 +55,34 @@ function Stars({ value }: { value: number }) {
 
 function ReviewCard({ review, clamp = false }: { review: WheelReview; clamp?: boolean }) {
   return (
-    <article className="w-full max-w-lg rounded-2xl border border-forest-900/10 bg-white p-5 shadow-lg shadow-forest-900/5">
-      <div className="flex items-center gap-3">
+    <article className="w-full max-w-2xl rounded-2xl border border-forest-900/10 bg-white p-6 shadow-lg shadow-forest-900/5 sm:p-8">
+      <div className="flex items-center gap-3 sm:gap-4">
         {review.avatarUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={review.avatarUrl}
             alt=""
-            width={40}
-            height={40}
+            width={48}
+            height={48}
             loading="lazy"
             referrerPolicy="no-referrer"
-            className="h-10 w-10 rounded-full"
+            className="h-11 w-11 rounded-full sm:h-12 sm:w-12"
           />
         ) : (
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-leaf-200 font-display font-semibold text-forest-900">
+          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-leaf-200 font-display font-semibold text-forest-900 sm:h-12 sm:w-12">
             {review.name.charAt(0)}
           </span>
         )}
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold text-forest-950">{review.name}</p>
-          <p className="text-xs text-forest-800/60">{review.dateLabel}</p>
+          <p className="truncate text-base font-semibold text-forest-950 sm:text-lg">{review.name}</p>
+          <p className="text-xs text-forest-800/60 sm:text-sm">{review.dateLabel}</p>
         </div>
         <span className="ml-auto flex-none">
           <Stars value={review.rating} />
         </span>
       </div>
       <p
-        className={`mt-3 whitespace-pre-line text-sm leading-relaxed text-forest-800/85 ${
+        className={`mt-4 whitespace-pre-line text-base leading-relaxed text-forest-800/85 sm:text-lg ${
           clamp ? "line-clamp-5 sm:line-clamp-none" : ""
         }`}
       >
@@ -170,7 +170,7 @@ export default function ReviewsWheel({ reviews, summary, googleUrl }: Props) {
   if (reducedMotion) {
     return (
       <section id="bewertungen" className="bg-white px-5 py-14 md:py-20">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-6xl lg:max-w-[80vw]">
           {header}
           <div className="mt-10 columns-1 gap-6 sm:columns-2 lg:columns-3">
             {reviews.map((review) => (
@@ -206,7 +206,7 @@ export default function ReviewsWheel({ reviews, summary, googleUrl }: Props) {
 
         <div
           aria-hidden="true"
-          className="relative h-[440px] w-full max-w-3xl [perspective:1600px] sm:h-[560px]"
+          className="relative h-[440px] w-full max-w-4xl [perspective:1600px] sm:h-[560px]"
         >
           <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-12 bg-gradient-to-b from-white to-transparent sm:h-16" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-12 bg-gradient-to-t from-white to-transparent sm:h-16" />

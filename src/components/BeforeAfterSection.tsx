@@ -42,15 +42,15 @@ export default function BeforeAfterSection() {
       id="vorher-nachher"
       className="bg-white px-5 pb-14 pt-4 text-forest-950 md:pb-20 md:pt-8"
     >
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-6xl lg:max-w-[86vw]">
         <Reveal className="text-center">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-leaf-500">
             Ergebnisse, die überzeugen
           </p>
-          <h2 className="mt-3 font-display text-3xl font-semibold sm:text-4xl">
+          <h2 className="mt-3 font-display text-4xl font-semibold sm:text-5xl lg:text-6xl">
             Vorher &amp; Nachher
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-forest-800/70">
+          <p className="mx-auto mt-4 max-w-xl text-forest-800/70 lg:text-lg">
             Ziehen Sie den Regler nach rechts und sehen Sie selbst, was ein
             bisschen Pflege bewirken kann.
           </p>

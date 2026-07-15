@@ -4,7 +4,7 @@ import TiltCard from "./TiltCard";
 
 export default function AboutSection() {
   return (
-    <section id="ueber-uns" className="mx-auto max-w-6xl px-5 py-14 md:py-20">
+    <section id="ueber-uns" className="mx-auto max-w-6xl px-5 py-14 md:py-20 lg:max-w-[80vw]">
       <Reveal className="text-center">
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-leaf-500">
           Über mich
@@ -14,9 +14,9 @@ export default function AboutSection() {
         </h2>
       </Reveal>
 
-      <div className="mt-10 grid grid-cols-1 items-center gap-12 md:grid-cols-2">
+      <div className="mt-10 grid grid-cols-1 items-center gap-12 md:grid-cols-2 lg:gap-20">
         <Reveal>
-          <TiltCard className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl shadow-2xl">
+          <TiltCard className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl shadow-2xl lg:mx-auto lg:max-w-2xl">
             <Image
               src="/images/heckenschnitt.jpg"
               alt="Eugen bei der Heckenpflege"
@@ -28,14 +28,14 @@ export default function AboutSection() {
         </Reveal>
 
         <Reveal delay={0.15}>
-          <p className="text-forest-800/80 leading-relaxed">
+          <p className="text-forest-800/80 leading-relaxed lg:text-lg">
             Mein Name ist Eugen Wermter – und Eugens Haus- und Gartenservice
             ist für mich mehr als nur ein Job. Ob verwilderter Garten, ein in
             die Jahre gekommenes Bad oder die Kleinigkeit, für die sonst
             niemand kommt: Ich packe selbst mit an, arbeite sauber und
             behandle jedes Grundstück, als wäre es mein eigenes.
           </p>
-          <p className="mt-4 text-forest-800/80 leading-relaxed">
+          <p className="mt-4 text-forest-800/80 leading-relaxed lg:text-lg">
             Vom ersten Anruf bis zum letzten Handgriff haben Sie einen festen
             Ansprechpartner, klare Absprachen und einen Preis, auf den Sie
             sich verlassen können – hier in Hamburg und Umgebung.
