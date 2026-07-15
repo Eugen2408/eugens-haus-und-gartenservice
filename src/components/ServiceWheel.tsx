@@ -16,7 +16,7 @@ const ITEMS: { label: string; image: string; pos?: string }[] = [
   { label: "Montage", image: "/images/montage.jpg" },
   { label: "Wandverschönerung", image: "/images/wandverschoenerung.jpg" },
   { label: "Bodenbeläge", image: "/images/bodenbelag.jpg" },
-  { label: "Reparaturen", image: "/images/reparaturen.jpg" },
+  { label: "Reparaturen", image: "/images/reparatur-siphon.jpg" },
   { label: "Aufbau-Service", image: "/frames/kueche/kueche-109.webp" },
   { label: "Technik-Tausch", image: "/frames/licht/licht-000.webp" },
   { label: "Ausbesserung", image: "/images/fliesen.jpg" },

@@ -5,16 +5,16 @@ import Reveal from "./Reveal";
 
 const PAIRS = [
   {
-    label: "Heckenschnitt",
-    beforeSrc: "/images/vorher-hecke.jpg",
-    afterSrc: "/images/nachher-hecke.jpg",
-    alt: "Überwachsene Hecke in Form geschnitten",
-  },
-  {
     label: "Gartenpflege",
     beforeSrc: "/images/vorher-schuppen.jpg",
     afterSrc: "/images/nachher-schuppen.jpg",
     alt: "Verwilderter Garten freigeschnitten und aufgeräumt",
+  },
+  {
+    label: "Heckenschnitt",
+    beforeSrc: "/images/vorher-hecke-strasse.jpg",
+    afterSrc: "/images/nachher-hecke-strasse.jpg",
+    alt: "Überwachsene Hecke in Form geschnitten",
   },
   {
     label: "Gehweg-Reinigung",

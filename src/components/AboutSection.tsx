@@ -53,7 +53,7 @@ export default function AboutSection() {
           <ul className="mt-8 space-y-3">
             {[
               "Zuverlässig & termintreu",
-              "Persönlicher Ansprechpartner vor Ort",
+              "Kompetent und persönlich",
               "Faire, transparente Preise",
               "Aus Hamburg – für Hamburg",
             ].map((item) => (

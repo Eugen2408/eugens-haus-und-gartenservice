@@ -27,7 +27,7 @@ type Props = {
 const ANGLE = 30;
 // Frontebene liegt durch translateZ(-radius) auf z=0, sonst skaliert die
 // Perspektive die vorderste Karte über den Container hinaus.
-const RADIUS_DESKTOP = 560;
+const RADIUS_DESKTOP = 700;
 // Größerer Mobile-Radius: mehr vertikaler Abstand zwischen benachbarten Karten,
 // damit sie sich im 3D-Rad nicht überlappen (Abstand ~ Radius * sin(Winkel)).
 const RADIUS_MOBILE = 520;
@@ -55,7 +55,7 @@ function Stars({ value }: { value: number }) {
 
 function ReviewCard({ review, clamp = false }: { review: WheelReview; clamp?: boolean }) {
   return (
-    <article className="w-full max-w-2xl rounded-2xl border border-forest-900/10 bg-white p-6 shadow-lg shadow-forest-900/5 sm:p-8">
+    <article className="w-full max-w-3xl rounded-2xl border border-forest-900/10 bg-white p-6 shadow-lg shadow-forest-900/5 sm:p-8">
       <div className="flex items-center gap-3 sm:gap-4">
         {review.avatarUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -83,7 +83,7 @@ function ReviewCard({ review, clamp = false }: { review: WheelReview; clamp?: bo
       </div>
       <p
         className={`mt-4 whitespace-pre-line text-base leading-relaxed text-forest-800/85 sm:text-lg ${
-          clamp ? "line-clamp-5 sm:line-clamp-none" : ""
+          clamp ? "line-clamp-6" : ""
         }`}
       >
         {review.text}
@@ -211,7 +211,7 @@ export default function ReviewsWheel({ reviews, summary, googleUrl }: Props) {
 
         <div
           aria-hidden="true"
-          className="relative h-[440px] w-full max-w-4xl [perspective:1600px] sm:h-[560px]"
+          className="relative h-[440px] w-full max-w-5xl [perspective:1600px] sm:h-[620px]"
         >
           <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-12 bg-gradient-to-b from-white to-transparent sm:h-16" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-12 bg-gradient-to-t from-white to-transparent sm:h-16" />

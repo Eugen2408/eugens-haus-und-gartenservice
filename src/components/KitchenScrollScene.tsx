@@ -43,7 +43,7 @@ const CHAPTERS: Chapter[] = [
   {
     kicker: "Die Verwandlung",
     title: "Die alte Küche macht Platz.",
-    text: "Ein Brand im Zeitraffer – Raum für einen frischen Start.",
+    text: "Raum für einen frischen Start.",
   },
   {
     kicker: "Das Ergebnis",
