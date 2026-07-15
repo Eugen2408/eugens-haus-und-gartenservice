@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -21,16 +21,15 @@ type Props = {
   googleUrl: string;
 };
 
-// Gleiche Mechanik wie ServiceWheel: scroll-getriebenes 3D-Rad um die X-Achse.
-// Das Rad wickelt nie komplett herum (Rotation 0 … n-1 Schritte), daher darf
-// der Winkel unabhängig von der Kartenzahl gewählt werden.
-const ANGLE = 30;
-// Frontebene liegt durch translateZ(-radius) auf z=0, sonst skaliert die
-// Perspektive die vorderste Karte über den Container hinaus.
-const RADIUS_DESKTOP = 700;
-// Größerer Mobile-Radius: mehr vertikaler Abstand zwischen benachbarten Karten,
-// damit sie sich im 3D-Rad nicht überlappen (Abstand ~ Radius * sin(Winkel)).
-const RADIUS_MOBILE = 520;
+// Scroll-getriebenes Bewertungs-Rad. Die Karten werden per PIXEL positioniert:
+// jede Karte an ihrer gemessenen Hoehe + festem Abstand (GAP) gestapelt, sodass
+// zwischen zwei Karten immer derselbe Rand bleibt – kurze Bewertungen stehen eng,
+// lange werden komplett gezeigt. Die aktive Karte liegt exakt flach und mittig
+// (voller Groesse); Nachbarn kippen leicht und blenden aus (Rad-/Coverflow-Look).
+const GAP = 44; // px Abstand zwischen benachbarten Karten
+const TILT_REF = 360; // px, ab dem die Neigung ihr Maximum erreicht
+const TILT_MAX = 30; // Grad maximale Neigung der Nachbarkarten
+const TZ_MAX = 220; // px maximaler Tiefen-Versatz
 
 function Stars({ value }: { value: number }) {
   return (
@@ -53,7 +52,7 @@ function Stars({ value }: { value: number }) {
   );
 }
 
-function ReviewCard({ review, clamp = false }: { review: WheelReview; clamp?: boolean }) {
+function ReviewCard({ review }: { review: WheelReview }) {
   return (
     <article className="w-full max-w-3xl rounded-2xl border border-forest-900/10 bg-white p-6 shadow-lg shadow-forest-900/5 sm:p-8">
       <div className="flex items-center gap-3 sm:gap-4">
@@ -81,11 +80,7 @@ function ReviewCard({ review, clamp = false }: { review: WheelReview; clamp?: bo
           <Stars value={review.rating} />
         </span>
       </div>
-      <p
-        className={`mt-4 whitespace-pre-line text-base leading-relaxed text-forest-800/85 sm:text-lg ${
-          clamp ? "line-clamp-6" : ""
-        }`}
-      >
+      <p className="mt-4 whitespace-pre-line text-base leading-relaxed text-forest-800/85 sm:text-lg">
         {review.text}
       </p>
     </article>
@@ -95,27 +90,82 @@ function ReviewCard({ review, clamp = false }: { review: WheelReview; clamp?: bo
 export default function ReviewsWheel({ reviews, summary, googleUrl }: Props) {
   const wrapperRef = useRef<HTMLElement>(null);
   const wheelRef = useRef<HTMLDivElement>(null);
+  const slotRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [active, setActive] = useState(0);
-  const [radius, setRadius] = useState(RADIUS_DESKTOP);
   const [reducedMotion, setReducedMotion] = useState(false);
-  // Auf Mobile das 3D-Rad durch die vollständige Liste ersetzen, damit die
-  // Bewertungen komplett lesbar sind (im Rad würden lange Texte abgeschnitten).
+  // Auf Mobile das Rad durch die vollständige Liste ersetzen (bessere Lesbarkeit,
+  // kein 3D noetig auf kleinen Screens).
   const [isMobile, setIsMobile] = useState(false);
+  // Gemessene Kartenhoehen; leer bis zur ersten Messung.
+  const [heights, setHeights] = useState<number[]>([]);
 
   useEffect(() => {
     setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-    const mobile = window.matchMedia("(max-width: 639px)").matches;
-    setIsMobile(mobile);
-    setRadius(mobile ? RADIUS_MOBILE : RADIUS_DESKTOP);
+    setIsMobile(window.matchMedia("(max-width: 639px)").matches);
   }, []);
+
+  // Kartenhoehen messen (nach Font-Load und bei Resize neu).
+  useEffect(() => {
+    if (reducedMotion || isMobile) return;
+    function measure() {
+      const hs = reviews.map((_, i) => slotRefs.current[i]?.querySelector("article")?.offsetHeight ?? 240);
+      setHeights((prev) => (prev.length === hs.length && prev.every((v, i) => v === hs[i]) ? prev : hs));
+    }
+    measure();
+    let raf = 0;
+    document.fonts?.ready.then(() => { raf = requestAnimationFrame(measure); });
+    window.addEventListener("resize", measure);
+    return () => {
+      window.removeEventListener("resize", measure);
+      cancelAnimationFrame(raf);
+    };
+  }, [reducedMotion, isMobile, reviews]);
+
+  // Mitte jeder Karte im gestapelten Fluss (Pixel). Fallback 240px bis gemessen.
+  const centers = useMemo(() => {
+    const c: number[] = [];
+    let top = 0;
+    for (let i = 0; i < reviews.length; i++) {
+      const h = heights[i] ?? 240;
+      c.push(top + h / 2);
+      top += h + GAP;
+    }
+    return c;
+  }, [heights, reviews]);
+
+  const maxCardH = useMemo(() => (heights.length ? Math.max(...heights) : 0), [heights]);
 
   useEffect(() => {
     const wrapper = wrapperRef.current;
     const wheel = wheelRef.current;
     if (!wrapper || !wheel || reducedMotion || isMobile || reviews.length < 2) return;
 
+    const n = reviews.length;
+    // Positioniert alle Karten fuer einen (kontinuierlichen) Schritt:
+    // aktive Karte flach/mittig, Nachbarn per Pixel-Abstand versetzt, geneigt, ausgeblendet.
+    function layout(step: number) {
+      const b = Math.max(0, Math.min(n - 1, Math.floor(step)));
+      const b1 = Math.min(n - 1, b + 1);
+      const targetCenter = centers[b] + (step - b) * (centers[b1] - centers[b]);
+      const activeIdx = Math.max(0, Math.min(n - 1, Math.round(step)));
+      for (let i = 0; i < n; i++) {
+        const slot = slotRefs.current[i];
+        if (!slot) continue;
+        const dy = centers[i] - targetCenter; // px Versatz zur Bildmitte
+        const t = Math.max(-1, Math.min(1, dy / TILT_REF));
+        const tilt = t * TILT_MAX; // obere Karten kippen zurueck, untere nach vorn
+        const tz = -Math.min(TZ_MAX, Math.abs(dy) * 0.32);
+        // translateY(-50%) zentriert die (unterschiedlich hohe) Karte auf top-1/2
+        slot.style.transform = `translateY(-50%) translateY(${dy}px) translateZ(${tz}px) rotateX(${-tilt}deg)`;
+        slot.style.opacity = String(i === activeIdx ? 1 : Math.abs(i - activeIdx) === 1 ? 0.28 : 0);
+        slot.style.zIndex = String(i === activeIdx ? 2 : 1);
+      }
+      setActive((prev) => (prev === activeIdx ? prev : activeIdx));
+    }
+
     const gsapCtx = gsap.context(() => {
       const state = { step: 0 };
+      layout(0);
       gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: {
@@ -126,18 +176,14 @@ export default function ReviewsWheel({ reviews, summary, googleUrl }: Props) {
           invalidateOnRefresh: true,
         },
       }).to(state, {
-        step: reviews.length - 1,
+        step: n - 1,
         duration: 1,
-        onUpdate: () => {
-          wheel.style.transform = `translateZ(${-radius}px) rotateX(${state.step * ANGLE}deg)`;
-          const next = Math.min(reviews.length - 1, Math.max(0, Math.round(state.step)));
-          setActive((prev) => (prev === next ? prev : next));
-        },
+        onUpdate: () => layout(state.step),
       }, 0);
     }, wrapper);
 
     return () => gsapCtx.revert();
-  }, [reducedMotion, isMobile, radius, reviews.length]);
+  }, [reducedMotion, isMobile, reviews.length, centers]);
 
   const header = (
     // z-20 + weißer Grund, damit keine ausgeblendete Karte die Überschrift überlagert
@@ -212,31 +258,26 @@ export default function ReviewsWheel({ reviews, summary, googleUrl }: Props) {
         <div
           aria-hidden="true"
           className="relative h-[440px] w-full max-w-5xl [perspective:1600px] sm:h-[620px]"
+          // Buehne so hoch wie die groesste Karte + Rand, gedeckelt, damit sie mit
+          // Ueberschrift/Link in den Viewport passt und nichts oben abschneidet.
+          style={maxCardH ? { height: `${Math.min(820, Math.max(460, maxCardH + 120))}px` } : undefined}
         >
-          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-12 bg-gradient-to-b from-white to-transparent sm:h-16" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-12 bg-gradient-to-t from-white to-transparent sm:h-16" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-10 bg-gradient-to-b from-white to-transparent sm:h-14" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-10 bg-gradient-to-t from-white to-transparent sm:h-14" />
 
-          <div
-            ref={wheelRef}
-            className="absolute inset-0 [transform-style:preserve-3d]"
-            style={{ transform: `translateZ(${-radius}px) rotateX(0deg)` }}
-          >
-            {reviews.map((review, i) => {
-              const dist = Math.abs(i - active);
-              const opacity = dist === 0 ? 1 : dist === 1 ? 0.25 : 0;
-              return (
-                <div
-                  key={review.id}
-                  className="absolute inset-x-0 top-1/2 -mt-28 flex h-56 items-center justify-center transition-opacity duration-300 sm:-mt-40 sm:h-80"
-                  style={{
-                    transform: `rotateX(${-i * ANGLE}deg) translateZ(${radius}px)`,
-                    opacity,
-                  }}
-                >
-                  <ReviewCard review={review} clamp />
-                </div>
-              );
-            })}
+          <div ref={wheelRef} className="absolute inset-0 [transform-style:preserve-3d]">
+            {reviews.map((review, i) => (
+              <div
+                key={review.id}
+                ref={(el) => {
+                  slotRefs.current[i] = el;
+                }}
+                className="absolute inset-x-0 top-1/2 flex justify-center transition-opacity duration-300"
+                style={{ transform: "translateY(-50%)", opacity: i === 0 ? 1 : 0 }}
+              >
+                <ReviewCard review={review} />
+              </div>
+            ))}
           </div>
         </div>
 
