@@ -16,7 +16,6 @@ export const DESKTOP = { count: 135, src: (i: number) => `/frames/licht/licht-${
 export const MOBILE = { count: 78, src: (i: number) => `/frames/licht/m/licht-${String(Math.max(0, i - HOLD + 1)).padStart(3, "0")}.webp` };
 
 type Chapter = {
-  kicker: string;
   title: string;
   text: string;
 };
@@ -25,9 +24,8 @@ type Chapter = {
 // - der Effekt laeuft ungestoert durch, der Text erscheint erst, wenn das
 // Ergebnis steht (siehe FRAME_END/CAPTION_AT weiter unten).
 const RESULT: Chapter = {
-  kicker: "Die Verwandlung",
-  title: "Sauber verdrahtet, sicher verbunden.",
-  text: "Ein Kurzschluss bringt ans Licht, was verborgen war – neue Klemmen, klare Ordnung und jeder Handgriff sitzt: Licht, auf das Verlass ist.",
+  title: "Ihr Zuhause in neuem Licht!",
+  text: "Lampenmontage und vieles mehr.",
 };
 
 export default function LightScrollScene() {
@@ -259,7 +257,7 @@ export default function LightScrollScene() {
           <canvas
             ref={canvasRef}
             role="img"
-            aria-label="Lichtmontage im Zeitraffer – von der Lampenmontage über den Kurzschluss bis zum sauber verdrahteten Anschluss"
+            aria-label="Lampenmontage im Zeitraffer – vom Anschluss der Lampe über den Kurzschluss bis zur sauber verdrahteten Verbindung"
             className="absolute inset-0 h-full w-full"
           />
 
@@ -279,7 +277,7 @@ export default function LightScrollScene() {
           <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-sand-50/25 bg-forest-950/35 px-4 py-2 backdrop-blur-md">
             <span className="h-2 w-2 rounded-full bg-leaf-500" />
             <span className="text-xs font-semibold uppercase tracking-[0.15em] text-sand-50">
-              Lichtmontage
+              Lampenmontage
             </span>
           </div>
 
@@ -291,9 +289,6 @@ export default function LightScrollScene() {
             }}
             className={`absolute inset-x-5 bottom-8 max-w-xl sm:inset-x-10 sm:bottom-12 ${reducedMotion ? "opacity-100" : "opacity-0"}`}
           >
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sand-100 sm:text-sm">
-              {RESULT.kicker}
-            </p>
             <h3 className="mt-2 font-display text-3xl font-semibold leading-[1.05] text-sand-50 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl">
               {RESULT.title.split(" ").map((word, wi) => (
                 <span key={wi} className="mr-[0.26em] inline-block overflow-hidden pb-1 align-top">
@@ -308,7 +303,7 @@ export default function LightScrollScene() {
               href="#kontakt"
               className="mt-5 inline-flex items-center gap-2 rounded-full bg-leaf-500 px-6 py-3 text-sm font-semibold text-sand-50 shadow-lg shadow-leaf-500/25 transition-colors duration-200 hover:bg-forest-600"
             >
-              Lichtmontage anfragen
+              Lampenmontage anfragen
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>

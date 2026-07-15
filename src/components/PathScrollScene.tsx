@@ -13,7 +13,6 @@ export const DESKTOP = { count: 168, src: (i: number) => `/frames/platten/platte
 export const MOBILE = { count: 84, src: (i: number) => `/frames/platten/m/platten-${String(i).padStart(3, "0")}.webp` };
 
 type Chapter = {
-  kicker: string;
   title: string;
   text: string;
 };
@@ -22,9 +21,8 @@ type Chapter = {
 // - der Effekt laeuft ungestoert durch, der Text erscheint erst, wenn das
 // Ergebnis steht (siehe FRAME_END/CAPTION_AT weiter unten).
 const RESULT: Chapter = {
-  kicker: "Die Verwandlung",
   title: "Ein Weg, der bleibt.",
-  text: "Sandbett abgezogen, Richtschnur gespannt, Platte für Platte gesetzt und abgerüttelt, bis jede Fuge fluchtet – fest verlegt und eben, bei jedem Wetter trittsicher.",
+  text: "Ein guter Weg beginnt im Untergrund. Fest im Sandbett verlegt und abgerüttelt – ebener Tritt bei jedem Wetter.",
 };
 
 export default function PathScrollScene() {
@@ -288,9 +286,6 @@ export default function PathScrollScene() {
             }}
             className={`absolute inset-x-5 bottom-8 max-w-xl sm:inset-x-10 sm:bottom-12 ${reducedMotion ? "opacity-100" : "opacity-0"}`}
           >
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sand-100 sm:text-sm">
-              {RESULT.kicker}
-            </p>
             <h3 className="mt-2 font-display text-3xl font-semibold leading-[1.05] text-sand-50 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl">
               {RESULT.title.split(" ").map((word, wi) => (
                 <span key={wi} className="mr-[0.26em] inline-block overflow-hidden pb-1 align-top">

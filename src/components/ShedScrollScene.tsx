@@ -13,7 +13,6 @@ export const DESKTOP = { count: 98, src: (i: number) => `/frames/schuppen/schupp
 export const MOBILE = { count: 49, src: (i: number) => `/frames/schuppen/m/schuppen-${String(i).padStart(3, "0")}.webp` };
 
 type Chapter = {
-  kicker: string;
   title: string;
   text: string;
 };
@@ -22,9 +21,8 @@ type Chapter = {
 // - der Effekt laeuft ungestoert durch, der Text erscheint erst, wenn das
 // Ergebnis steht (siehe FRAME_END/CAPTION_AT weiter unten).
 const RESULT: Chapter = {
-  kicker: "Die Verwandlung",
   title: "Ihr Garten, wieder sichtbar.",
-  text: "Jahrelang zugewuchert, dann gerodet, geschnitten und abtransportiert, Stück für Stück zurück ans Licht – freigelegt und aufgeräumt, bereit für alles, was Sie vorhaben.",
+  text: "Unter dem Dickicht steckt oft mehr, als man denkt. Ich hole Ihren Garten zurück ans Licht: freigeschnitten und aufgeräumt.",
 };
 
 export default function ShedScrollScene() {
@@ -288,9 +286,6 @@ export default function ShedScrollScene() {
             }}
             className={`absolute inset-x-5 bottom-8 max-w-xl sm:inset-x-10 sm:bottom-12 ${reducedMotion ? "opacity-100" : "opacity-0"}`}
           >
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sand-100 sm:text-sm">
-              {RESULT.kicker}
-            </p>
             <h3 className="mt-2 font-display text-3xl font-semibold leading-[1.05] text-sand-50 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl">
               {RESULT.title.split(" ").map((word, wi) => (
                 <span key={wi} className="mr-[0.26em] inline-block overflow-hidden pb-1 align-top">

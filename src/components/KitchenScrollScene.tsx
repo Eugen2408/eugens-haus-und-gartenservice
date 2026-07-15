@@ -29,7 +29,6 @@ export const MOBILE = {
 };
 
 type Chapter = {
-  kicker: string;
   title: string;
   text: string;
 };
@@ -38,9 +37,8 @@ type Chapter = {
 // - der Effekt laeuft ungestoert durch, der Text erscheint erst, wenn das
 // Ergebnis steht (siehe FRAME_END/CAPTION_AT weiter unten).
 const RESULT: Chapter = {
-  kicker: "Die Verwandlung",
   title: "Spüle, Kochfeld, alles montiert.",
-  text: "Die alte Küche macht Platz für einen frischen Start – Ausschnitte auf den Millimeter gesägt, alles eingepasst, angeschlossen und einsatzbereit zum Loskochen.",
+  text: "Ausschnitte millimetergenau gesägt, alles eingepasst und angeschlossen – die Küche ist startklar.",
 };
 
 export default function KitchenScrollScene() {
@@ -304,9 +302,6 @@ export default function KitchenScrollScene() {
             }}
             className={`absolute inset-x-5 bottom-8 max-w-xl sm:inset-x-10 sm:bottom-12 ${reducedMotion ? "opacity-100" : "opacity-0"}`}
           >
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sand-100 sm:text-sm">
-              {RESULT.kicker}
-            </p>
             <h3 className="mt-2 font-display text-3xl font-semibold leading-[1.05] text-sand-50 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl">
               {RESULT.title.split(" ").map((word, wi) => (
                 <span key={wi} className="mr-[0.26em] inline-block overflow-hidden pb-1 align-top">

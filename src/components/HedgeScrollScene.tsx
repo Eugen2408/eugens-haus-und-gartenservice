@@ -13,7 +13,6 @@ export const DESKTOP = { count: 53, src: (i: number) => `/frames/hecke-${String(
 export const MOBILE = { count: 26, src: (i: number) => `/frames/m/hecke-${String(i).padStart(2, "0")}.webp` };
 
 type Chapter = {
-  kicker: string;
   title: string;
   text: string;
 };
@@ -22,9 +21,8 @@ type Chapter = {
 // - der Effekt laeuft ungestoert durch, der Text erscheint erst, wenn das
 // Ergebnis steht (siehe FRAME_END/CAPTION_AT weiter unten).
 const RESULT: Chapter = {
-  kicker: "Die Verwandlung",
   title: "Eine Kante wie gezogen.",
-  text: "Sicherer Stand, ruhige Hand und Profi-Werkzeug bringen jede Hecke Schnitt für Schnitt in Form – so steht sie da, wenn ich die Leiter zusammenklappe.",
+  text: "Ruhige Hand, sicherer Stand. Mit Profiwerkzeug zur perfekten Hecke.",
 };
 
 export default function HedgeScrollScene() {
@@ -315,9 +313,6 @@ export default function HedgeScrollScene() {
             }}
             className={`absolute inset-x-5 bottom-8 max-w-xl sm:inset-x-10 sm:bottom-12 ${reducedMotion ? "opacity-100" : "opacity-0"}`}
           >
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sand-100 sm:text-sm">
-              {RESULT.kicker}
-            </p>
             <h3 className="mt-2 font-display text-3xl font-semibold leading-[1.05] text-sand-50 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl">
               {RESULT.title.split(" ").map((word, wi) => (
                 <span key={wi} className="mr-[0.26em] inline-block overflow-hidden pb-1 align-top">

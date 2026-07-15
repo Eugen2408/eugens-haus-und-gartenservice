@@ -25,7 +25,7 @@ type FeaturableResponse = {
 };
 
 // Relative deutsche Zeitangabe ("vor 3 Monaten"); wird beim (Re-)Build
-// berechnet – die Seite revalidiert täglich, das reicht für Monatsangaben.
+// berechnet – die Seite revalidiert stündlich, das reicht für Monatsangaben.
 function relativeDate(iso: string): string {
   const rtf = new Intl.RelativeTimeFormat("de", { numeric: "auto" });
   const days = Math.round((Date.now() - new Date(iso).getTime()) / 86400000);
@@ -37,7 +37,7 @@ function relativeDate(iso: string): string {
 
 async function fetchReviews(): Promise<FeaturableResponse["widget"] | null> {
   try {
-    const res = await fetch(FEATURABLE_API_URL, { next: { revalidate: 86400 } });
+    const res = await fetch(FEATURABLE_API_URL, { next: { revalidate: 3600 } });
     if (!res.ok) return null;
     const data: FeaturableResponse = await res.json();
     if (!data.success || !data.widget?.reviews?.length) return null;

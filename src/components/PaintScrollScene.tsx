@@ -13,7 +13,6 @@ export const DESKTOP = { count: 160, src: (i: number) => `/frames/farbe/farbe-${
 export const MOBILE = { count: 80, src: (i: number) => `/frames/farbe/m/farbe-${String(i).padStart(3, "0")}.webp` };
 
 type Chapter = {
-  kicker: string;
   title: string;
   text: string;
 };
@@ -22,9 +21,8 @@ type Chapter = {
 // - der Effekt laeuft ungestoert durch, der Text erscheint erst, wenn das
 // Ergebnis steht (siehe FRAME_END/CAPTION_AT weiter unten).
 const RESULT: Chapter = {
-  kicker: "Die Verwandlung",
   title: "Wände wie neu.",
-  text: "Gründlich abgeklebt und grundiert, dann Schicht für Schicht frische Farbe – gleichmäßiger Auftrag, scharfe Kanten, sauber gestrichen bis in jede Ecke.",
+  text: "Erst abkleben und grundieren, dann streichen. Am Ende sehen die Wände aus wie neu – ohne Flecken, ohne Ränder.",
 };
 
 export default function PaintScrollScene() {
@@ -288,9 +286,6 @@ export default function PaintScrollScene() {
             }}
             className={`absolute inset-x-5 bottom-8 max-w-xl sm:inset-x-10 sm:bottom-12 ${reducedMotion ? "opacity-100" : "opacity-0"}`}
           >
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sand-100 sm:text-sm">
-              {RESULT.kicker}
-            </p>
             <h3 className="mt-2 font-display text-3xl font-semibold leading-[1.05] text-sand-50 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl">
               {RESULT.title.split(" ").map((word, wi) => (
                 <span key={wi} className="mr-[0.26em] inline-block overflow-hidden pb-1 align-top">

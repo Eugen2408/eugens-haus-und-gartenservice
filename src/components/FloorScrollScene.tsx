@@ -13,7 +13,6 @@ export const DESKTOP = { count: 127, src: (i: number) => `/frames/boden/boden-${
 export const MOBILE = { count: 64, src: (i: number) => `/frames/boden/m/boden-${String(i).padStart(3, "0")}.webp` };
 
 type Chapter = {
-  kicker: string;
   title: string;
   text: string;
 };
@@ -22,9 +21,8 @@ type Chapter = {
 // - der Effekt laeuft ungestoert durch, der Text erscheint erst, wenn das
 // Ergebnis steht (siehe FRAME_END/CAPTION_AT weiter unten).
 const RESULT: Chapter = {
-  kicker: "Die Verwandlung",
   title: "Ein Boden zum Wohlfühlen.",
-  text: "Alter Belag raus, Untergrund ausgeglichen, dann Diele für Diele mit Trittschalldämmung verlegt – passgenau und sauber abgeschlossen, bereit zum Einrichten.",
+  text: "Alter Belag raus, Untergrund nivelliert, neuer Boden passgenau verlegt – bis sauber an die Wand.",
 };
 
 export default function FloorScrollScene() {
@@ -288,9 +286,6 @@ export default function FloorScrollScene() {
             }}
             className={`absolute inset-x-5 bottom-8 max-w-xl sm:inset-x-10 sm:bottom-12 ${reducedMotion ? "opacity-100" : "opacity-0"}`}
           >
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sand-100 sm:text-sm">
-              {RESULT.kicker}
-            </p>
             <h3 className="mt-2 font-display text-3xl font-semibold leading-[1.05] text-sand-50 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl">
               {RESULT.title.split(" ").map((word, wi) => (
                 <span key={wi} className="mr-[0.26em] inline-block overflow-hidden pb-1 align-top">
