@@ -110,11 +110,11 @@ export default function HedgeScrollScene() {
         // (cover) auf die Vollbild-Buehne – kein Letterbox mehr.
         sy = nh * 0.14;
         sH = nh * 0.86;
-        const scale = Math.max(cw / nw, ch / sH);
-        dw = nw * scale;
+        const scale = cw / nw; // volle Breite, ganzes Bild, oben ausgerichtet
+        dw = cw;
         dh = sH * scale;
-        dx = (cw - dw) / 2;
-        dy = (ch - dh) / 2;
+        dx = 0;
+        dy = 0;
       } else {
         const progress = SET.count > 1 ? frame / (SET.count - 1) : 0;
         const zoom = zoomAt(progress);
@@ -205,8 +205,8 @@ export default function HedgeScrollScene() {
         defaults: { ease: "none" },
         scrollTrigger: {
           trigger: wrapper,
-          start: "top top",
-          end: "bottom bottom",
+          start: isMobile ? "top bottom" : "top top",
+          end: isMobile ? "bottom top" : "bottom bottom",
           scrub: true, // sofort, keine GSAP-Traegheit - die Tick-Schleife regelt das Tempo
           invalidateOnRefresh: true,
         },
@@ -243,7 +243,7 @@ export default function HedgeScrollScene() {
       // (siehe FRAME_END) - Titel-Woerter schieben sich einmal aus einer Maske
       // hoch und bleiben stehen (kein Ausblenden mehr, das ist der Schlusspunkt).
       const captionEl = captionRefs.current[0];
-      if (captionEl) {
+      if (captionEl && !isMobile) {
         tl.fromTo(captionEl, { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.07 }, CAPTION_AT);
         const words = captionEl.querySelectorAll<HTMLElement>(".hedge-word");
         if (words.length) {
@@ -269,14 +269,15 @@ export default function HedgeScrollScene() {
     <section
       id="einsatz"
       ref={wrapperRef}
-      className={`relative bg-white ${reducedMotion ? "" : "h-[240svh]"}`}
+      className={`relative bg-white ${reducedMotion ? "" : "md:h-[240svh]"}`}
     >
       <div
-        className={`${reducedMotion ? "relative py-24" : "sticky top-0 h-[100svh]"} flex items-center justify-center overflow-hidden px-0 md:px-5`}
+        className={`${reducedMotion ? "relative py-16" : "relative md:sticky md:top-0 md:h-[100svh]"} flex flex-col items-center justify-center overflow-hidden px-0 md:px-5`}
       >
+        <div className="relative w-full max-w-6xl md:max-w-[86vw]">
         <div
           ref={stageRef}
-          className="relative h-[100svh] w-full max-w-6xl md:max-w-[86vw] overflow-hidden md:rounded-3xl bg-forest-900 shadow-2xl shadow-black/40 md:h-auto md:aspect-video"
+          className="relative w-full aspect-video overflow-hidden md:rounded-3xl bg-forest-900 shadow-2xl shadow-black/40"
         >
           <canvas
             ref={canvasRef}
@@ -305,22 +306,30 @@ export default function HedgeScrollScene() {
             </span>
           </div>
 
+
+          {/* Scroll-Fortschritt */}
+          {!reducedMotion && (
+            <div className="absolute inset-x-0 bottom-0 h-1 bg-sand-50/10">
+              <div ref={barRef} className="h-full origin-left bg-leaf-500" style={{ transform: "scaleX(0)" }} />
+            </div>
+          )}
+        </div>
           {/* Ergebnis-Text: erscheint erst, wenn der Effekt durchgelaufen ist und
               das Ergebnisbild steht (FRAME_END/CAPTION_AT oben) */}
           <div
             ref={(el) => {
               captionRefs.current[0] = el;
             }}
-            className={`absolute inset-x-5 bottom-8 max-w-xl sm:inset-x-10 sm:bottom-12 ${reducedMotion ? "opacity-100" : "opacity-0"}`}
+            className={`mt-5 px-6 md:mt-0 md:absolute md:inset-x-10 md:bottom-12 md:max-w-xl md:px-0 ${reducedMotion ? "opacity-100" : "opacity-100 md:opacity-0"}`}
           >
-            <h3 className="mt-2 font-display text-3xl font-semibold leading-[1.05] text-sand-50 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] sm:text-5xl">
+            <h3 className="font-display text-2xl font-semibold leading-[1.1] text-forest-950 sm:text-3xl md:text-5xl md:text-sand-50 md:drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
               {RESULT.title.split(" ").map((word, wi) => (
                 <span key={wi} className="mr-[0.26em] inline-block overflow-hidden pb-1 align-top">
                   <span className="hedge-word inline-block">{word}</span>
                 </span>
               ))}
             </h3>
-            <p className="mt-3 max-w-md text-sm leading-relaxed text-sand-100/85 sm:text-base">
+            <p className="mt-2 max-w-md text-sm leading-relaxed text-forest-700 sm:text-base md:mt-3 md:text-sand-100/85">
               {RESULT.text}
             </p>
             <a
@@ -333,13 +342,6 @@ export default function HedgeScrollScene() {
               </svg>
             </a>
           </div>
-
-          {/* Scroll-Fortschritt */}
-          {!reducedMotion && (
-            <div className="absolute inset-x-0 bottom-0 h-1 bg-sand-50/10">
-              <div ref={barRef} className="h-full origin-left bg-leaf-500" style={{ transform: "scaleX(0)" }} />
-            </div>
-          )}
         </div>
       </div>
     </section>
