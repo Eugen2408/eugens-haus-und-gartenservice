@@ -46,6 +46,17 @@ body {
   color: var(--foreground);
 }
 
+/* iOS Safari: ohne manipulation gibt es eine ~300ms Tap-Verzoegerung und
+   schnelle Taps werden als Doppeltipp-Zoom verschluckt -> Buttons wirken
+   "nicht klickbar". manipulation laesst Scrollen/Pinch zu, entfernt nur den
+   Zoom-Verzoegerungs-Sonderfall. Der Slider setzt sein touch-action selbst. */
+a,
+button,
+[role="button"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Kein CSS-Smooth-Scroll: Anker-Sprünge werden von SmoothAnchors per GSAP
    ScrollTo gesteuert (synchron mit den ScrollTrigger-Szenen). */
 html {

@@ -106,15 +106,18 @@ export default function HedgeScrollScene() {
       let sx = 0, sy = 0, sW = nw, sH = nh;
       let dx: number, dy: number, dw: number, dh: number;
       if (isMobile) {
-        // Oberste 14% (Kopf, wirkt KI-generiert) weg-croppen, Rest formatfuellend
-        // (cover) auf die Vollbild-Buehne – kein Letterbox mehr.
+        // Oberste 14% (Kopf, wirkt KI-generiert) weg-croppen; Rest per COVER
+        // formatfuellend ins 16:9-Band. Frueher wurde nur auf volle Breite
+        // skaliert und oben ausgerichtet -> unten blieb ein dunkelgruener
+        // Streifen (wirkte kaputt). COVER fuellt das Band voll, zentriert
+        // horizontal, minimal seitlich beschnitten.
         sy = nh * 0.14;
         sH = nh * 0.86;
-        const scale = cw / nw; // volle Breite, ganzes Bild, oben ausgerichtet
-        dw = cw;
+        const scale = Math.max(cw / nw, ch / sH);
+        dw = nw * scale;
         dh = sH * scale;
-        dx = 0;
-        dy = 0;
+        dx = (cw - dw) / 2;
+        dy = ch - dh;
       } else {
         const progress = SET.count > 1 ? frame / (SET.count - 1) : 0;
         const zoom = zoomAt(progress);
@@ -178,7 +181,7 @@ export default function HedgeScrollScene() {
     // dorthin (kein Exponential-Nachziehen) – die Animation läuft immer gleich
     // schnell durch, egal wie schnell gescrollt wird. Bleibt der Scroll stehen,
     // bleibt auch das Bild stehen; rückwärts scrollen läuft symmetrisch zurück.
-    const MIN_PLAY_SECONDS = 1.3; // Mindestdauer fuer einen kompletten Durchlauf
+    const MIN_PLAY_SECONDS = 2.2; // Mindestdauer fuer einen kompletten Durchlauf
     const maxFramesPerSecond = SET.count / MIN_PLAY_SECONDS;
     let targetFrame = 0;
     let rafId = 0;
@@ -199,8 +202,8 @@ export default function HedgeScrollScene() {
       const state = { frame: 0 };
       // Frame-Fortschritt laeuft nur bis FRAME_END der Scroll-Strecke, der Rest
       // bleibt Lese-Pause auf dem stehenden Ergebnis-Frame (Pin haelt weiter).
-      const FRAME_END = 0.78;
-      const CAPTION_AT = 0.82;
+      const FRAME_END = 0.7;
+      const CAPTION_AT = 0.75;
       const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: {
@@ -269,7 +272,7 @@ export default function HedgeScrollScene() {
     <section
       id="einsatz"
       ref={wrapperRef}
-      className={`relative bg-white ${reducedMotion ? "" : "md:h-[240svh]"}`}
+      className={`relative bg-white ${reducedMotion ? "" : "md:h-[280svh]"}`}
     >
       <div
         className={`${reducedMotion ? "relative py-16" : "relative md:sticky md:top-0 md:h-[100svh]"} flex flex-col items-center justify-center overflow-hidden px-0 md:px-5`}

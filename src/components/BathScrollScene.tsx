@@ -155,7 +155,7 @@ export default function BathScrollScene() {
     // dorthin (kein Exponential-Nachziehen) – die Animation läuft immer gleich
     // schnell durch, egal wie schnell gescrollt wird. Bleibt der Scroll stehen,
     // bleibt auch das Bild stehen; rückwärts scrollen läuft symmetrisch zurück.
-    const MIN_PLAY_SECONDS = 1.3; // Mindestdauer fuer einen kompletten Durchlauf
+    const MIN_PLAY_SECONDS = 2.2; // Mindestdauer fuer einen kompletten Durchlauf
     const maxFramesPerSecond = SET.count / MIN_PLAY_SECONDS;
     let targetFrame = 0;
     let rafId = 0;
@@ -176,8 +176,8 @@ export default function BathScrollScene() {
       const state = { frame: 0 };
       // Frame-Fortschritt laeuft nur bis FRAME_END der Scroll-Strecke, der Rest
       // bleibt Lese-Pause auf dem stehenden Ergebnis-Frame (Pin haelt weiter).
-      const FRAME_END = 0.78;
-      const CAPTION_AT = 0.82;
+      const FRAME_END = 0.7;
+      const CAPTION_AT = 0.75;
       const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: {
@@ -246,7 +246,7 @@ export default function BathScrollScene() {
     <section
       id="bad"
       ref={wrapperRef}
-      className={`relative bg-white ${reducedMotion ? "" : "md:h-[240svh]"}`}
+      className={`relative bg-white ${reducedMotion ? "" : "md:h-[280svh]"}`}
     >
       <div
         className={`${reducedMotion ? "relative py-16" : "relative md:sticky md:top-0 md:h-[100svh]"} flex flex-col items-center justify-center overflow-hidden px-0 md:px-5`}
