@@ -21,7 +21,10 @@
   --color-forest-500: #497b37;
 
   /* Fresh leaf greens */
-  --color-leaf-500: #5c9a3d;
+  /* leaf-500 auf ein satteres Gruen abgedunkelt (#497b37 statt #5c9a3d), damit
+     Buttons (weisse Schrift) und Akzent-Texte auf Weiss WCAG AA (>=4,5:1)
+     erreichen. Dekorative Punkte/Balken werden nur unwesentlich dunkler. */
+  --color-leaf-500: #497b37;
   --color-leaf-400: #79b558;
   --color-leaf-300: #9fcf80;
   --color-leaf-200: #cbe6b8;

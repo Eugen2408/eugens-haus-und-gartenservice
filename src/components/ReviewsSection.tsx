@@ -2,6 +2,7 @@ import ReviewsWheel, { type WheelReview } from "./ReviewsWheel";
 
 const GOOGLE_PROFILE_URL =
   "https://www.google.com/search?q=Eugens+Haus-+und+Gartenservice+Hamburg";
+const SITE_URL = "https://www.eugens-hausundgartenservice.de";
 
 // Google Place ID: ChIJ-zWuHHua_6sR6OOZXKBzgX0 ("Eugens Haus- und Gartenservice")
 const FEATURABLE_API_URL =
@@ -92,5 +93,47 @@ export default async function ReviewsSection() {
     ? { rating: widget.gbpLocationSummary.rating, count: widget.gbpLocationSummary.reviewsCount }
     : null;
 
-  return <ReviewsWheel reviews={reviews} summary={summary} googleUrl={GOOGLE_PROFILE_URL} />;
+  // Structured Data fuer Rich Snippets (Sterne in der Google-Suche): echte
+  // aggregierte Bewertung + einzelne Rezensionen, per gleichem @id an den
+  // Betriebs-Knoten aus layout.tsx gebunden. Nur ausgeben, wenn eine Summary da
+  // ist (sonst waere aggregateRating ohne Werte ungueltig).
+  const jsonLd = summary && summary.count > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "HomeAndConstructionBusiness",
+        "@id": `${SITE_URL}#business`,
+        name: "Eugens Haus- und Gartenservice",
+        url: SITE_URL,
+        aggregateRating: {
+          "@type": "AggregateRating",
+          ratingValue: summary.rating,
+          reviewCount: summary.count,
+          bestRating: 5,
+          worstRating: 1,
+        },
+        review: widget.reviews.slice(0, 6).map((r) => ({
+          "@type": "Review",
+          author: { "@type": "Person", name: r.author.name },
+          datePublished: r.publishedAt?.slice(0, 10),
+          reviewRating: {
+            "@type": "Rating",
+            ratingValue: r.rating.value,
+            bestRating: r.rating.max || 5,
+          },
+          reviewBody: (r.originalText || r.text || "").slice(0, 500),
+        })),
+      }
+    : null;
+
+  return (
+    <>
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
+      <ReviewsWheel reviews={reviews} summary={summary} googleUrl={GOOGLE_PROFILE_URL} />
+    </>
+  );
 }

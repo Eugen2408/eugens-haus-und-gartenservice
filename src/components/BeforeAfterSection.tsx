@@ -65,7 +65,7 @@ export default function BeforeAfterSection() {
         <div className="mt-10 space-y-12">
           {PAIRS.map((pair, i) => (
             <Reveal key={pair.label} delay={i * 0.1}>
-              <p className="mb-4 text-center text-sm font-semibold uppercase tracking-[0.15em] text-forest-800/60">
+              <p className="mb-4 text-center text-sm font-semibold uppercase tracking-[0.15em] text-forest-800/75">
                 {pair.label}
               </p>
               <BeforeAfterSlider

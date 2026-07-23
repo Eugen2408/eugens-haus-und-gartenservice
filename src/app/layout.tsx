@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { Outfit } from "next/font/google";
 import { Dancing_Script } from "next/font/google";
@@ -43,21 +43,36 @@ export const metadata: Metadata = {
     siteName: "Eugens Haus- und Gartenservice",
     title: "Eugens Haus- und Gartenservice | Hamburg",
     description: DESCRIPTION,
-    images: [{ url: "/images/og.jpg", width: 1200, height: 630 }],
+    images: [
+      {
+        url: "/images/og.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Eugens Haus- und Gartenservice in Hamburg",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Eugens Haus- und Gartenservice | Hamburg",
     description: DESCRIPTION,
-    images: ["/images/og.jpg"],
+    images: [{ url: "/images/og.jpg", alt: "Eugens Haus- und Gartenservice in Hamburg" }],
   },
   robots: { index: true, follow: true },
+};
+
+// theme-color: faerbt die Browser-/Statusleiste auf Mobilgeraeten im Marken-Gruen.
+export const viewport: Viewport = {
+  themeColor: "#16260f",
 };
 
 // JSON-LD LocalBusiness für Google (Firma, Adresse, Kontakt)
 const JSON_LD = {
   "@context": "https://schema.org",
   "@type": "HomeAndConstructionBusiness",
+  // @id, damit die Bewertungssektion (aggregateRating/review) per gleichem @id
+  // auf denselben Betrieb verweist und Google beide Knoten zusammenfuehrt.
+  "@id": `${SITE_URL}#business`,
   name: "Eugens Haus- und Gartenservice",
   description: DESCRIPTION,
   url: SITE_URL,

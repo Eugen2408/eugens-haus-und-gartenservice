@@ -33,7 +33,7 @@ const TZ_MAX = 220; // px maximaler Tiefen-Versatz
 
 function Stars({ value }: { value: number }) {
   return (
-    <span className="flex gap-0.5 text-terracotta-500" aria-label={`${value} von 5 Sternen`}>
+    <span role="img" className="flex gap-0.5 text-terracotta-500" aria-label={`${value} von 5 Sternen`}>
       {Array.from({ length: 5 }, (_, i) => (
         <svg
           key={i}
@@ -74,7 +74,7 @@ function ReviewCard({ review }: { review: WheelReview }) {
         )}
         <div className="min-w-0">
           <p className="truncate text-base font-semibold text-forest-950 sm:text-lg">{review.name}</p>
-          <p className="text-xs text-forest-800/60 sm:text-sm">{review.dateLabel}</p>
+          <p className="text-xs text-forest-800/75 sm:text-sm">{review.dateLabel}</p>
         </div>
         <span className="ml-auto flex-none">
           <Stars value={review.rating} />

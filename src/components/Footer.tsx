@@ -68,7 +68,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-forest-900/10 pt-6 text-center text-xs text-forest-800/60">
+        <div className="mt-12 border-t border-forest-900/10 pt-6 text-center text-xs text-forest-800/75">
           © {new Date().getFullYear()} Eugens Haus- und Gartenservice · Eugen
           Wermter
         </div>

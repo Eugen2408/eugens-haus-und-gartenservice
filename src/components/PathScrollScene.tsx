@@ -297,13 +297,14 @@ export default function PathScrollScene() {
             }}
             className={`mt-5 px-6 md:mt-0 md:absolute md:inset-x-10 md:bottom-12 md:max-w-xl md:px-0 ${reducedMotion ? "opacity-100" : "opacity-100 md:opacity-0"}`}
           >
-            <h3 className="font-display text-2xl font-semibold leading-[1.1] text-forest-950 sm:text-3xl md:text-5xl md:text-sand-50 md:drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
-              {RESULT.title.split(" ").map((word, wi) => (
-                <span key={wi} className="mr-[0.26em] inline-block overflow-hidden pb-1 align-top">
+            <h2 className="font-display text-2xl font-semibold leading-[1.1] text-forest-950 sm:text-3xl md:text-5xl md:text-sand-50 md:drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
+              {RESULT.title.split(" ").flatMap((word, wi) => [
+                <span key={wi} className="inline-block overflow-hidden pb-1 align-top">
                   <span className="path-word inline-block">{word}</span>
-                </span>
-              ))}
-            </h3>
+                </span>,
+                " ",
+              ])}
+            </h2>
             <p className="mt-2 max-w-md text-sm leading-relaxed text-forest-700 sm:text-base md:mt-3 md:text-sand-100/85">
               {RESULT.text}
             </p>
