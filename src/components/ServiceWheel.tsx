@@ -154,14 +154,14 @@ export default function ServiceWheel() {
                   }}
                 >
                   <span
-                    className={`whitespace-nowrap font-display text-lg font-semibold leading-none transition-colors duration-300 lg:text-6xl xl:text-7xl ${
+                    className={`whitespace-nowrap font-display text-base font-semibold leading-none transition-colors duration-300 min-[360px]:text-lg lg:text-6xl xl:text-7xl ${
                       isActive ? "text-terracotta-600" : "text-forest-900"
                     }`}
                   >
                     {item.label}
                   </span>
                   <span
-                    className={`relative block h-28 w-40 flex-none overflow-hidden rounded-2xl shadow-lg ring-1 ring-forest-900/10 transition-transform duration-300 lg:h-64 lg:w-[25rem] ${
+                    className={`relative block h-24 w-32 flex-none overflow-hidden rounded-2xl shadow-lg ring-1 ring-forest-900/10 transition-transform duration-300 min-[360px]:h-28 min-[360px]:w-40 lg:h-64 lg:w-[25rem] ${
                       isActive ? "scale-105" : "scale-90"
                     }`}
                   >
