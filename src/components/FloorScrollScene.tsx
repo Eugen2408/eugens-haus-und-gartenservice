@@ -174,14 +174,14 @@ export default function FloorScrollScene() {
       const state = { frame: 0 };
       // Frame-Fortschritt laeuft nur bis FRAME_END der Scroll-Strecke, der Rest
       // bleibt Lese-Pause auf dem stehenden Ergebnis-Frame (Pin haelt weiter).
-      const FRAME_END = 0.7;
-      const CAPTION_AT = 0.75;
+      const FRAME_END = 0.58;
+      const CAPTION_AT = 0.64;
       const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: {
           trigger: wrapper,
-          start: isMobile ? "top bottom" : "top top",
-          end: isMobile ? "bottom top" : "bottom bottom",
+          start: "top top",
+          end: "bottom bottom",
           scrub: true, // sofort, keine GSAP-Traegheit - die Tick-Schleife regelt das Tempo
           invalidateOnRefresh: true,
         },
@@ -244,10 +244,10 @@ export default function FloorScrollScene() {
     <section
       id="boden"
       ref={wrapperRef}
-      className={`relative bg-white ${reducedMotion ? "" : "md:h-[280svh]"}`}
+      className={`relative bg-white ${reducedMotion ? "" : "h-[168svh] md:h-[280svh]"}`}
     >
       <div
-        className={`${reducedMotion ? "relative py-16" : "relative md:sticky md:top-0 md:h-[100svh]"} flex flex-col items-center justify-center overflow-hidden px-0 md:px-5`}
+        className={`${reducedMotion ? "relative py-16" : "sticky top-0 h-[100svh]"} flex flex-col items-center justify-center overflow-hidden px-0 md:px-5`}
       >
         <div className="relative w-full max-w-6xl md:max-w-[86vw]">
         <div
