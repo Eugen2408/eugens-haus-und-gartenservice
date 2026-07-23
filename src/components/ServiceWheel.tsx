@@ -39,7 +39,10 @@ export default function ServiceWheel() {
 
   useEffect(() => {
     setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-    setRadius(window.matchMedia("(max-width: 639px)").matches ? RADIUS_MOBILE : RADIUS_DESKTOP);
+    // Bis 1023px (Handy UND Tablet) die kompakte Variante mit kleinem Radius:
+    // Tablets hatten sonst den grossen Desktop-Radius + 400px-Thumbs und zu wenig
+    // Breite -> Text links und Bild rechts wurden am Rand abgeschnitten.
+    setRadius(window.matchMedia("(max-width: 1023px)").matches ? RADIUS_MOBILE : RADIUS_DESKTOP);
   }, []);
 
   useEffect(() => {
@@ -144,21 +147,21 @@ export default function ServiceWheel() {
               return (
                 <div
                   key={item.label}
-                  className="absolute inset-x-0 top-1/2 -mt-16 flex h-32 items-center justify-center gap-2 transition-opacity duration-300 sm:-mt-32 sm:h-64 sm:gap-8"
+                  className="absolute inset-x-0 top-1/2 -mt-16 flex h-32 items-center justify-center gap-2 transition-opacity duration-300 lg:-mt-32 lg:h-64 lg:gap-8"
                   style={{
                     transform: `rotateX(${-i * ANGLE}deg) translateZ(${radius}px)`,
                     opacity,
                   }}
                 >
                   <span
-                    className={`whitespace-nowrap font-display text-lg font-semibold leading-none transition-colors duration-300 sm:text-5xl md:text-6xl lg:text-7xl ${
+                    className={`whitespace-nowrap font-display text-lg font-semibold leading-none transition-colors duration-300 lg:text-6xl xl:text-7xl ${
                       isActive ? "text-terracotta-600" : "text-forest-900"
                     }`}
                   >
                     {item.label}
                   </span>
                   <span
-                    className={`relative block h-28 w-40 flex-none overflow-hidden rounded-2xl shadow-lg ring-1 ring-forest-900/10 transition-transform duration-300 sm:h-64 sm:w-[25rem] ${
+                    className={`relative block h-28 w-40 flex-none overflow-hidden rounded-2xl shadow-lg ring-1 ring-forest-900/10 transition-transform duration-300 lg:h-64 lg:w-[25rem] ${
                       isActive ? "scale-105" : "scale-90"
                     }`}
                   >
